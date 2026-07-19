@@ -1,794 +1,813 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Senior — المتخصص الأول في إنجليزي الثانوية العامة والأزهر</title>
-<meta name="description" content="سلسلة Senior المتخصصة في اللغة الإنجليزية للثانوية العامة والأزهر: القواعد، التمارين، المهارات، وقطع الفهم — مجاب عنها بالكامل. تأليف الأستاذ صلاح علي. اطلب أونلاين والدفع عند الاستلام." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<meta name="description" content="سلسلة Senior المتخصصة في اللغة الإنجليزية للثانوية العامة والأزهر: القواعد، التمارين، المهارات، وقطع الفهم — مجاب عنها بالكامل. تأليف الأستاذ صلاح علي. اطلب أونلاين والدفع عند الاستلام.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --orange:#EE5A2D; --orange-d:#D2471C; --orange-l:#FDE9E0;
-  --teal:#138A78; --teal-d:#0E6E60; --teal-l:#DDF1ED;
-  --green:#1C7A46; --red:#E23B3B; --blue:#1CA5D8;
-  --navy:#1B2D4F; --navy-d:#142339;
-  --amber:#F2A03D; --amber-l:#FDF0DC;
-  --cream:#FBF8F3; --card:#FFFFFF;
-  --ink:#1A2230; --muted:#5E6B7A; --line:#E9E2D6;
-  --shadow:0 10px 30px rgba(27,45,79,.10); --shadow-s:0 4px 14px rgba(27,45,79,.08);
-  --radius:18px; --radius-s:12px; --maxw:1180px;
+  --ink:#16323C; --ink-2:#33474E; --muted:#5E7078; --muted-2:#7C8B90; --muted-3:#8A9499;
+  --cream:#FBF8F3; --white:#fff; --line:#EAE2D6; --line-2:#D8E3E0; --chip:#F1EDE6;
+  --teal:#0E6E60; --teal-d:#0A5348; --teal-l:#DDF1ED;
+  --orange:#E4572E; --orange-d:#C0421C; --orange-l:#FDE9E0;
+  --amber:#F2A03D; --amber-l:#FDF0DC; --amber-ink:#B07419;
+  --slate-l:#E7ECF2;
+  --sh-card:0 4px 18px rgba(14,110,96,.06);
+  --sh-pop:0 12px 30px rgba(22,50,60,.14);
+  --sh-cta:0 12px 24px rgba(228,87,46,.26);
+  --wrap:1180px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Cairo','Poppins',system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-html[lang="en"] body{font-family:'Poppins','Cairo',system-ui,sans-serif}
+body{font-family:'Readex Pro',system-ui,sans-serif;color:var(--ink);background:var(--cream);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;font-weight:400}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
-section{padding:74px 0}
-.eyebrow{color:var(--orange);font-weight:800;letter-spacing:.5px;font-size:.82rem;text-transform:uppercase;margin-bottom:10px}
-h2.sec-title{font-size:clamp(1.6rem,3.6vw,2.5rem);font-weight:900;color:var(--navy);line-height:1.25;margin-bottom:12px}
-.sec-sub{color:var(--muted);max-width:700px;font-size:1.02rem}
-.center{text-align:center;margin-inline:auto}
-.btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:.98rem;padding:13px 24px;border-radius:999px;transition:.2s;white-space:nowrap}
-.btn-primary{background:var(--orange);color:#fff;box-shadow:0 8px 20px rgba(238,90,45,.30)}
-.btn-primary:hover{background:var(--orange-d);transform:translateY(-2px)}
-.btn-teal{background:var(--teal);color:#fff;box-shadow:0 8px 20px rgba(19,138,120,.28)}
-.btn-teal:hover{background:var(--teal-d);transform:translateY(-2px)}
-.btn-ghost{background:#fff;color:var(--navy);border:2px solid var(--line)}
-.btn-ghost:hover{border-color:var(--navy);transform:translateY(-2px)}
-.btn-wa{background:#25D366;color:#fff}
-.btn-wa:hover{background:#1da851;transform:translateY(-2px)}
-.btn-sm{padding:9px 16px;font-size:.86rem}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+section{padding:80px 0}
+.sec-white{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.head-c{text-align:center;max-width:720px;margin:0 auto 40px}
+.eyebrow{color:var(--orange);font-weight:700;font-size:13px;margin-bottom:10px}
+h2.t{font-weight:700;font-size:35px;color:var(--ink);margin-bottom:12px;line-height:1.3}
+.lead{color:var(--muted);font-size:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:600;font-size:15px;padding:14px 28px;border-radius:999px;transition:.18s}
+.b-o{background:var(--orange);color:#fff;box-shadow:var(--sh-cta)}
+.b-o:hover{background:var(--orange-d);transform:translateY(-2px)}
+.b-t{background:var(--teal);color:#fff}
+.b-t:hover{background:var(--teal-d);transform:translateY(-2px)}
+.b-g{background:#fff;border:1.5px solid var(--line-2);color:var(--teal)}
+.b-g:hover{border-color:var(--teal);transform:translateY(-2px)}
+.b-wa{background:#25D366;color:#fff}
+.b-wa:hover{background:#1da851}
+.b-sm{padding:10px 18px;font-size:13.5px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 
-.topbar{background:var(--navy-d);color:#fff;text-align:center;font-size:.86rem;padding:8px 16px;font-weight:600}
+/* topbar + header */
+.topbar{background:var(--teal);color:#EAF7F3;font-size:12.5px;font-weight:500;text-align:center;padding:9px 20px}
 .topbar b{color:var(--amber)}
+header{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:20px;height:74px}
+.brand{display:flex;flex-direction:column;line-height:1.1;cursor:pointer}
+.brand img{height:32px;width:auto;object-fit:contain}
+.brand span{font-size:10.5px;color:var(--muted-2);font-weight:500;margin-top:6px}
+nav.links{display:flex;align-items:center;gap:22px;font-weight:600;font-size:14px;color:var(--ink-2)}
+nav.links a{transition:.15s}
+nav.links a:hover{color:var(--teal)}
+.nav-act{display:flex;align-items:center;gap:12px}
+.lang{border:1.5px solid var(--line-2);color:var(--teal);background:#fff;border-radius:999px;padding:8px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;min-width:44px}
+.cart-b{position:relative;width:42px;height:42px;border-radius:12px;background:var(--ink);color:#fff;border:none;cursor:pointer;display:grid;place-items:center}
+.cart-b:hover{background:var(--teal)}
+.cart-n{position:absolute;top:-7px;inset-inline-end:-7px;background:var(--orange);color:#fff;font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:999px;display:grid;place-items:center;padding:0 5px;border:2px solid var(--cream)}
+.hamb{display:none;background:#fff;border:1.5px solid var(--line-2);border-radius:11px;width:42px;height:42px;cursor:pointer}
+.hamb i{display:block;width:17px;height:2px;background:var(--ink);margin:3.5px auto;border-radius:2px}
 
-header.nav{position:sticky;top:0;z-index:60;background:rgba(251,248,243,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;height:70px}
-.logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.logo .mark{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.7rem;letter-spacing:-.5px;line-height:1}
-.logo .mark .s1{color:var(--orange)} .logo .mark .n{color:var(--teal);position:relative}
-.logo .mark .n::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:3px;background:var(--teal);border-radius:2px;transform:skewX(-12deg)}
-.logo .tag{font-size:.62rem;color:var(--muted);font-weight:700;margin-top:2px}
-.logo .logo-txt{display:flex;flex-direction:column}
-nav.links{display:flex;align-items:center;gap:4px}
-nav.links a{padding:9px 13px;border-radius:10px;font-weight:700;font-size:.92rem;color:var(--navy);transition:.15s}
-nav.links a:hover{background:var(--orange-l);color:var(--orange-d)}
-.nav-actions{display:flex;align-items:center;gap:8px}
-.lang-btn{background:#fff;border:2px solid var(--line);border-radius:999px;font-family:inherit;font-weight:800;cursor:pointer;padding:7px 14px;font-size:.85rem;color:var(--navy);transition:.15s}
-.lang-btn:hover{border-color:var(--teal);color:var(--teal)}
-.cart-btn{position:relative;background:var(--navy);color:#fff;border:none;cursor:pointer;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;transition:.15s}
-.cart-btn:hover{background:var(--orange)}
-.cart-btn svg{width:21px;height:21px}
-.cart-count{position:absolute;top:-7px;inset-inline-end:-7px;background:var(--orange);color:#fff;font-size:.7rem;font-weight:800;min-width:20px;height:20px;border-radius:999px;display:grid;place-items:center;padding:0 5px;border:2px solid var(--cream)}
-.hamb{display:none;background:#fff;border:2px solid var(--line);border-radius:10px;width:42px;height:42px;cursor:pointer}
-.hamb span{display:block;width:18px;height:2px;background:var(--navy);margin:3px auto;border-radius:2px}
+/* hero */
+.hero{max-width:var(--wrap);margin:0 auto;padding:56px 24px 60px;display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.pill{border-radius:999px;padding:7px 15px;font-size:12.5px;font-weight:600}
+.p-t{background:var(--teal-l);color:var(--teal)}
+.p-o{background:var(--orange-l);color:var(--orange-d)}
+.p-a{background:var(--amber-l);color:var(--amber-ink)}
+.hero h1{font-weight:700;font-size:47px;line-height:1.28}
+.hero h1 span{color:var(--orange)}
+.hero p.sub{font-size:16px;line-height:1.85;color:var(--muted);margin:20px 0 28px;max-width:32em}
+.hero-cta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.stats{display:flex;gap:34px;margin-top:38px;flex-wrap:wrap}
+.stats .n{font-weight:700;font-size:30px;color:var(--teal);line-height:1}
+.stats .l{font-size:12.5px;color:var(--muted-2);font-weight:500;margin-top:3px}
+.hero-art{position:relative;height:430px}
+.bk{position:absolute;width:186px;border-radius:6px;box-shadow:0 18px 36px rgba(22,50,60,.26)}
+.bk1{transform:rotate(-8deg);inset-inline-start:6%;top:34px;z-index:1}
+.bk2{transform:rotate(3deg);inset-inline-start:31%;top:82px;z-index:3}
+.bk3{transform:rotate(11deg);inset-inline-start:55%;top:42px;z-index:2}
+.float{position:absolute;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh-pop);padding:11px 15px;display:flex;align-items:center;gap:9px;font-weight:600;font-size:13px;z-index:5}
+.f1{bottom:4px;inset-inline-start:0;color:var(--teal)}
+.f2{top:-4px;inset-inline-end:2%;color:var(--orange)}
+.float b{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#fff;font-size:13px}
 
-.hero{background:radial-gradient(1200px 500px at 80% -10%, rgba(19,138,120,.10), transparent 60%),radial-gradient(900px 400px at 0% 110%, rgba(238,90,45,.08), transparent 60%),var(--cream);padding:60px 0 70px}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center}
-.badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.78rem;font-weight:800;color:var(--navy);box-shadow:var(--shadow-s)}
-.pill.t{color:var(--teal);border-color:var(--teal-l);background:var(--teal-l)}
-.pill.o{color:var(--orange-d);border-color:var(--orange-l);background:var(--orange-l)}
-.hero h1{font-size:clamp(2rem,5vw,3.3rem);font-weight:900;line-height:1.18;color:var(--navy);letter-spacing:-.5px}
-.hero h1 .hl{color:var(--orange)}
-.hero p.lead{font-size:1.1rem;color:var(--muted);margin:18px 0 26px;max-width:560px}
-.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
-.hero-stats{display:flex;gap:26px;margin-top:30px;flex-wrap:wrap}
-.hstat .n{font-size:1.5rem;font-weight:900;color:var(--teal)}
-.hstat .l{font-size:.8rem;color:var(--muted);font-weight:700}
-.hero-art{position:relative;height:420px}
-.bkcard{position:absolute;width:188px}
-.bkcard img{width:100%;height:auto;border-radius:8px;box-shadow:0 24px 50px rgba(27,45,79,.28);display:block}
-.bk1{transform:rotate(-9deg);inset-inline-start:8%;top:30px;z-index:1}
-.bk2{transform:rotate(3deg);inset-inline-start:33%;top:75px;z-index:3}
-.bk3{transform:rotate(12deg);inset-inline-start:55%;top:40px;z-index:2}
-.hero-art .float-card{position:absolute;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:11px 14px;display:flex;align-items:center;gap:9px;font-weight:800;font-size:.84rem;z-index:5}
-.fc1{bottom:2px;inset-inline-start:1%;color:var(--teal)}
-.fc2{top:-6px;inset-inline-end:2%;color:var(--orange)}
-.float-card .dot{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:.95rem}
+/* cards */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.feat{background:var(--cream);border:1px solid var(--line);border-radius:20px;padding:26px 22px}
+.sec-white .feat{background:var(--cream)}
+.feat .ic{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px;font-size:20px}
+.feat h3{font-size:17px;color:var(--ink);font-weight:700;margin-bottom:7px}
+.feat p{color:var(--muted);font-size:13.5px;line-height:1.7}
+.i-o{background:var(--orange-l);color:var(--orange-d)}
+.i-t{background:var(--teal-l);color:var(--teal)}
+.i-a{background:var(--amber-l);color:var(--amber-ink)}
+.i-s{background:var(--slate-l);color:var(--ink)}
 
-.grid{display:grid;gap:22px}
-.g4{grid-template-columns:repeat(4,1fr)}
-.feat{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;transition:.2s}
-.feat:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
-.feat .ic{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:1.4rem;margin-bottom:14px}
-.feat h3{font-size:1.1rem;color:var(--navy);font-weight:900;margin-bottom:7px}
-.feat p{color:var(--muted);font-size:.92rem}
-.ic-o{background:var(--orange-l);color:var(--orange-d)} .ic-t{background:var(--teal-l);color:var(--teal-d)}
-.ic-a{background:var(--amber-l);color:#bf7a16} .ic-n{background:#e7ecf5;color:var(--navy)}
+/* shop */
+.seg-wrap{display:flex;justify-content:center;margin:0 0 36px}
+.seg{display:inline-flex;gap:4px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px;box-shadow:0 6px 20px rgba(14,110,96,.07)}
+.seg button{background:transparent;color:var(--muted);border:none;cursor:pointer;font-family:inherit;border-radius:999px;padding:11px 22px;font-weight:600;font-size:13.5px;display:inline-flex;align-items:center;gap:8px;transition:.15s}
+.seg button.on{background:var(--ink);color:#fff}
+.seg button i{background:var(--chip);color:var(--muted-3);border-radius:999px;min-width:20px;height:20px;padding:0 6px;display:inline-grid;place-items:center;font-size:11px;font-weight:700;font-style:normal}
+.seg button.on i{background:rgba(255,255,255,.18);color:#fff}
+.prods{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sh-card);transition:.18s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--sh-pop)}
+.cv{height:270px;background:linear-gradient(160deg,#F5F1EA,#ECE6DB);position:relative;display:flex;align-items:center;justify-content:center;padding:22px}
+.cv img{height:226px;width:auto;border-radius:6px;box-shadow:0 14px 26px rgba(22,50,60,.24)}
+.cv.bundle{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:22px 44px;place-items:center}
+.cv.bundle img{height:104px;box-shadow:0 8px 16px rgba(22,50,60,.2)}
+.badge{position:absolute;top:12px;inset-inline-end:12px;border-radius:999px;padding:4px 11px;font-size:10.5px;font-weight:700;z-index:2}
+.cbody{padding:18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:999px;color:#fff}
+.tag.g{background:var(--chip);color:var(--muted-3)}
+.card h3{font-size:16px;color:var(--ink);font-weight:700}
+.card p{font-size:13px;color:var(--muted);line-height:1.7;flex:1}
+.price{display:flex;align-items:baseline;gap:7px;margin-top:2px}
+.price .n{font-size:22px;font-weight:700;color:var(--orange)}
+.price .c{font-size:13px;color:var(--muted-2);font-weight:500}
+.price .old{font-size:14px;color:var(--muted-3);text-decoration:line-through}
+.acts{display:flex;gap:8px;margin-top:6px}
+.acts .btn{flex:1}
+.ship-note{text-align:center;margin-top:26px;color:var(--muted);font-size:14px}
+.ship-note b{color:var(--teal)}
 
-#shop{background:#fff}
-.filters{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:24px 0 34px}
-.chip{background:var(--cream);border:1.5px solid var(--line);border-radius:999px;padding:8px 18px;font-weight:800;font-size:.88rem;cursor:pointer;color:var(--navy);transition:.15s;font-family:inherit}
-.chip:hover{border-color:var(--orange)}
-.chip.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-.products{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
-.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:.2s;display:flex;flex-direction:column}
-.card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
-.card.bundle{border:2px solid var(--amber)}
-.cover{height:240px;background:#fff;position:relative;overflow:hidden}
-.cover img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
-.bundle-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;height:100%;padding:6px}
-.bundle-grid img{width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:8px}
-.card .body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:9px;flex:1}
-.tag-row{display:flex;gap:6px;flex-wrap:wrap}
-.tag{font-size:.7rem;font-weight:800;padding:3px 9px;border-radius:7px;background:var(--cream);color:var(--muted);border:1px solid var(--line)}
-.tag.accent{color:#fff;border-color:transparent}
-.card h3{font-size:1.08rem;color:var(--navy);font-weight:900}
-.card .desc{font-size:.86rem;color:var(--muted);flex:1}
-.price{display:flex;align-items:baseline;gap:6px;margin-top:2px}
-.price .num{font-size:1.35rem;font-weight:900;color:var(--orange)}
-.price .cur{font-size:.85rem;font-weight:800;color:var(--muted)}
-.price .old{font-size:.9rem;color:var(--muted);text-decoration:line-through;font-weight:700}
-.card .acts{display:flex;gap:8px;margin-top:6px}
-.card .acts .btn{flex:1;justify-content:center}
-.badge-corner{position:absolute;inset-inline-end:12px;top:12px;background:var(--orange);color:#fff;font-size:.68rem;font-weight:900;padding:4px 10px;border-radius:999px;z-index:2;box-shadow:var(--shadow-s)}
-.badge-corner.green{background:var(--green)} .badge-corner.amber{background:var(--amber);color:var(--navy-d)}
+/* plus */
+#plus{background:linear-gradient(160deg,var(--teal),var(--teal-d));color:#fff;position:relative;overflow:hidden}
+#plus h2.t{color:#fff}
+#plus .eyebrow{color:var(--amber)}
+#plus .lead{color:#BFE0DA}
+.ribbon{display:inline-block;background:var(--amber);color:#0A3B33;font-weight:700;font-size:12.5px;padding:6px 16px;border-radius:999px;margin-bottom:14px}
+.pcards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+.pcard{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:24px}
+.pcard .ic{width:46px;height:46px;border-radius:13px;background:rgba(242,160,61,.18);color:var(--amber);display:grid;place-items:center;font-size:19px;margin-bottom:13px}
+.pcard h4{font-size:16px;font-weight:700;margin-bottom:6px}
+.pcard p{color:#BFE0DA;font-size:13.5px;line-height:1.7}
+.pcard .soon{display:inline-block;background:rgba(255,255,255,.14);color:#EAF7F3;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;margin-top:9px}
+.verify{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:26px;margin-top:24px;display:grid;grid-template-columns:1.3fr .7fr;gap:24px;align-items:center}
+.verify h3{font-size:20px;font-weight:700;margin-bottom:8px}
+.verify p{color:#CFE6E1;font-size:14px}
+.vform{display:flex;gap:8px}
+.vform input{flex:1;border:1.5px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;border-radius:12px;padding:13px 15px;font-family:inherit;font-size:14px}
+.vform input::placeholder{color:#9FC6BF}
+.incl{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:18px 22px;margin-top:18px;display:flex;gap:14px;align-items:flex-start}
+.incl .em{font-size:22px}
+.incl h4{font-weight:700;margin-bottom:4px}
+.incl p{color:#CFE6E1;font-size:13.5px}
 
-#plus{background:linear-gradient(180deg,var(--navy),var(--navy-d));color:#fff;position:relative;overflow:hidden}
-#plus .sec-title{color:#fff} #plus .sec-sub{color:#c4cee0} #plus .eyebrow{color:var(--amber)}
-.soon-ribbon{display:inline-block;background:var(--amber);color:var(--navy-d);font-weight:900;font-size:.8rem;padding:5px 16px;border-radius:999px;margin-bottom:14px}
-.plus-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}
-.qcard{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:22px}
-.qcard .ic{width:46px;height:46px;border-radius:12px;background:rgba(242,160,61,.16);color:var(--amber);display:grid;place-items:center;font-size:1.3rem;margin-bottom:12px}
-.qcard h4{font-size:1.03rem;font-weight:800;margin-bottom:6px}
-.qcard p{color:#bfcae0;font-size:.89rem}
-.protect{background:rgba(19,138,120,.16);border:1px solid rgba(19,138,120,.4);border-radius:16px;padding:22px 24px;margin-top:24px;display:flex;gap:16px;align-items:flex-start}
-.protect .ic{font-size:1.8rem} .protect h4{color:#fff;font-weight:800;margin-bottom:4px} .protect p{color:#cfe6e1;font-size:.9rem}
-.plus-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px;align-items:center}
+/* posts */
+.posts{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.post{background:var(--cream);border:1px solid var(--line);border-radius:18px;overflow:hidden;cursor:pointer;transition:.18s}
+.post:hover{transform:translateY(-4px);box-shadow:var(--sh-card)}
+.post .ph{height:118px;display:grid;place-items:center;font-size:34px;color:#fff}
+.post .pb{padding:18px}
+.post .cat{font-size:11.5px;font-weight:700;color:var(--orange);margin-bottom:6px}
+.post h3{font-size:16px;color:var(--ink);font-weight:700;line-height:1.5;margin-bottom:7px}
+.post p{font-size:13px;color:var(--muted);line-height:1.7}
+.post .r{color:var(--teal);font-weight:600;font-size:13px;margin-top:10px;display:inline-block}
 
-.posts{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:34px}
-.post{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:.2s;cursor:pointer}
-.post:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
-.post .ph{height:120px;display:grid;place-items:center;font-size:2.4rem;color:#fff}
-.post .pbody{padding:18px}
-.post .cat{font-size:.72rem;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:.4px}
-.post h3{font-size:1.08rem;color:var(--navy);font-weight:900;margin:6px 0 8px;line-height:1.4}
-.post p{font-size:.87rem;color:var(--muted)}
-.post .read{color:var(--teal);font-weight:800;font-size:.85rem;margin-top:10px;display:inline-block}
+/* teachers */
+.tbox{background:linear-gradient(150deg,var(--teal),var(--teal-d));color:#fff;border-radius:24px;padding:46px;display:grid;grid-template-columns:1.3fr .7fr;gap:32px;align-items:center}
+.tbox h2{color:#fff;font-size:29px;font-weight:700;line-height:1.35}
+.tbox p{color:#CFE6E1;margin-top:12px;font-size:15px}
+.tlist{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.tlist span{display:flex;gap:9px;font-weight:500;font-size:14.5px}
+.tlist span::before{content:"◆";color:var(--amber)}
+.tcta{display:flex;flex-direction:column;gap:10px}
 
-#teachers .tbox{background:linear-gradient(135deg,var(--teal),var(--teal-d));color:#fff;border-radius:24px;padding:46px;display:grid;grid-template-columns:1.3fr .7fr;gap:30px;align-items:center;position:relative;overflow:hidden}
-#teachers .tbox h2{color:#fff;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:900;line-height:1.3}
-#teachers .tbox p{color:#d6f0eb;margin:12px 0 0}
-#teachers .tlist{display:flex;flex-direction:column;gap:10px;margin-top:18px}
-#teachers .tlist span{display:flex;gap:8px;font-weight:700;font-size:.95rem}
-#teachers .tlist span::before{content:"◆";color:var(--amber)}
-.tbox .tcta{display:flex;flex-direction:column;gap:10px}
+/* about */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center}
+.astats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
+.astat{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:18px}
+.astat .n{font-size:24px;font-weight:700;color:var(--orange)}
+.astat .l{font-size:13px;color:var(--muted);font-weight:500}
+.avis{background:linear-gradient(150deg,var(--ink),#0D2129);border-radius:24px;padding:44px;text-align:center;color:#fff}
+.avis img{height:52px;margin:0 auto 16px;filter:brightness(0) invert(1)}
 
-#about{background:#fff}
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center}
-.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
-.astat{background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:18px}
-.astat .n{font-size:1.6rem;font-weight:900;color:var(--orange)}
-.astat .l{font-size:.84rem;color:var(--muted);font-weight:700}
-.about-visual{background:linear-gradient(150deg,var(--navy),var(--navy-d));border-radius:24px;padding:40px;color:#fff;text-align:center}
-.about-visual .big{font-family:'Poppins';font-weight:800;font-size:3.2rem;line-height:1}
-.about-visual .big .t{color:#3fd0b8} .about-visual .big .o{color:var(--orange)}
+/* contact */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+.cinfo{display:flex;flex-direction:column;gap:12px}
+.cline{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+.cline .ic{width:42px;height:42px;border-radius:12px;background:var(--orange-l);color:var(--orange-d);display:grid;place-items:center;font-size:18px;flex-shrink:0}
+.cline b{color:var(--ink);font-weight:600;display:block;font-size:14.5px}
+.cline span{color:var(--muted);font-size:13.5px}
+.cform{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px}
+.fld{margin-bottom:14px}
+.fld label{display:block;font-weight:600;font-size:13.5px;margin-bottom:6px;color:var(--ink)}
+.fld input,.fld textarea,.fld select{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:12px 14px;font-family:inherit;font-size:14.5px;background:#fff;color:var(--ink)}
+.fld input:focus,.fld textarea:focus,.fld select:focus{outline:none;border-color:var(--teal)}
 
-#contact{background:var(--cream)}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px}
-.cinfo{display:flex;flex-direction:column;gap:14px}
-.cline{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
-.cline .ic{width:42px;height:42px;border-radius:11px;background:var(--orange-l);color:var(--orange-d);display:grid;place-items:center;font-size:1.2rem;flex-shrink:0}
-.cline b{color:var(--navy)} .cline span{color:var(--muted);font-size:.9rem}
-form.cform{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px}
-.field{margin-bottom:14px}
-.field label{display:block;font-weight:800;font-size:.85rem;margin-bottom:6px;color:var(--navy)}
-.field input,.field textarea,.field select{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:12px 14px;font-family:inherit;font-size:.95rem;background:var(--cream);transition:.15s}
-.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--teal);background:#fff}
-
-footer{background:var(--navy-d);color:#cdd6e6;padding:54px 0 26px}
-.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:30px}
-footer h5{color:#fff;font-weight:800;margin-bottom:14px;font-size:1rem}
-footer a,footer p.fx{display:block;color:#b7c2d6;font-size:.89rem;padding:4px 0;transition:.15s}
+/* footer */
+footer{background:var(--ink);color:#C3D2D6;padding:56px 0 26px}
+.fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:30px}
+footer h5{color:#fff;font-weight:700;margin-bottom:14px;font-size:15px}
+footer a,footer p.fx{display:block;color:#A8BCC1;font-size:13.5px;padding:4px 0}
 footer a:hover{color:var(--amber)}
-.foot-logo .mark{font-family:'Poppins';font-weight:800;font-size:1.6rem}
-.foot-logo .mark .s1{color:var(--orange)} .foot-logo .mark .n{color:#3fd0b8}
-.socials{display:flex;gap:10px;margin-top:14px}
-.socials a{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.08);display:grid;place-items:center;color:#fff;padding:0}
-.socials a:hover{background:var(--orange)}
-.foot-bottom{border-top:1px solid rgba(255,255,255,.1);margin-top:34px;padding-top:18px;text-align:center;font-size:.82rem;color:#90a0bb}
+footer .flogo img{height:30px;filter:brightness(0) invert(1)}
+.soc{display:flex;gap:10px;margin-top:14px}
+.soc a{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.09);display:grid;place-items:center;color:#fff;padding:0}
+.soc a:hover{background:var(--orange)}
+.fbot{border-top:1px solid rgba(255,255,255,.1);margin-top:34px;padding-top:18px;text-align:center;font-size:12.5px;color:#8CA3A9}
 
-.overlay{position:fixed;inset:0;background:rgba(20,35,57,.55);z-index:90;opacity:0;visibility:hidden;transition:.25s}
-.overlay.show{opacity:1;visibility:visible}
-.drawer{position:fixed;top:0;inset-inline-end:0;height:100%;width:400px;max-width:92vw;background:var(--cream);z-index:100;transform:translateX(100%);transition:.3s;display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,.2)}
+/* drawer + modal */
+.ov{position:fixed;inset:0;background:rgba(22,50,60,.55);z-index:90;opacity:0;visibility:hidden;transition:.25s}
+.ov.on{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;inset-inline-end:0;height:100%;width:410px;max-width:92vw;background:var(--cream);z-index:100;transform:translateX(100%);transition:.3s;display:flex;flex-direction:column}
 html[dir="rtl"] .drawer{transform:translateX(-100%)}
-.drawer.show{transform:translateX(0)!important}
-.drawer-head{padding:20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:#fff}
-.drawer-head h3{color:var(--navy);font-weight:900}
-.x{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted);line-height:1}
-.cart-items{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
-.citem{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;gap:12px;align-items:center}
-.citem .ci-cv{width:46px;height:62px;border-radius:7px;flex-shrink:0;object-fit:cover}
-.citem .ci-info{flex:1;min-width:0}
-.citem .ci-info h4{font-size:.9rem;color:var(--navy);font-weight:800}
-.citem .ci-info .p{color:var(--orange);font-weight:800;font-size:.87rem}
+.drawer.on{transform:translateX(0)!important}
+.dhead{padding:20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:#fff}
+.dhead h3{color:var(--ink);font-weight:700;font-size:17px}
+.x{background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted);line-height:1}
+.citems{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.ci{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;gap:12px;align-items:center}
+.ci img{width:44px;height:60px;object-fit:contain;border-radius:5px}
+.ci .in{flex:1;min-width:0}
+.ci h4{font-size:13.5px;color:var(--ink);font-weight:600}
+.ci .p{color:var(--orange);font-weight:700;font-size:13.5px}
 .qty{display:flex;align-items:center;gap:6px}
-.qty button{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-weight:900;color:var(--navy)}
-.qty span{min-width:20px;text-align:center;font-weight:800;font-size:.9rem}
-.ci-rm{background:none;border:none;color:#c0392b;cursor:pointer;font-size:.77rem;font-weight:700}
-.cart-empty{text-align:center;color:var(--muted);padding:50px 20px}
-.cart-foot{padding:18px 20px;border-top:1px solid var(--line);background:#fff}
-.cart-total{display:flex;justify-content:space-between;font-weight:900;font-size:1.12rem;color:var(--navy);margin-bottom:14px}
-.cart-total .t{color:var(--orange)}
-.cart-foot .btn{width:100%;justify-content:center;margin-bottom:8px}
-
+.qty button{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-weight:700;color:var(--ink)}
+.qty span{min-width:20px;text-align:center;font-weight:600;font-size:13.5px}
+.rm{background:none;border:none;color:#C0392B;cursor:pointer;font-size:12px;font-weight:600}
+.empty{text-align:center;color:var(--muted);padding:50px 20px}
+.dfoot{padding:18px 20px;border-top:1px solid var(--line);background:#fff}
+.tot{display:flex;justify-content:space-between;font-weight:700;font-size:17px;color:var(--ink);margin-bottom:14px}
+.tot .v{color:var(--orange)}
+.dfoot .btn{width:100%;margin-bottom:8px}
 .modal{position:fixed;inset:0;z-index:110;display:none;align-items:center;justify-content:center;padding:20px}
-.modal.show{display:flex}
-.modal-bg{position:absolute;inset:0;background:rgba(20,35,57,.6)}
-.modal-card{position:relative;background:var(--cream);border-radius:20px;width:560px;max-width:100%;max-height:90vh;overflow-y:auto;z-index:1}
-.modal-card .mhead{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:20px 20px 0 0;position:sticky;top:0}
-.modal-card .mhead h3{color:var(--navy);font-weight:900}
-.modal-body{padding:24px}
-.note{background:var(--amber-l);border:1px solid #f0d9ad;border-radius:12px;padding:12px 14px;font-size:.84rem;color:#8a6210;margin-top:8px}
+.modal.on{display:flex}
+.mbg{position:absolute;inset:0;background:rgba(22,50,60,.6)}
+.mcard{position:relative;background:var(--cream);border-radius:22px;width:580px;max-width:100%;max-height:90vh;overflow-y:auto;z-index:1}
+.mhead{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:22px 22px 0 0;position:sticky;top:0}
+.mhead h3{color:var(--ink);font-weight:700;font-size:17px}
+.mbody{padding:24px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.pd{display:grid;grid-template-columns:190px 1fr;gap:20px}
-.pd .cover{aspect-ratio:.7;height:auto;border-radius:14px}
-.pd h3{color:var(--navy);font-weight:900;font-size:1.3rem}
-.pd ul{margin:10px 0 0;padding-inline-start:18px;color:var(--muted);font-size:.9rem}
-.pd ul li{margin-bottom:4px}
+.note{background:var(--amber-l);border:1px solid #F0DCB5;border-radius:13px;padding:12px 14px;font-size:13px;color:var(--amber-ink);margin-top:10px}
+.note.t{background:var(--teal-l);border-color:#BFE0DA;color:var(--teal)}
+.pd{display:grid;grid-template-columns:190px 1fr;gap:22px}
+.pd .cv{height:250px;border-radius:14px}
+.pd .cv img{height:210px}
+.pd h3{font-size:19px;font-weight:700;color:var(--ink)}
+.pd ul{margin:10px 0 0;padding-inline-start:18px;color:var(--muted);font-size:13.5px}
+.pd li{margin-bottom:5px}
+/* payment */
+.pay{background:#fff;border:2px solid var(--line);border-radius:14px;padding:13px;margin-bottom:9px;cursor:pointer;display:flex;align-items:center;gap:11px;transition:.15s}
+.pay:hover{border-color:var(--teal)}
+.pay.on{border-color:var(--orange);background:var(--orange-l)}
+.pay .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:19px;flex-shrink:0;background:var(--cream)}
+.pay .tx{flex:1}
+.pay .tx b{display:block;font-size:14px;color:var(--ink);font-weight:600}
+.pay .tx span{font-size:12px;color:var(--muted)}
+.pay .tg{font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--teal-l);color:var(--teal)}
+.pay .tg.hot{background:var(--orange-l);color:var(--orange-d)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px;margin-top:6px}
+.copy{display:flex;align-items:center;justify-content:space-between;background:var(--cream);border:1.5px dashed var(--orange);border-radius:12px;padding:12px;margin:10px 0;font-weight:700;color:var(--ink);direction:ltr}
+.copy button{background:var(--orange);color:#fff;border:none;border-radius:9px;padding:6px 12px;font-family:inherit;font-weight:600;font-size:12px;cursor:pointer}
+.upl{border:2px dashed var(--line);border-radius:13px;padding:18px;text-align:center;color:var(--muted);font-size:13.5px;cursor:pointer}
+.upl.ok{border-color:var(--teal);background:var(--teal-l);color:var(--teal);font-weight:600}
 
-.wa-float{position:fixed;bottom:22px;inset-inline-start:22px;width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;z-index:80;box-shadow:0 8px 22px rgba(37,211,102,.5);transition:.2s}
-.wa-float:hover{transform:scale(1.08)}
-.wa-float svg{width:30px;height:30px}
-.toast{position:fixed;bottom:28px;inset-inline-end:28px;background:var(--navy);color:#fff;padding:14px 22px;border-radius:12px;font-weight:800;font-size:.92rem;z-index:200;opacity:0;transform:translateY(20px);transition:.3s;box-shadow:var(--shadow)}
-.toast.show{opacity:1;transform:translateY(0)}
+.wa{position:fixed;bottom:22px;inset-inline-start:22px;width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;z-index:80;box-shadow:0 8px 22px rgba(37,211,102,.45)}
+.wa:hover{transform:scale(1.07)}
+.toast{position:fixed;bottom:28px;inset-inline-end:28px;background:var(--ink);color:#fff;padding:14px 22px;border-radius:13px;font-weight:600;font-size:14px;z-index:200;opacity:0;transform:translateY(20px);transition:.3s}
+.toast.on{opacity:1;transform:translateY(0)}
 
-@media(max-width:980px){
-  .hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr}
+@media(max-width:1000px){
+  .hero,.about,.cgrid{grid-template-columns:1fr}
   .hero-art{height:340px;order:-1}
-  .g4,.products,.plus-grid,.posts{grid-template-columns:repeat(2,1fr)}
-  #teachers .tbox{grid-template-columns:1fr}
-  nav.links{display:none} .hamb{display:block}
-  nav.links.open{display:flex;position:absolute;top:70px;inset-inline:0;flex-direction:column;background:#fff;padding:14px;gap:4px;border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
-  nav.links.open a{width:100%}
+  .g4,.prods,.pcards,.posts{grid-template-columns:repeat(2,1fr)}
+  .tbox,.verify{grid-template-columns:1fr}
+  nav.links{display:none}.hamb{display:block}
+  nav.links.open{display:flex;position:absolute;top:74px;inset-inline:0;flex-direction:column;background:#fff;padding:14px;gap:6px;border-bottom:1px solid var(--line);box-shadow:var(--sh-card)}
+  .hero h1{font-size:36px}
+  h2.t{font-size:28px}
 }
-@media(max-width:600px){
+@media(max-width:620px){
   section{padding:52px 0}
-  .g4,.products,.plus-grid,.posts,.two{grid-template-columns:1fr}
-  .hero-stats{gap:18px}
-  .pd{grid-template-columns:1fr} .pd .cover{height:220px}
-  .foot-grid{grid-template-columns:1fr 1fr}
+  .g4,.prods,.pcards,.posts,.two{grid-template-columns:1fr}
+  .pd{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr 1fr}
+  .tbox{padding:30px}
+  .hero h1{font-size:31px}
 }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <span data-ar="📚 سلسلة <b>Senior 2027</b> — إصدار جديد متوافق مع الثانوية العامة والأزهر · الدفع عند الاستلام لكل المحافظات"
-        data-en="📚 <b>Senior 2027</b> series — new edition for General & Azhari secondary · cash on delivery nationwide"></span>
+  <span data-ar="سلسلة <b>Senior 2026/2027</b> — عام وأزهر · تأليف الأستاذ صلاح علي"
+        data-en="<b>Senior 2026/2027</b> series — General &amp; Azhar · by Mr. Salah Ali"></span>
 </div>
 
-<header class="nav">
-  <div class="wrap nav-inner">
-    <div class="logo" onclick="scrollTo({top:0,behavior:'smooth'})">
-      <div class="logo-txt">
-        <span class="mark"><span class="s1">Se</span><span class="n">N</span><span class="s1">ior</span></span>
-        <span class="tag" data-ar="سلسلة كتب خارجية متخصّصة في الإنجليزي" data-en="Specialist English book series">سلسلة كتب خارجية متخصّصة في الإنجليزي</span>
-      </div>
+<header>
+  <div class="wrap nav-in">
+    <div class="brand" onclick="scrollTo({top:0,behavior:'smooth'})">
+      <img src="senior-logo.png" alt="Senior">
+      <span data-ar="سلسلة كتب خارجية متخصّصة في الإنجليزي" data-en="Specialist English book series">سلسلة كتب خارجية متخصّصة في الإنجليزي</span>
     </div>
-    <nav class="links" id="navlinks">
+    <nav class="links" id="nav">
       <a href="#why" data-ar="لماذا Senior" data-en="Why Senior">لماذا Senior</a>
       <a href="#shop" data-ar="السلسلة" data-en="The Series">السلسلة</a>
-      <a href="#plus" data-ar="المنصة الرقمية" data-en="Senior Plus">المنصة الرقمية</a>
+      <a href="#plus" data-ar="المنصّة الرقمية" data-en="Senior Plus">المنصّة الرقمية</a>
       <a href="#content" data-ar="المحتوى" data-en="Learn">المحتوى</a>
       <a href="#teachers" data-ar="للمدرّسين" data-en="For Teachers">للمدرّسين</a>
-      <a href="#about" data-ar="من نحن" data-en="About">من نحن</a>
       <a href="#contact" data-ar="تواصل" data-en="Contact">تواصل</a>
     </nav>
-    <div class="nav-actions">
-      <button class="lang-btn" onclick="toggleLang()" id="langBtn">EN</button>
-      <button class="cart-btn" onclick="openCart()" aria-label="cart">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        <span class="cart-count" id="cartCount" style="display:none">0</span>
+    <div class="nav-act">
+      <button class="lang" onclick="toggleLang()" id="langBtn">EN</button>
+      <button class="cart-b" onclick="openCart()" aria-label="cart">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-n" id="cartN" style="display:none">0</span>
       </button>
-      <button class="hamb" onclick="document.getElementById('navlinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+      <a href="#shop" class="btn b-o b-sm" data-ar="اطلب الآن" data-en="Order now">اطلب الآن</a>
+      <button class="hamb" onclick="document.getElementById('nav').classList.toggle('open')"><i></i><i></i><i></i></button>
     </div>
   </div>
 </header>
 
-<!-- Hero -->
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <div class="badge-row">
-        <span class="pill t" data-ar="★ متخصّصون في الإنجليزي فقط" data-en="★ English specialists only">★ متخصّصون في الإنجليزي فقط</span>
-        <span class="pill o" data-ar="عام وأزهر" data-en="General & Azhar">عام وأزهر</span>
-        <span class="pill" data-ar="مجاب عنه بالكامل" data-en="Fully answered">مجاب عنه بالكامل</span>
-      </div>
-      <h1 data-ar="الكتاب الخارجي <span class='hl'>الأول</span> في إنجليزي الثانوية — عام وأزهر"
-          data-en="The <span class='hl'>#1</span> external English series for secondary — General & Azhar">
-        الكتاب الخارجي <span class="hl">الأول</span> في إنجليزي الثانوية — عام وأزهر</h1>
-      <p class="lead" data-ar="سلسلة متخصّصة في اللغة الإنجليزية وحدها: قواعد مبسّطة، وتمارين وقطع فهم بإجابات نموذجية كاملة، وترجمة شاملة — كل ما يحتاجه طالب الثانوية للتفوّق. تأليف الأستاذ صلاح علي."
-         data-en="A series focused on English alone: simplified grammar, exercises and reading passages with complete model answers, and full translation — everything a secondary student needs to excel. By Mr. Salah Ali.">
-        سلسلة متخصّصة في اللغة الإنجليزية وحدها: قواعد مبسّطة، وتمارين وقطع فهم بإجابات نموذجية كاملة، وترجمة شاملة — كل ما يحتاجه طالب الثانوية للتفوّق. تأليف الأستاذ صلاح علي.</p>
-      <div class="hero-cta">
-        <a href="#shop" class="btn btn-primary" data-ar="🛒 اطلب السلسلة الآن" data-en="🛒 Order the series">🛒 اطلب السلسلة الآن</a>
-        <a href="#why" class="btn btn-ghost" data-ar="لماذا Senior؟" data-en="Why Senior?">لماذا Senior؟</a>
-      </div>
-      <div class="hero-stats">
-        <div class="hstat"><div class="n">4</div><div class="l" data-ar="كتب في السلسلة" data-en="books in the series">كتب في السلسلة</div></div>
-        <div class="hstat"><div class="n">100+150</div><div class="l" data-ar="قطعة فهم + ترجمة" data-en="passages + translations">قطعة فهم + ترجمة</div></div>
-        <div class="hstat"><div class="n">100%</div><div class="l" data-ar="مجاب عنه بالكامل" data-en="fully answered">مجاب عنه بالكامل</div></div>
-      </div>
+<!-- HERO -->
+<section class="hero" style="padding-top:56px;padding-bottom:60px">
+  <div>
+    <div class="pills">
+      <span class="pill p-t" data-ar="★ متخصّصون في الإنجليزي فقط" data-en="★ English specialists only">★ متخصّصون في الإنجليزي فقط</span>
+      <span class="pill p-o" data-ar="عام وأزهر" data-en="General &amp; Azhar">عام وأزهر</span>
+      <span class="pill p-a" data-ar="مجاب عنه بالكامل" data-en="Fully answered">مجاب عنه بالكامل</span>
     </div>
-    <div class="hero-art">
-      <div class="bkcard bk1"><img src="book-comprehension.jpg" alt="Senior Comprehension" loading="lazy"></div>
-      <div class="bkcard bk2"><img src="book-exercises.jpg" alt="Senior Exercises" loading="lazy"></div>
-      <div class="bkcard bk3"><img src="book-skills.jpg" alt="Senior Skills" loading="lazy"></div>
-      <div class="float-card fc1"><span class="dot" style="background:var(--teal)">✓</span><span data-ar="دفع عند الاستلام" data-en="Cash on delivery">دفع عند الاستلام</span></div>
-      <div class="float-card fc2"><span class="dot" style="background:var(--orange)">★</span><span data-ar="إجابات نموذجية" data-en="Model answers">إجابات نموذجية</span></div>
+    <h1 data-ar="الكتاب الخارجي <span>الأول</span> في إنجليزي الثانوية — عام وأزهر"
+        data-en="The <span>#1</span> external English series for secondary — General &amp; Azhar"></h1>
+    <p class="sub" data-ar="سلسلة متخصّصة في اللغة الإنجليزية وحدها: قواعد مبسّطة، وتمارين وقطع فهم بإجابات نموذجية كاملة، وترجمة شاملة — كل ما يحتاجه طالب الثانوية للتفوّق."
+       data-en="A series focused on English alone: simplified grammar, exercises and reading passages with complete model answers, and full translation — everything a secondary student needs to excel."></p>
+    <div class="hero-cta">
+      <a href="#shop" class="btn b-o" data-ar="اطلب السلسلة الآن" data-en="Order the series">اطلب السلسلة الآن</a>
+      <a href="#why" class="btn b-g" data-ar="لماذا Senior؟" data-en="Why Senior?">لماذا Senior؟</a>
     </div>
+    <div class="stats">
+      <div><div class="n">4</div><div class="l" data-ar="كتب في السلسلة" data-en="books in the series">كتب في السلسلة</div></div>
+      <div><div class="n">100+150</div><div class="l" data-ar="قطعة فهم وترجمة" data-en="passages &amp; translations">قطعة فهم وترجمة</div></div>
+      <div><div class="n">100%</div><div class="l" data-ar="مجاب عنه بالكامل" data-en="fully answered">مجاب عنه بالكامل</div></div>
+    </div>
+  </div>
+  <div class="hero-art">
+    <img class="bk bk1" src="book-comprehension.jpg" alt="Comprehension">
+    <img class="bk bk2" src="book-exercises.jpg" alt="Exercises">
+    <img class="bk bk3" src="book-skills.jpg" alt="Skills">
+    <div class="float f1"><b style="background:var(--teal)">✓</b><span data-ar="دفع عند الاستلام" data-en="Cash on delivery">دفع عند الاستلام</span></div>
+    <div class="float f2"><b style="background:var(--orange)">★</b><span data-ar="إجابات نموذجية" data-en="Model answers">إجابات نموذجية</span></div>
   </div>
 </section>
 
-<!-- Why -->
-<section id="why">
+<!-- WHY -->
+<section id="why" class="sec-white">
   <div class="wrap">
-    <div class="center" style="max-width:700px">
+    <div class="head-c">
       <div class="eyebrow" data-ar="لماذا Senior" data-en="Why Senior">لماذا Senior</div>
-      <h2 class="sec-title" data-ar="التخصّص في مادة واحدة… هو الفارق" data-en="Specializing in one subject… that's the difference">التخصّص في مادة واحدة… هو الفارق</h2>
-      <p class="sec-sub center" data-ar="Senior ليست سلسلة عامة تغطّي كل المواد؛ اخترنا التخصّص في اللغة الإنجليزية وحدها، لنمنح طالب الثانوية شرحاً أعمق وتدريباتٍ أدقّ." data-en="Senior is not a general series covering every subject. We chose to specialize in English alone, to give the secondary student deeper explanation and sharper practice.">Senior ليست سلسلة عامة تغطّي كل المواد؛ اخترنا التخصّص في اللغة الإنجليزية وحدها، لنمنح طالب الثانوية شرحاً أعمق وتدريباتٍ أدقّ.</p>
+      <h2 class="t" data-ar="التخصّص في مادة واحدة… هو الفارق" data-en="Specializing in one subject… that's the difference"></h2>
+      <p class="lead" data-ar="Senior ليست سلسلة عامة تغطّي كل المواد؛ اخترنا التخصّص في اللغة الإنجليزية وحدها، لنمنح طالب الثانوية شرحاً أعمق وتدريباتٍ أدقّ." data-en="Senior is not a general series covering every subject. We chose to specialize in English alone, to give the secondary student deeper explanation and sharper practice."></p>
     </div>
-    <div class="grid g4" style="margin-top:38px">
-      <div class="feat"><div class="ic ic-o">🎯</div><h3 data-ar="متخصّصون في الإنجليزي فقط" data-en="English specialists only">متخصّصون في الإنجليزي فقط</h3><p data-ar="كل تركيزنا على مادة واحدة من البداية إلى النهاية، وهذا التخصّص هو ما يجعل الشرح أعمق والتدريبات أدقّ." data-en="All our focus is on one subject from start to finish — that specialization is what makes the explanation deeper and the practice sharper.">كل تركيزنا على مادة واحدة من البداية إلى النهاية، وهذا التخصّص هو ما يجعل الشرح أعمق والتدريبات أدقّ.</p></div>
-      <div class="feat"><div class="ic ic-t">✅</div><h3 data-ar="مجاب عنه بالكامل" data-en="Fully answered">مجاب عنه بالكامل</h3><p data-ar="كل تمرين وكل قطعة فهم بإجابة نموذجية داخل الكتاب، ليراجع الطالب ويصحّح لنفسه دون انتظار أحد." data-en="Every exercise and passage has a model answer inside the book, so the student can review and self-correct without waiting for anyone.">كل تمرين وكل قطعة فهم بإجابة نموذجية داخل الكتاب، ليراجع الطالب ويصحّح لنفسه دون انتظار أحد.</p></div>
-      <div class="feat"><div class="ic ic-a">🏛️</div><h3 data-ar="للعام والأزهر معاً" data-en="General & Azhar">للعام والأزهر معاً</h3><p data-ar="السلسلة تغطّي طلاب الثانوية العامة والأزهرية، ومتوافقة مع المنهج ونظام التقييم الجديد." data-en="The series covers both General and Azhari secondary students, aligned with the curriculum and the new assessment.">السلسلة تغطّي طلاب الثانوية العامة والأزهرية، ومتوافقة مع المنهج ونظام التقييم الجديد.</p></div>
-      <div class="feat"><div class="ic ic-n">✍️</div><h3 data-ar="تأليف الأستاذ صلاح علي" data-en="By Mr. Salah Ali">تأليف الأستاذ صلاح علي</h3><p data-ar="خبرة سنوات في تدريس اللغة الإنجليزية للمرحلة الثانوية، وأسلوب معروف في تبسيط أصعب النقاط لكل طالب." data-en="Years of experience teaching English at secondary level, with a signature style for simplifying the hardest points for every student.">خبرة سنوات في تدريس اللغة الإنجليزية للمرحلة الثانوية، وأسلوب معروف في تبسيط أصعب النقاط لكل طالب.</p></div>
+    <div class="g4">
+      <div class="feat"><div class="ic i-o">🎯</div><h3 data-ar="متخصّصون في الإنجليزي فقط" data-en="English specialists only"></h3><p data-ar="كل تركيزنا على مادة واحدة من البداية إلى النهاية — شرح أعمق وتدريبات أدقّ." data-en="All our focus is on one subject from start to finish — deeper explanation and sharper practice."></p></div>
+      <div class="feat"><div class="ic i-t">✅</div><h3 data-ar="مجاب عنه بالكامل" data-en="Fully answered"></h3><p data-ar="كل تمرين وكل قطعة فهم بإجابة نموذجية داخل الكتاب ليصحّح الطالب لنفسه." data-en="Every exercise and passage has a model answer inside the book, so the student can self-correct."></p></div>
+      <div class="feat"><div class="ic i-a">🏛️</div><h3 data-ar="للعام والأزهر معاً" data-en="General &amp; Azhar together"></h3><p data-ar="تغطّي الثانوية العامة والأزهرية، ومتوافقة مع المنهج ونظام التقييم الجديد." data-en="Covers both General and Azhari secondary, aligned with the curriculum and the new assessment."></p></div>
+      <div class="feat"><div class="ic i-s">✍️</div><h3 data-ar="تأليف الأستاذ صلاح علي" data-en="By Mr. Salah Ali"></h3><p data-ar="خبرة سنوات في تدريس الإنجليزي للثانوي وأسلوب معروف في تبسيط أصعب النقاط." data-en="Years teaching secondary English, with a signature style for simplifying the hardest points."></p></div>
     </div>
   </div>
 </section>
 
-<!-- Shop -->
+<!-- SHOP -->
 <section id="shop">
   <div class="wrap">
-    <div class="center" style="max-width:700px">
-      <div class="eyebrow" data-ar="سلسلة Senior 2027" data-en="Senior 2027 Series">سلسلة Senior 2027</div>
-      <h2 class="sec-title" data-ar="كتب الصف الثالث الثانوي — عام وأزهر" data-en="Grade 3 Secondary books — General & Azhar">كتب الصف الثالث الثانوي — عام وأزهر</h2>
-      <p class="sec-sub center" data-ar="أربعة كتب متكاملة: القواعد، والتمارين، والمهارات، وقطع الفهم — جميعها بإجابات نموذجية. اطلب الكتاب الذي تحتاجه، أو السلسلة كاملة بسعر أوفر." data-en="Four complete books: Grammar, Exercises, Skills and Comprehension — all with model answers. Order the book you need, or the full series at a better price.">أربعة كتب متكاملة: القواعد، والتمارين، والمهارات، وقطع الفهم — جميعها بإجابات نموذجية. اطلب الكتاب الذي تحتاجه، أو السلسلة كاملة بسعر أوفر.</p>
+    <div class="head-c">
+      <div class="eyebrow" data-ar="سلسلة Senior 2026/2027" data-en="Senior 2026/2027 Series"></div>
+      <h2 class="t" data-ar="كتب الصف الثالث الثانوي — عام وأزهر" data-en="Grade 3 Secondary books — General &amp; Azhar"></h2>
+      <p class="lead" data-ar="أربعة كتب متكاملة — القواعد والتمارين والمهارات وقطع الفهم، جميعها بإجابات نموذجية. اطلب الكتاب الذي تحتاجه أو السلسلة كاملة بسعر أوفر." data-en="Four complete books — Grammar, Exercises, Skills and Comprehension, all with model answers. Order the book you need, or the full series at a better price."></p>
     </div>
-    <div class="filters" id="filters">
-      <button class="chip active" data-f="all" data-ar="الكل" data-en="All">الكل</button>
-      <button class="chip" data-f="single" data-ar="كتب مفردة" data-en="Single books">كتب مفردة</button>
-      <button class="chip" data-f="bundle" data-ar="السلسلة كاملة" data-en="Full series">السلسلة كاملة</button>
-    </div>
-    <div class="products" id="products"></div>
-    <p class="center" style="margin-top:26px;color:var(--muted);font-size:.9rem" data-ar="الأول والثاني الثانوي — قريباً بإذن الله." data-en="Grades 1 & 2 secondary — coming soon.">الأول والثاني الثانوي — قريباً بإذن الله.</p>
+    <div class="seg-wrap"><div class="seg" id="seg"></div></div>
+    <div class="prods" id="prods"></div>
+    <p class="ship-note" data-ar="🚚 <b>شحن مجاني</b> عند طلب السلسلة كاملة · الدفع عند الاستلام لكل المحافظات" data-en="🚚 <b>Free shipping</b> on the full series · cash on delivery nationwide"></p>
   </div>
 </section>
 
-<!-- Digital hub (coming soon) -->
+<!-- SENIOR PLUS -->
 <section id="plus">
   <div class="wrap">
-    <div class="center" style="max-width:730px">
-      <div class="eyebrow" data-ar="Senior Plus" data-en="Senior Plus">Senior Plus</div>
-      <span class="soon-ribbon" data-ar="قريباً" data-en="Coming soon">قريباً</span>
-      <h2 class="sec-title" data-ar="منصّة Senior الرقمية — تكمّل الكتاب" data-en="The Senior digital platform — completing the book">منصّة Senior الرقمية — تكمّل الكتاب</h2>
-      <p class="sec-sub center" data-ar="نُعِدّ لك تجربة رقمية تُفتَح بكود داخل كل نسخة أصلية: فيديوهات حلول، وبنك أسئلة تفاعلي يُصحَّح فوراً، ومحاكي امتحان — قيمة حقيقية غير قابلة للنسخ." data-en="We're building a digital experience unlocked by a code inside every original copy: solution videos, an interactive auto-graded question bank, and an exam simulator — real value that can't be copied.">نُعِدّ لك تجربة رقمية تُفتَح بكود داخل كل نسخة أصلية: فيديوهات حلول، وبنك أسئلة تفاعلي يُصحَّح فوراً، ومحاكي امتحان — قيمة حقيقية غير قابلة للنسخ.</p>
+    <div class="head-c">
+      <div class="eyebrow">Senior Plus</div>
+      <h2 class="t" data-ar="مع كل نسخة أصلية… منصّة Senior الرقمية" data-en="With every original copy… the Senior digital platform"></h2>
+      <p class="lead" data-ar="داخل كل نسخة أصلية كود خاص بها. الكود مجاني تماماً مع الكتاب، وصالح حتى نهاية العام الدراسي في ٣٠ يونيو — لأن قيمة كتابك الأصلي يجب أن تبقى معك حتى الامتحان." data-en="Inside every original copy there is a unique code. It is completely free with the book and valid until 30 June — because the value of your original copy should stay with you until the exam."></p>
     </div>
-    <div class="plus-grid">
-      <div class="qcard"><div class="ic">▶️</div><h4 data-ar="فيديوهات حلول" data-en="Solution videos">فيديوهات حلول</h4><p data-ar="شرح بالفيديو لأصعب أنواع الأسئلة والقطع، بكود داخل الكتاب." data-en="Video walkthroughs of the hardest questions and passages, via a code inside the book.">شرح بالفيديو لأصعب أنواع الأسئلة والقطع، بكود داخل الكتاب.</p></div>
-      <div class="qcard"><div class="ic">☑️</div><h4 data-ar="أسئلة تتصحّح فوراً" data-en="Auto-graded questions">أسئلة تتصحّح فوراً</h4><p data-ar="اختيار من متعدد بتصحيح لحظي وتوضيح للإجابة، لا مجرّد مفتاح إجابات." data-en="Instant-graded MCQs with an explanation — not just an answer key.">اختيار من متعدد بتصحيح لحظي وتوضيح للإجابة، لا مجرّد مفتاح إجابات.</p></div>
-      <div class="qcard"><div class="ic">⏱️</div><h4 data-ar="محاكي الامتحان" data-en="Exam simulator">محاكي الامتحان</h4><p data-ar="امتحان كامل بمؤقّت على شكل الامتحان الفعلي، مع تقرير أداء." data-en="A full timed mock in the real exam format, with a performance report.">امتحان كامل بمؤقّت على شكل الامتحان الفعلي، مع تقرير أداء.</p></div>
+
+    <!-- authenticity: ships first -->
+    <div class="verify">
+      <div>
+        <h3 data-ar="🛡️ تأكّد أن نسختك أصلية" data-en="🛡️ Check your copy is genuine"></h3>
+        <p data-ar="النسخ المقلّدة تنتشر في السوق، وقد تدفع ثمن نسخة أصلية وتحصل على نسخة مغشوشة ناقصة الصفحات. أدخل الكود المطبوع داخل غلاف كتابك وسنؤكّد لك أصالته." data-en="Counterfeit copies circulate in the market — you may pay for a genuine book and receive a faulty copy with missing pages. Enter the code printed inside your cover and we'll confirm it's genuine."></p>
+      </div>
+      <div>
+        <div class="vform">
+          <input id="vcode" placeholder="SNR-2027-XXXX" dir="ltr">
+          <button class="btn b-o b-sm" onclick="verifyCode()" data-ar="تحقّق" data-en="Verify">تحقّق</button>
+        </div>
+      </div>
     </div>
-    <div class="protect">
-      <div class="ic">🔒</div>
-      <div><h4 data-ar="محميّة ضد التسريب بالتصميم" data-en="Anti-piracy by design">محميّة ضد التسريب بالتصميم</h4>
-      <p data-ar="دخول بحساب وكود فريد لكل نسخة أصلية، وعلامة مائية باسم المستخدم — قيمة رقمية لا تستطيع النسخة المنسوخة أن توفّرها." data-en="Account login with a unique per-copy code and a per-user watermark — value a copied file simply can't deliver.">دخول بحساب وكود فريد لكل نسخة أصلية، وعلامة مائية باسم المستخدم — قيمة رقمية لا تستطيع النسخة المنسوخة أن توفّرها.</p></div>
+
+    <div class="pcards" style="margin-top:26px">
+      <div class="pcard"><div class="ic">📝</div><h4 data-ar="تدريبات تُصحَّح فوراً" data-en="Instantly graded practice"></h4><p data-ar="أسئلة على نمط الامتحان تُصحَّح لحظياً مع شرح سبب الإجابة، لا مجرّد مفتاح إجابات." data-en="Exam-style questions graded instantly with an explanation of the answer — not just an answer key."></p><span class="soon" data-ar="قيد التطوير" data-en="In development"></span></div>
+      <div class="pcard"><div class="ic">▶️</div><h4 data-ar="فيديوهات حلول" data-en="Solution videos"></h4><p data-ar="شرح بالفيديو لأصعب أنواع الأسئلة والقطع من مؤلّف السلسلة نفسه." data-en="Video walkthroughs of the hardest question types, from the author himself."></p><span class="soon" data-ar="قيد التطوير" data-en="In development"></span></div>
+      <div class="pcard"><div class="ic">📈</div><h4 data-ar="متابعة تقدّمك" data-en="Track your progress"></h4><p data-ar="تقرير بسيط يوضّح ما أتقنته وما يحتاج مراجعة، ليعرف الطالب أين يركّز جهده." data-en="A simple report showing what you've mastered and what needs review, so you know where to focus."></p><span class="soon" data-ar="قيد التطوير" data-en="In development"></span></div>
     </div>
-    <div class="plus-cta">
-      <button class="btn btn-primary" onclick="notifyPlus()" data-ar="🔔 أعلِمني عند الإطلاق" data-en="🔔 Notify me at launch">🔔 أعلِمني عند الإطلاق</button>
-      <span style="color:#9fb0cc;font-size:.9rem" data-ar="سنراسلك عبر واتساب فور إطلاق المنصّة." data-en="We'll message you on WhatsApp the moment it goes live.">سنراسلك عبر واتساب فور إطلاق المنصّة.</span>
+
+    <div class="incl">
+      <span class="em">🎁</span>
+      <div>
+        <h4 data-ar="مجاناً مع الكتاب — بلا اشتراكات ولا رسوم إضافية" data-en="Free with the book — no subscriptions, no extra fees"></h4>
+        <p data-ar="لا نبيع اشتراكات رقمية منفصلة. الكود هدية مع كل نسخة أصلية وصالح حتى ٣٠ يونيو. نُعلن عن كل ميزة فور جاهزيتها فعلياً — ولا نَعِد بما لم نُنجزه بعد." data-en="We don't sell separate digital subscriptions. The code is included free with every original copy and valid until 30 June. We announce each feature only once it's genuinely ready — we don't promise what we haven't built."></p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Content -->
-<section id="content">
+<!-- CONTENT -->
+<section id="content" class="sec-white">
   <div class="wrap">
-    <div class="center" style="max-width:700px">
-      <div class="eyebrow" data-ar="مدوّنة Senior" data-en="Senior Blog">مدوّنة Senior</div>
-      <h2 class="sec-title" data-ar="نصائح للمذاكرة الصحيحة" data-en="Tips to study the right way">نصائح للمذاكرة الصحيحة</h2>
-      <p class="sec-sub center" data-ar="مقالات قصيرة لطالب الثانوية ولوليّ الأمر عن المذاكرة والاستعداد للامتحان وأساليب تعلّم اللغة الإنجليزية." data-en="Short reads for the secondary student and the parent — about studying, exam preparation, and methods for learning English.">مقالات قصيرة لطالب الثانوية ولوليّ الأمر عن المذاكرة والاستعداد للامتحان وأساليب تعلّم اللغة الإنجليزية.</p>
+    <div class="head-c">
+      <div class="eyebrow" data-ar="مدوّنة Senior" data-en="Senior Blog"></div>
+      <h2 class="t" data-ar="نصائح للمذاكرة الصحيحة" data-en="Tips to study the right way"></h2>
+      <p class="lead" data-ar="مقالات قصيرة لطالب الثانوية ولوليّ الأمر عن المذاكرة والاستعداد للامتحان وأساليب تعلّم اللغة الإنجليزية." data-en="Short reads for the secondary student and the parent — about studying, exam preparation, and methods for learning English."></p>
     </div>
     <div class="posts">
       <div class="post" onclick="toast(t('قريباً: المقال كامل','Coming soon: full article'))">
-        <div class="ph" style="background:linear-gradient(135deg,#1C7A46,#0E6E60)">📖</div>
-        <div class="pbody"><div class="cat" data-ar="مذاكرة الإنجليزي" data-en="Studying English">مذاكرة الإنجليزي</div>
-          <h3 data-ar="كيف تذاكر قطع الـ Comprehension وتحصل على الدرجة كاملة" data-en="How to study Comprehension and score full marks">كيف تذاكر قطع الـ Comprehension وتحصل على الدرجة كاملة</h3>
-          <p data-ar="خطوات عملية للتعامل مع أي قطعة فهم، من قراءة السؤال الأول إلى الإجابة النموذجية." data-en="Practical steps for any reading passage — from the first question to the model answer.">خطوات عملية للتعامل مع أي قطعة فهم، من قراءة السؤال الأول إلى الإجابة النموذجية.</p>
-          <span class="read" data-ar="اقرأ المقال ←" data-en="Read more →">اقرأ المقال ←</span></div>
+        <div class="ph" style="background:linear-gradient(150deg,#1C7A46,#0E6E60)">📖</div>
+        <div class="pb"><div class="cat" data-ar="مذاكرة الإنجليزي" data-en="Studying English"></div>
+          <h3 data-ar="كيف تذاكر قطع الـ Comprehension وتحصل على الدرجة كاملة" data-en="How to study Comprehension and score full marks"></h3>
+          <p data-ar="خطوات عملية للتعامل مع أي قطعة فهم، من قراءة السؤال الأول إلى الإجابة النموذجية." data-en="Practical steps for any reading passage — from the first question to the model answer."></p>
+          <span class="r" data-ar="اقرأ المقال ←" data-en="Read more →"></span></div>
       </div>
       <div class="post" onclick="toast(t('قريباً: المقال كامل','Coming soon: full article'))">
-        <div class="ph" style="background:linear-gradient(135deg,#E23B3B,#b52a2a)">✍️</div>
-        <div class="pbody"><div class="cat" data-ar="القواعد" data-en="Grammar">القواعد</div>
-          <h3 data-ar="القواعد ليست حفظاً… كيف تفهم الـ Grammar بطريقة سهلة" data-en="Grammar isn't memorizing — understand it the easy way">القواعد ليست حفظاً… كيف تفهم الـ Grammar بطريقة سهلة</h3>
-          <p data-ar="أشهر الأخطاء التي يقع فيها الطلاب في القواعد، وكيف تتجنّبها في الامتحان." data-en="The most common grammar mistakes students make — and how to avoid them in the exam.">أشهر الأخطاء التي يقع فيها الطلاب في القواعد، وكيف تتجنّبها في الامتحان.</p>
-          <span class="read" data-ar="اقرأ المقال ←" data-en="Read more →">اقرأ المقال ←</span></div>
+        <div class="ph" style="background:linear-gradient(150deg,#E4572E,#C0421C)">✍️</div>
+        <div class="pb"><div class="cat" data-ar="القواعد" data-en="Grammar"></div>
+          <h3 data-ar="القواعد ليست حفظاً… كيف تفهم الـ Grammar بطريقة سهلة" data-en="Grammar isn't memorizing — understand it the easy way"></h3>
+          <p data-ar="أشهر الأخطاء التي يقع فيها الطلاب في القواعد، وكيف تتجنّبها في الامتحان." data-en="The most common grammar mistakes students make — and how to avoid them in the exam."></p>
+          <span class="r" data-ar="اقرأ المقال ←" data-en="Read more →"></span></div>
       </div>
       <div class="post" onclick="toast(t('قريباً: المقال كامل','Coming soon: full article'))">
-        <div class="ph" style="background:linear-gradient(135deg,#EE5A2D,#D2471C)">👨‍👩‍👦</div>
-        <div class="pbody"><div class="cat" data-ar="لولي الأمر" data-en="For parents">لولي الأمر</div>
-          <h3 data-ar="كيف تدعم ابنك خلال سنوات الثانوية" data-en="How to support your child through the secondary years">كيف تدعم ابنك خلال سنوات الثانوية</h3>
-          <p data-ar="دور وليّ الأمر أهم مما يُتصوَّر؛ خطوات بسيطة تحفظ هدوء البيت في أصعب سنة دراسية." data-en="A parent's role matters more than you think — simple steps to keep the home calm in the hardest school year.">دور وليّ الأمر أهم مما يُتصوَّر؛ خطوات بسيطة تحفظ هدوء البيت في أصعب سنة دراسية.</p>
-          <span class="read" data-ar="اقرأ المقال ←" data-en="Read more →">اقرأ المقال ←</span></div>
+        <div class="ph" style="background:linear-gradient(150deg,#F2A03D,#B07419)">👨‍👩‍👦</div>
+        <div class="pb"><div class="cat" data-ar="لوليّ الأمر" data-en="For parents"></div>
+          <h3 data-ar="كيف تدعم ابنك خلال سنوات الثانوية" data-en="How to support your child through the secondary years"></h3>
+          <p data-ar="دور وليّ الأمر أهم مما يُتصوَّر؛ خطوات بسيطة تحفظ هدوء البيت في أصعب سنة دراسية." data-en="A parent's role matters more than you think — simple steps to keep the home calm in the hardest school year."></p>
+          <span class="r" data-ar="اقرأ المقال ←" data-en="Read more →"></span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Teachers -->
+<!-- TEACHERS -->
 <section id="teachers">
   <div class="wrap">
     <div class="tbox">
       <div>
-        <h2 data-ar="مدرّس أو مكتبة؟ اجعل Senior كتابك الموصى به" data-en="A teacher or bookshop? Make Senior your recommended book">مدرّس أو مكتبة؟ اجعل Senior كتابك الموصى به</h2>
-        <p data-ar="نوفّر لمدرّسي اللغة الإنجليزية والمراكز التعليمية والمكتبات أسعار جملة، ونُسخاً للمعاينة، وشراكات بيع." data-en="We offer English teachers, educational centers and bookshops wholesale pricing, review copies and sales partnerships.">نوفّر لمدرّسي اللغة الإنجليزية والمراكز التعليمية والمكتبات أسعار جملة، ونُسخاً للمعاينة، وشراكات بيع.</p>
+        <h2 data-ar="شريكٌ للمدرّس… لا بديلٌ عنه" data-en="A partner to the teacher — never a replacement"></h2>
+        <p data-ar="Senior كتابٌ يشرح ويُدرّب، لكن الشرح داخل الفصل يبقى دور المدرّس. نوفّر لمدرّسي اللغة الإنجليزية والمراكز التعليمية والمكتبات أسعار جملة ونُسخاً للمعاينة وشراكات بيع." data-en="Senior explains and drills, but classroom teaching remains the teacher's role. We offer English teachers, educational centres and bookshops wholesale pricing, review copies and sales partnerships."></p>
         <div class="tlist">
-          <span data-ar="أسعار جملة ومنافذ بيع للموزّعين" data-en="Wholesale pricing & distributor points">أسعار جملة ومنافذ بيع للموزّعين</span>
-          <span data-ar="نُسخ معاينة مجانية للمدرّسين" data-en="Free review copies for teachers">نُسخ معاينة مجانية للمدرّسين</span>
-          <span data-ar="توزيع عبر مؤسسة الكتب الذهبية" data-en="Distribution via Golden Books">توزيع عبر مؤسسة الكتب الذهبية</span>
+          <span data-ar="أسعار جملة ومنافذ بيع للموزّعين" data-en="Wholesale pricing &amp; distributor points"></span>
+          <span data-ar="نُسخ معاينة مجانية للمدرّسين" data-en="Free review copies for teachers"></span>
+          <span data-ar="توزيع عبر مؤسسة الكتب الذهبية" data-en="Distribution via Golden Books"></span>
         </div>
       </div>
       <div class="tcta">
-        <a class="btn btn-wa" id="teacherWa" target="_blank" rel="noopener" data-ar="📞 تواصل واتساب" data-en="📞 WhatsApp us">📞 تواصل واتساب</a>
-        <a href="#contact" class="btn" style="background:#fff;color:var(--teal-d)" data-ar="نموذج الشراكة" data-en="Partnership form">نموذج الشراكة</a>
+        <a class="btn b-wa" id="twa" target="_blank" rel="noopener" data-ar="تواصل واتساب" data-en="WhatsApp us"></a>
+        <a href="#contact" class="btn" style="background:#fff;color:var(--teal)" data-ar="نموذج الشراكة" data-en="Partnership form"></a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- About -->
-<section id="about">
-  <div class="wrap about-grid">
+<!-- ABOUT -->
+<section id="about" class="sec-white">
+  <div class="wrap about">
     <div>
-      <div class="eyebrow" data-ar="من نحن" data-en="About">من نحن</div>
-      <h2 class="sec-title" data-ar="اسم موثوق في إنجليزي الثانوي" data-en="A trusted name in secondary English">اسم موثوق في إنجليزي الثانوي</h2>
-      <p style="color:var(--muted)" data-ar="Senior سلسلة كتب خارجية متخصّصة في اللغة الإنجليزية للمرحلة الثانوية، من تأليف الأستاذ صلاح علي وتوزيع مؤسسة الكتب الذهبية. نقدّم شرحاً وتمارين وقطع فهم مجاباً عنها بالكامل لطلاب الثانوية العامة والأزهرية، مع متجر رسمي ومنصّة رقمية قادمة تواكب نظام التقييم الجديد." data-en="Senior is a specialist external English series for secondary school, authored by Mr. Salah Ali and distributed by Golden Books. We provide explanation, exercises and fully-answered reading passages for General and Azhari students, alongside an official store and an upcoming digital platform aligned with the new assessment.">Senior سلسلة كتب خارجية متخصّصة في اللغة الإنجليزية للمرحلة الثانوية، من تأليف الأستاذ صلاح علي وتوزيع مؤسسة الكتب الذهبية. نقدّم شرحاً وتمارين وقطع فهم مجاباً عنها بالكامل لطلاب الثانوية العامة والأزهرية.</p>
-      <div class="about-stats">
-        <div class="astat"><div class="n">+31K</div><div class="l" data-ar="متابع على فيسبوك" data-en="Facebook followers">متابع على فيسبوك</div></div>
-        <div class="astat"><div class="n">4</div><div class="l" data-ar="كتب في السلسلة" data-en="books in the series">كتب في السلسلة</div></div>
-        <div class="astat"><div class="n" data-ar="عام+أزهر" data-en="Gen+Azhar">عام+أزهر</div><div class="l" data-ar="تغطية كاملة" data-en="full coverage">تغطية كاملة</div></div>
-        <div class="astat"><div class="n">100%</div><div class="l" data-ar="مجاب عنه بالكامل" data-en="fully answered">مجاب عنه بالكامل</div></div>
+      <div class="eyebrow" data-ar="من نحن" data-en="About"></div>
+      <h2 class="t" data-ar="اسم موثوق في إنجليزي الثانوي" data-en="A trusted name in secondary English"></h2>
+      <p class="lead" data-ar="Senior سلسلة كتب خارجية متخصّصة في اللغة الإنجليزية للمرحلة الثانوية، من تأليف الأستاذ صلاح علي وتوزيع مؤسسة الكتب الذهبية. نقدّم شرحاً وتمارين وقطع فهم مجاباً عنها بالكامل لطلاب الثانوية العامة والأزهرية." data-en="Senior is a specialist external English series for secondary school, authored by Mr. Salah Ali and distributed by Golden Books. We provide explanation, exercises and fully-answered reading passages for General and Azhari students."></p>
+      <div class="astats">
+        <div class="astat"><div class="n">+31K</div><div class="l" data-ar="متابع على فيسبوك" data-en="Facebook followers"></div></div>
+        <div class="astat"><div class="n">4</div><div class="l" data-ar="كتب في السلسلة" data-en="books in the series"></div></div>
+        <div class="astat"><div class="n" data-ar="عام + أزهر" data-en="Gen + Azhar"></div><div class="l" data-ar="تغطية كاملة" data-en="full coverage"></div></div>
+        <div class="astat"><div class="n">100%</div><div class="l" data-ar="مجاب عنه بالكامل" data-en="fully answered"></div></div>
       </div>
     </div>
-    <div class="about-visual">
-      <div class="big"><span class="o">Se</span><span class="t">N</span><span class="o">ior</span></div>
-      <p style="margin-top:14px;color:#c4cee0" data-ar="المتخصّص الأول في إنجليزي الثانوي" data-en="The #1 specialist in secondary English">المتخصّص الأول في إنجليزي الثانوي</p>
+    <div class="avis">
+      <img src="senior-logo.png" alt="Senior">
+      <p style="color:#BFD3D8;font-size:15px" data-ar="المتخصّص الأول في إنجليزي الثانوي" data-en="The #1 specialist in secondary English"></p>
       <div style="height:1px;background:rgba(255,255,255,.15);margin:22px 0"></div>
-      <p style="font-size:.9rem;color:#aebbd2" data-ar="تأليف: الأستاذ صلاح م. علي · توزيع: مؤسسة الكتب الذهبية — القاهرة، الفجالة" data-en="By Mr. Salah M. Ali · Distributed by Golden Books — El-Fagala, Cairo">تأليف: الأستاذ صلاح م. علي · توزيع: مؤسسة الكتب الذهبية — القاهرة، الفجالة</p>
+      <p style="font-size:13.5px;color:#9DB4BA" data-ar="تأليف: الأستاذ صلاح م. علي · توزيع: مؤسسة الكتب الذهبية — القاهرة، الفجالة" data-en="By Mr. Salah M. Ali · Distributed by Golden Books — El-Fagala, Cairo"></p>
     </div>
   </div>
 </section>
 
-<!-- Contact -->
+<!-- CONTACT -->
 <section id="contact">
   <div class="wrap">
-    <div class="center" style="max-width:700px">
-      <div class="eyebrow" data-ar="تواصل واطلب" data-en="Contact & order">تواصل واطلب</div>
-      <h2 class="sec-title" data-ar="اطلب أو اسأل في أي وقت" data-en="Order or ask, anytime">اطلب أو اسأل في أي وقت</h2>
+    <div class="head-c">
+      <div class="eyebrow" data-ar="تواصل واطلب" data-en="Contact &amp; order"></div>
+      <h2 class="t" data-ar="اطلب أو اسأل في أي وقت" data-en="Order or ask, anytime"></h2>
     </div>
-    <div class="contact-grid" style="margin-top:34px">
+    <div class="cgrid">
       <div class="cinfo">
-        <a class="cline" id="waLine" target="_blank" rel="noopener">
-          <div class="ic">💬</div><div><b style="display:block" data-ar="واتساب للطلب السريع" data-en="WhatsApp — fast orders">واتساب للطلب السريع</b><span dir="ltr">+20 10 10101445</span></div>
-        </a>
-        <a class="cline" href="tel:+201031373132">
-          <div class="ic">📣</div><div><b style="display:block" data-ar="الدعاية والتسويق" data-en="Sales & marketing">الدعاية والتسويق</b><span dir="ltr">+20 10 3137 3132 · +20 10 0072 1887</span></div>
-        </a>
-        <a class="cline" href="tel:+201099422466">
-          <div class="ic">🚚</div><div><b style="display:block" data-ar="التوزيع — مؤسسة الكتب الذهبية" data-en="Distribution — Golden Books">التوزيع — مؤسسة الكتب الذهبية</b><span dir="ltr">+20 10 9942 2466 · +20 10 9942 2400</span></div>
-        </a>
-        <div class="cline">
-          <div class="ic">📍</div><div><b style="display:block" data-ar="العنوان" data-en="Address">العنوان</b><span data-ar="القاهرة — الفجالة" data-en="El-Fagala, Cairo">القاهرة — الفجالة</span></div>
-        </div>
-        <a class="cline" href="https://www.facebook.com/" target="_blank" rel="noopener">
-          <div class="ic">👍</div><div><b style="display:block">Facebook</b><span>Senior Book Egy</span></div>
-        </a>
+        <a class="cline" id="wal" target="_blank" rel="noopener"><div class="ic">💬</div><div><b data-ar="واتساب للطلب السريع" data-en="WhatsApp — fast orders"></b><span dir="ltr">+20 10 10101445</span></div></a>
+        <a class="cline" href="tel:+201031373132"><div class="ic">📣</div><div><b data-ar="الدعاية والتسويق" data-en="Sales &amp; marketing"></b><span dir="ltr">+20 10 3137 3132 · +20 10 0072 1887</span></div></a>
+        <a class="cline" href="tel:+201099422466"><div class="ic">🚚</div><div><b data-ar="التوزيع — مؤسسة الكتب الذهبية" data-en="Distribution — Golden Books"></b><span dir="ltr">+20 10 9942 2466 · +20 10 9942 2400</span></div></a>
+        <div class="cline"><div class="ic">📍</div><div><b data-ar="العنوان" data-en="Address"></b><span data-ar="القاهرة — الفجالة" data-en="El-Fagala, Cairo"></span></div></div>
+        <a class="cline" href="https://www.facebook.com/" target="_blank" rel="noopener"><div class="ic">👍</div><div><b>Facebook</b><span>Senior Book Egy</span></div></a>
       </div>
       <form class="cform" onsubmit="sendContact(event)">
-        <div class="field"><label data-ar="الاسم" data-en="Name">الاسم</label><input id="cf-name" required data-ar-ph="اسمك بالكامل" data-en-ph="Your full name"></div>
-        <div class="field"><label data-ar="رقم الموبايل" data-en="Mobile">رقم الموبايل</label><input id="cf-phone" required data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
-        <div class="field"><label data-ar="أنا..." data-en="I am...">أنا...</label>
-          <select id="cf-role"><option data-ar="ولي أمر" data-en="Parent">ولي أمر</option><option data-ar="طالب" data-en="Student">طالب</option><option data-ar="مدرّس / سنتر" data-en="Teacher / Center">مدرّس / سنتر</option><option data-ar="مكتبة / موزّع" data-en="Bookshop / Distributor">مكتبة / موزّع</option></select></div>
-        <div class="field"><label data-ar="رسالتك" data-en="Message">رسالتك</label><textarea id="cf-msg" rows="3" data-ar-ph="اكتب طلبك أو سؤالك..." data-en-ph="Write your request or question..."></textarea></div>
-        <button class="btn btn-wa" style="width:100%;justify-content:center" type="submit" data-ar="📨 إرسال عبر واتساب" data-en="📨 Send via WhatsApp">📨 إرسال عبر واتساب</button>
+        <div class="fld"><label data-ar="الاسم" data-en="Name"></label><input id="cf-n" required data-ar-ph="اسمك بالكامل" data-en-ph="Your full name"></div>
+        <div class="fld"><label data-ar="رقم الموبايل" data-en="Mobile"></label><input id="cf-p" required data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
+        <div class="fld"><label data-ar="أنا..." data-en="I am..."></label>
+          <select id="cf-r"><option data-ar="وليّ أمر" data-en="Parent"></option><option data-ar="طالب" data-en="Student"></option><option data-ar="مدرّس / مركز تعليمي" data-en="Teacher / Centre"></option><option data-ar="مكتبة / موزّع" data-en="Bookshop / Distributor"></option></select></div>
+        <div class="fld"><label data-ar="رسالتك" data-en="Message"></label><textarea id="cf-m" rows="3" data-ar-ph="اكتب طلبك أو سؤالك..." data-en-ph="Write your request or question..."></textarea></div>
+        <button class="btn b-wa" style="width:100%" type="submit" data-ar="إرسال عبر واتساب" data-en="Send via WhatsApp"></button>
       </form>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="wrap foot-grid">
-    <div class="foot-logo">
-      <div class="mark"><span class="s1">Se</span><span class="n">N</span><span class="s1">ior</span></div>
-      <p class="fx" style="margin-top:10px;max-width:270px" data-ar="سلسلة الكتب الخارجية المتخصّصة في اللغة الإنجليزية للثانوية العامة والأزهر. تأليف الأستاذ صلاح علي." data-en="The specialist external English series for General & Azhari secondary. By Mr. Salah Ali.">سلسلة الكتب الخارجية المتخصّصة في اللغة الإنجليزية للثانوية العامة والأزهر.</p>
-      <div class="socials">
+  <div class="wrap fgrid">
+    <div>
+      <div class="flogo"><img src="senior-logo.png" alt="Senior"></div>
+      <p class="fx" style="margin-top:12px;max-width:270px" data-ar="سلسلة الكتب الخارجية المتخصّصة في اللغة الإنجليزية للثانوية العامة والأزهر. تأليف الأستاذ صلاح علي." data-en="The specialist external English series for General &amp; Azhari secondary. By Mr. Salah Ali."></p>
+      <div class="soc">
         <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.5 9.9v-7H8v-2.9h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6v1.9h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
         <a href="#" onclick="toast(t('قريباً على تيك توك','Coming soon on TikTok'));return false" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 3c.3 2.1 1.5 3.6 3.6 3.8V9c-1.3 0-2.5-.4-3.6-1.1v6.4A5.3 5.3 0 1 1 10.7 9v2.5a2.8 2.8 0 1 0 2 2.7V3H16z"/></svg></a>
         <a href="#" onclick="toast(t('قريباً على يوتيوب','Coming soon on YouTube'));return false" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.1-.4-4.6a2.5 2.5 0 0 0-1.7-1.7C19.4 5.3 12 5.3 12 5.3s-7.4 0-8.9.4A2.5 2.5 0 0 0 1.4 7.4C1 8.9 1 12 1 12s0 3.1.4 4.6a2.5 2.5 0 0 0 1.7 1.7c1.5.4 8.9.4 8.9.4s7.4 0 8.9-.4a2.5 2.5 0 0 0 1.7-1.7C23 15.1 23 12 23 12zM9.8 15V9l5.2 3-5.2 3z"/></svg></a>
       </div>
     </div>
     <div>
-      <h5 data-ar="السلسلة" data-en="Series">السلسلة</h5>
-      <a href="#shop" data-ar="القواعد Grammar" data-en="Grammar">القواعد Grammar</a>
-      <a href="#shop" data-ar="التمارين Exercises" data-en="Exercises">التمارين Exercises</a>
-      <a href="#shop" data-ar="المهارات Skills" data-en="Skills">المهارات Skills</a>
-      <a href="#shop" data-ar="قطع الفهم Comprehension" data-en="Comprehension">قطع الفهم Comprehension</a>
+      <h5 data-ar="السلسلة" data-en="Series"></h5>
+      <a href="#shop" data-ar="القواعد Grammar" data-en="Grammar"></a>
+      <a href="#shop" data-ar="التمارين Exercises" data-en="Exercises"></a>
+      <a href="#shop" data-ar="المهارات Skills" data-en="Skills"></a>
+      <a href="#shop" data-ar="قطع الفهم Comprehension" data-en="Comprehension"></a>
     </div>
     <div>
-      <h5 data-ar="روابط" data-en="Links">روابط</h5>
-      <a href="#why" data-ar="لماذا Senior" data-en="Why Senior">لماذا Senior</a>
-      <a href="#plus" data-ar="المنصة الرقمية" data-en="Senior Plus">المنصة الرقمية</a>
-      <a href="#teachers" data-ar="للمدرّسين والموزّعين" data-en="Teachers & distributors">للمدرّسين والموزّعين</a>
-      <a href="#content" data-ar="المدوّنة" data-en="Blog">المدوّنة</a>
+      <h5 data-ar="روابط" data-en="Links"></h5>
+      <a href="#why" data-ar="لماذا Senior" data-en="Why Senior"></a>
+      <a href="#plus" data-ar="المنصّة الرقمية" data-en="Senior Plus"></a>
+      <a href="#teachers" data-ar="للمدرّسين والموزّعين" data-en="Teachers &amp; distributors"></a>
+      <a href="#content" data-ar="المدوّنة" data-en="Blog"></a>
     </div>
     <div>
-      <h5 data-ar="تواصل" data-en="Contact">تواصل</h5>
+      <h5 data-ar="تواصل" data-en="Contact"></h5>
       <a href="https://wa.me/201010101445" target="_blank" rel="noopener" dir="ltr">WhatsApp: +20 10 10101445</a>
-      <p class="fx" data-ar="القاهرة — الفجالة" data-en="El-Fagala, Cairo">القاهرة — الفجالة</p>
-      <a href="#shop" class="btn btn-primary btn-sm" style="margin-top:10px" data-ar="اطلب الآن" data-en="Order now">اطلب الآن</a>
+      <p class="fx" data-ar="القاهرة — الفجالة" data-en="El-Fagala, Cairo"></p>
+      <a href="#shop" class="btn b-o b-sm" style="margin-top:10px" data-ar="اطلب الآن" data-en="Order now"></a>
     </div>
   </div>
-  <div class="wrap foot-bottom">
-    <span data-ar="© 2027 Senior — جميع الحقوق محفوظة · تأليف الأستاذ صلاح علي · توزيع مؤسسة الكتب الذهبية" data-en="© 2027 Senior — All rights reserved · By Mr. Salah Ali · Distributed by Golden Books">© 2027 Senior — جميع الحقوق محفوظة</span>
-  </div>
+  <div class="wrap fbot"><span data-ar="© 2026 Senior — جميع الحقوق محفوظة · تأليف الأستاذ صلاح علي · توزيع مؤسسة الكتب الذهبية" data-en="© 2026 Senior — All rights reserved · By Mr. Salah Ali · Distributed by Golden Books"></span></div>
 </footer>
 
-<!-- Cart drawer -->
-<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<!-- CART -->
+<div class="ov" id="ov" onclick="closeCart()"></div>
 <aside class="drawer" id="drawer">
-  <div class="drawer-head"><h3 data-ar="سلّة الطلب" data-en="Your cart">سلّة الطلب</h3><button class="x" onclick="closeCart()">×</button></div>
-  <div class="cart-items" id="cartItems"></div>
-  <div class="cart-foot" id="cartFoot" style="display:none">
-    <div class="cart-total"><span data-ar="الإجمالي" data-en="Total">الإجمالي</span><span><span class="t" id="cartTotal">0</span> <span data-ar="ج" data-en="EGP">ج</span></span></div>
-    <button class="btn btn-primary" onclick="openCheckout()" data-ar="إتمام الطلب (دفع عند الاستلام)" data-en="Checkout (cash on delivery)">إتمام الطلب (دفع عند الاستلام)</button>
-    <button class="btn btn-wa" onclick="orderWhatsApp()" data-ar="اطلب مباشرة عبر واتساب" data-en="Order directly on WhatsApp">اطلب مباشرة عبر واتساب</button>
+  <div class="dhead"><h3 data-ar="سلّة الطلب" data-en="Your cart"></h3><button class="x" onclick="closeCart()">×</button></div>
+  <div class="citems" id="citems"></div>
+  <div class="dfoot" id="dfoot" style="display:none">
+    <div class="tot"><span data-ar="الإجمالي" data-en="Total"></span><span><span class="v" id="ctot">0</span> <span data-ar="ج" data-en="EGP">ج</span></span></div>
+    <button class="btn b-o" onclick="openCheckout()" data-ar="إتمام الطلب" data-en="Checkout"></button>
+    <button class="btn b-wa" onclick="orderWA()" data-ar="اطلب عبر واتساب" data-en="Order on WhatsApp"></button>
   </div>
 </aside>
 
-<!-- Checkout modal -->
-<div class="modal" id="checkoutModal">
-  <div class="modal-bg" onclick="closeModal('checkoutModal')"></div>
-  <div class="modal-card">
-    <div class="mhead"><h3 data-ar="إتمام الطلب" data-en="Complete your order">إتمام الطلب</h3><button class="x" onclick="closeModal('checkoutModal')">×</button></div>
-    <div class="modal-body">
+<!-- CHECKOUT -->
+<div class="modal" id="mCheck">
+  <div class="mbg" onclick="closeModal('mCheck')"></div>
+  <div class="mcard">
+    <div class="mhead"><h3 data-ar="إتمام الطلب" data-en="Complete your order"></h3><button class="x" onclick="closeModal('mCheck')">×</button></div>
+    <div class="mbody">
       <div class="two">
-        <div class="field"><label data-ar="الاسم" data-en="Name">الاسم</label><input id="co-name" required data-ar-ph="الاسم بالكامل" data-en-ph="Full name"></div>
-        <div class="field"><label data-ar="رقم الموبايل" data-en="Mobile">رقم الموبايل</label><input id="co-phone" required data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
+        <div class="fld"><label data-ar="الاسم" data-en="Name"></label><input id="co-n" required data-ar-ph="الاسم بالكامل" data-en-ph="Full name"></div>
+        <div class="fld"><label data-ar="رقم الموبايل" data-en="Mobile"></label><input id="co-p" required data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
       </div>
       <div class="two">
-        <div class="field"><label data-ar="المحافظة" data-en="Governorate">المحافظة</label><select id="co-gov"></select></div>
-        <div class="field"><label data-ar="المسار" data-en="Track">المسار</label>
-          <select id="co-grade"><option data-ar="ثالثة ثانوي — عام" data-en="Grade 3 — General">ثالثة ثانوي — عام</option><option data-ar="ثالثة ثانوي — أزهر" data-en="Grade 3 — Azhar">ثالثة ثانوي — أزهر</option><option data-ar="أخرى" data-en="Other">أخرى</option></select></div>
+        <div class="fld"><label data-ar="المحافظة" data-en="Governorate"></label><select id="co-g"></select></div>
+        <div class="fld"><label data-ar="المسار" data-en="Track"></label><select id="co-t"><option data-ar="ثالثة ثانوي — عام" data-en="Grade 3 — General"></option><option data-ar="ثالثة ثانوي — أزهر" data-en="Grade 3 — Azhar"></option><option data-ar="أخرى" data-en="Other"></option></select></div>
       </div>
-      <div class="field"><label data-ar="العنوان بالتفصيل" data-en="Full address">العنوان بالتفصيل</label><textarea id="co-addr" rows="2" required data-ar-ph="المدينة، الشارع، رقم العمارة، علامة مميزة" data-en-ph="City, street, building no., landmark"></textarea></div>
-      <div class="field"><label data-ar="ملاحظات (اختياري)" data-en="Notes (optional)">ملاحظات (اختياري)</label><input id="co-notes" data-ar-ph="أي تفاصيل إضافية" data-en-ph="Any extra details"></div>
-      <div class="cart-total" style="margin:4px 0 6px"><span data-ar="الإجمالي + الشحن حسب المحافظة" data-en="Total + shipping by governorate">الإجمالي</span><span><span class="t" id="co-total">0</span> <span data-ar="ج" data-en="EGP">ج</span></span></div>
-      <div class="note" data-ar="الدفع عند الاستلام. بالضغط على إرسال يتم تحويلك لواتساب Senior بطلبك جاهزاً للتأكيد." data-en="Cash on delivery. Pressing send opens Senior's WhatsApp with your order ready to confirm.">الدفع عند الاستلام. بالضغط على إرسال يتم تحويلك لواتساب Senior بطلبك جاهزاً للتأكيد.</div>
-      <button class="btn btn-wa" style="width:100%;justify-content:center;margin-top:14px" onclick="submitCheckout()" data-ar="📨 إرسال الطلب عبر واتساب" data-en="📨 Send order via WhatsApp">📨 إرسال الطلب عبر واتساب</button>
+      <div class="fld"><label data-ar="العنوان بالتفصيل" data-en="Full address"></label><textarea id="co-a" rows="2" required data-ar-ph="المدينة، الشارع، رقم العمارة، علامة مميّزة" data-en-ph="City, street, building no., landmark"></textarea></div>
+      <h4 style="font-size:15px;font-weight:700;margin:16px 0 10px" data-ar="اختر وسيلة الدفع" data-en="Choose payment method"></h4>
+      <div id="pays"></div>
+      <div id="payPanel"></div>
+      <div class="tot" style="margin-top:14px"><span data-ar="الإجمالي" data-en="Total"></span><span><span class="v" id="cotot">0</span> <span data-ar="ج" data-en="EGP">ج</span></span></div>
+      <button class="btn b-wa" style="width:100%;margin-top:8px" onclick="submitOrder()" data-ar="إرسال الطلب عبر واتساب" data-en="Send order via WhatsApp"></button>
+      <div class="note" data-ar="سنتواصل معك لتأكيد الطلب قبل الشحن." data-en="We'll contact you to confirm the order before shipping."></div>
     </div>
   </div>
 </div>
 
-<!-- Product modal -->
-<div class="modal" id="prodModal">
-  <div class="modal-bg" onclick="closeModal('prodModal')"></div>
-  <div class="modal-card">
-    <div class="mhead"><h3 data-ar="تفاصيل الكتاب" data-en="Book details">تفاصيل الكتاب</h3><button class="x" onclick="closeModal('prodModal')">×</button></div>
-    <div class="modal-body" id="prodBody"></div>
+<!-- PRODUCT -->
+<div class="modal" id="mProd">
+  <div class="mbg" onclick="closeModal('mProd')"></div>
+  <div class="mcard">
+    <div class="mhead"><h3 data-ar="تفاصيل الكتاب" data-en="Book details"></h3><button class="x" onclick="closeModal('mProd')">×</button></div>
+    <div class="mbody" id="pdBody"></div>
   </div>
 </div>
 
-<a class="wa-float" id="waFloat" target="_blank" rel="noopener" aria-label="WhatsApp">
-  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.5 23.5l1.6-6A11.4 11.4 0 1 1 12 23.4a11.4 11.4 0 0 1-5.6-1.5L.5 23.5zM6.7 19.8l.4.2a9.5 9.5 0 1 0-3.2-3.2l.2.4-.9 3.5 3.5-.9zM17.5 14c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8 1-.1.1-.3.2-.5 0-.7-.3-1.4-.6-2.1-1.5-.5-.6-.9-1.3-1-1.5-.1-.2 0-.4.1-.5l.4-.4c.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5l-.7-1.7c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3s-.9.8-.9 2 .9 2.3 1 2.5c.1.2 1.7 2.7 4.2 3.7 1.6.6 2.2.7 2.9.6.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1 0-.1-.2-.2-.4-.3z"/></svg>
+<a class="wa" id="waF" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M.5 23.5l1.6-6A11.4 11.4 0 1 1 12 23.4a11.4 11.4 0 0 1-5.6-1.5L.5 23.5zM6.7 19.8l.4.2a9.5 9.5 0 1 0-3.2-3.2l.2.4-.9 3.5 3.5-.9zM17.5 14c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8 1-.1.1-.3.2-.5 0-.7-.3-1.4-.6-2.1-1.5-.5-.6-.9-1.3-1-1.5-.1-.2 0-.4.1-.5l.4-.4c.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5l-.7-1.7c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3s-.9.8-.9 2 .9 2.3 1 2.5c.1.2 1.7 2.7 4.2 3.7 1.6.6 2.2.7 2.9.6.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1 0-.1-.2-.2-.4-.3z"/></svg>
 </a>
 <div class="toast" id="toast"></div>
 
 <script>
-let LANG = localStorage.getItem('senior_lang') || 'ar';
-const GOVS = ["القاهرة","الجيزة","الإسكندرية","القليوبية","الدقهلية","الشرقية","الغربية","المنوفية","البحيرة","كفر الشيخ","دمياط","بورسعيد","الإسماعيلية","السويس","المنيا","بني سويف","الفيوم","أسيوط","سوهاج","قنا","الأقصر","أسوان","البحر الأحمر","مطروح","شمال سيناء","جنوب سيناء","الوادي الجديد","دمنهور"];
-function t(ar,en){return LANG==='ar'?ar:en}
+let LANG=localStorage.getItem('senior_lang')||'ar';
+const WA='201010101445';
+const GOVS=["القاهرة","الجيزة","الإسكندرية","القليوبية","الدقهلية","الشرقية","الغربية","المنوفية","البحيرة","كفر الشيخ","دمياط","بورسعيد","الإسماعيلية","السويس","المنيا","بني سويف","الفيوم","أسيوط","سوهاج","قنا","الأقصر","أسوان","البحر الأحمر","مطروح","شمال سيناء","جنوب سيناء","الوادي الجديد"];
+function t(a,e){return LANG==='ar'?a:e}
 function applyLang(){
-  document.documentElement.lang = LANG;
-  document.documentElement.dir = LANG==='ar' ? 'rtl' : 'ltr';
-  document.getElementById('langBtn').textContent = LANG==='ar' ? 'EN' : 'ع';
-  document.querySelectorAll('[data-ar]').forEach(el=>{const v=el.getAttribute('data-'+LANG); if(v!==null) el.innerHTML=v;});
-  document.querySelectorAll('[data-ar-ph]').forEach(el=>{const v=el.getAttribute('data-'+LANG+'-ph'); if(v!==null) el.placeholder=v;});
-  renderProducts(currentFilter); renderCart();
+  document.documentElement.lang=LANG;
+  document.documentElement.dir=LANG==='ar'?'rtl':'ltr';
+  document.getElementById('langBtn').textContent=LANG==='ar'?'EN':'ع';
+  document.querySelectorAll('[data-ar]').forEach(el=>{const v=el.getAttribute('data-'+LANG);if(v!==null)el.innerHTML=v});
+  document.querySelectorAll('[data-ar-ph]').forEach(el=>{const v=el.getAttribute('data-'+LANG+'-ph');if(v!==null)el.placeholder=v});
+  renderSeg();renderProds();renderCart();renderPays();
 }
-function toggleLang(){LANG=LANG==='ar'?'en':'ar'; localStorage.setItem('senior_lang',LANG); applyLang();}
+function toggleLang(){LANG=LANG==='ar'?'en':'ar';localStorage.setItem('senior_lang',LANG);applyLang()}
 
-/* ===== Real Senior catalogue ===== */
-const PRODUCTS = [
-  {id:'grammar', kind:'single', img:'book-grammar.jpg', accent:'#E23B3B', price:120, real:false,
-   titleAr:'Grammar — القواعد', titleEn:'English Grammar',
-   metaAr:'كل صفوف الثانوي', metaEn:'All secondary',
-   descAr:'تعلّم قواعد الإنجليزية بطريقة سهلة ومبسّطة لكل طلاب المرحلة الثانوية — الإصدار الثاني.',
-   descEn:'Learn English grammar the easy way for all secondary students — 2nd edition.',
-   featAr:['شرح مبسّط لكل قاعدة','أمثلة وتدريبات محلولة','مناسب للعام والأزهر'],
-   featEn:['Every rule simplified','Worked examples & drills','Fits General & Azhar']},
-  {id:'exercises', kind:'single', img:'book-exercises.jpg', accent:'#E02434', price:110, real:false, badge:'',
-   titleAr:'Exercises — كتاب التمارين', titleEn:'Exercises Book',
-   metaAr:'٣ ثانوي · عام وأزهر', metaEn:'Grade 3 · Gen & Azhar',
-   descAr:'بنك تمارين شامل على المنهج ورواية The Count of Monte Cristo — بالإجابات النموذجية.',
-   descEn:'A full exercise bank on the curriculum and the novel The Count of Monte Cristo — with model answers.',
-   featAr:['تمارين على كل الوحدات','أسئلة على الرواية','مجاب عنه بالكامل'],
-   featEn:['Drills on every unit','Questions on the novel','Fully answered']},
-  {id:'skills', kind:'single', img:'book-skills.jpg', accent:'#EE5A2D', price:110, real:false,
-   titleAr:'Skills — المهارات', titleEn:'Skills',
-   metaAr:'٣ ثانوي · عام وأزهر', metaEn:'Grade 3 · Gen & Azhar',
-   descAr:'فقرات كتابة وقطع فهم وتدريبات مكثّفة على مهارات الكتابة (MCQ) — تدريب على نمط الامتحان.',
-   descEn:'Paragraphs, comprehension passages and intensive writing-skills drills (MCQ) — exam-style practice.',
-   featAr:['Paragraphs + Comprehension','تدريب على مهارات الكتابة','أسئلة اختيار من متعدد'],
-   featEn:['Paragraphs + Comprehension','Writing-skills practice','Multiple-choice questions']},
-  {id:'comprehension', kind:'single', img:'book-comprehension.jpg', accent:'#1C7A46', price:110, real:true, badge:'مجاب عنه بالكامل', badgeEn:'Fully answered', badgeCls:'green',
-   titleAr:'Comprehension — قطع الفهم', titleEn:'Comprehension',
-   metaAr:'٣ ثانوي · عام وأزهر', metaEn:'Grade 3 · Gen & Azhar',
-   descAr:'100 قطعة فهم بإجابات نموذجية + 150 ترجمة داخل الكتاب — مجاب عنه بالكامل.',
-   descEn:'100 reading passages with model answers + 150 translations inside — fully answered.',
-   featAr:['100 قطعة بإجابات نموذجية','150 ترجمة داخل الكتاب','مجاب عنه بالكامل'],
-   featEn:['100 passages with model answers','150 translations inside','Fully answered']},
-  {id:'bundle', kind:'bundle', imgs:['book-grammar.jpg','book-exercises.jpg','book-skills.jpg','book-comprehension.jpg'], accent:'#F2A03D', price:380, oldPrice:450, real:false, badge:'وفّر أكثر', badgeEn:'Best value', badgeCls:'amber',
-   titleAr:'السلسلة كاملة — ٤ كتب', titleEn:'The full series — 4 books',
-   metaAr:'٣ ثانوي · عام وأزهر', metaEn:'Grade 3 · Gen & Azhar',
-   descAr:'المجموعة الكاملة: Grammar + Exercises + Skills + Comprehension في طلب واحد وبسعر أوفر — أعلى قيمة للطالب.',
-   descEn:'The complete package: Grammar + Exercises + Skills + Comprehension in one order at a better price — highest value, hardest to pirate.',
-   featAr:['٤ كتب في طلب واحد','خصم على السلسلة كاملة','كل الكتب مجاب عنها'],
-   featEn:['4 books in one order','Discount on the full set','All books answered']},
+const PRODUCTS=[
+ {id:'grammar',kind:'single',img:'book-grammar.jpg',price:120,accent:'#E23B3B',
+  tAr:'Grammar — القواعد',tEn:'English Grammar',mAr:'كل صفوف الثانوي',mEn:'All secondary',
+  dAr:'تعلّم قواعد الإنجليزية بطريقة سهلة ومبسّطة لكل طلاب المرحلة الثانوية — الإصدار الثاني.',
+  dEn:'Learn English grammar the easy way for all secondary students — 2nd edition.',
+  fAr:['شرح مبسّط لكل قاعدة','أمثلة وتدريبات محلولة','مناسب للعام والأزهر'],
+  fEn:['Every rule simplified','Worked examples &amp; drills','Fits General &amp; Azhar']},
+ {id:'exercises',kind:'single',img:'book-exercises.jpg',price:110,accent:'#C0421C',
+  tAr:'Exercises — كتاب التمارين',tEn:'Exercises Book',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
+  dAr:'بنك تمارين شامل على المنهج ورواية The Count of Monte Cristo — بالإجابات النموذجية.',
+  dEn:'A full exercise bank on the curriculum and the novel The Count of Monte Cristo — with model answers.',
+  fAr:['تمارين على كل الوحدات','أسئلة على الرواية','مجاب عنه بالكامل'],
+  fEn:['Drills on every unit','Questions on the novel','Fully answered']},
+ {id:'skills',kind:'single',img:'book-skills.jpg',price:110,accent:'#B07419',
+  tAr:'Skills — المهارات',tEn:'Skills',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
+  dAr:'فقرات كتابة وقطع فهم وتدريبات مكثّفة على مهارات الكتابة — تدريب على نمط الامتحان.',
+  dEn:'Paragraphs, comprehension passages and intensive writing-skills drills — exam-style practice.',
+  fAr:['Paragraphs + Comprehension','تدريب على مهارات الكتابة','أسئلة اختيار من متعدد'],
+  fEn:['Paragraphs + Comprehension','Writing-skills practice','Multiple-choice questions']},
+ {id:'comprehension',kind:'single',img:'book-comprehension.jpg',price:110,accent:'#0E6E60',
+  badgeAr:'مجاب عنه بالكامل',badgeEn:'Fully answered',badgeBg:'#0E6E60',badgeInk:'#fff',
+  tAr:'Comprehension — قطع الفهم',tEn:'Comprehension',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
+  dAr:'100 قطعة فهم بإجابات نموذجية + 150 ترجمة داخل الكتاب — مجاب عنه بالكامل.',
+  dEn:'100 reading passages with model answers + 150 translations inside — fully answered.',
+  fAr:['100 قطعة بإجابات نموذجية','150 ترجمة داخل الكتاب','مجاب عنه بالكامل'],
+  fEn:['100 passages with model answers','150 translations inside','Fully answered']},
+ {id:'bundle',kind:'bundle',imgs:['book-grammar.jpg','book-exercises.jpg','book-skills.jpg','book-comprehension.jpg'],
+  price:380,oldPrice:450,accent:'#F2A03D',badgeAr:'شحن مجاني',badgeEn:'Free shipping',badgeBg:'#F2A03D',badgeInk:'#0A3B33',
+  tAr:'السلسلة كاملة — ٤ كتب',tEn:'The full series — 4 books',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
+  dAr:'المجموعة الكاملة: Grammar + Exercises + Skills + Comprehension في طلب واحد بسعر أوفر وشحن مجاني.',
+  dEn:'The complete set: Grammar + Exercises + Skills + Comprehension in one order, better price and free shipping.',
+  fAr:['٤ كتب في طلب واحد','خصم ٧٠ جنيهاً','شحن مجاني لكل المحافظات'],
+  fEn:['4 books in one order','Save 70 EGP','Free shipping nationwide']},
 ];
-function pTitle(p){return LANG==='ar'?p.titleAr:p.titleEn}
-function pDesc(p){return LANG==='ar'?p.descAr:p.descEn}
-function pMeta(p){return LANG==='ar'?p.metaAr:p.metaEn}
-function pBadge(p){return LANG==='ar'?p.badge:(p.badgeEn||p.badge)}
-
-let currentFilter='all';
-function renderProducts(f){
-  currentFilter=f;
-  const box=document.getElementById('products'); box.innerHTML='';
-  PRODUCTS.filter(p=> f==='all'?true:p.kind===f).forEach(p=>{
-    const badge = p.badge ? `<div class="badge-corner ${p.badgeCls||''}">${pBadge(p)}</div>`:'';
-    const coverInner = p.kind==='bundle'
-      ? `<div class="bundle-grid">${p.imgs.map(s=>`<img src="${s}" alt="">`).join('')}</div>`
-      : `<img src="${p.img}" alt="${pTitle(p)}" loading="lazy">`;
-    const priceInner = p.oldPrice
-      ? `<span class="old">${p.oldPrice}</span><span class="num">${p.price}</span><span class="cur">${t('ج','EGP')}</span>`
-      : `<span class="num">${p.price}</span><span class="cur">${t('ج','EGP')}</span>`;
-    const el=document.createElement('div');
-    el.className='card'+(p.kind==='bundle'?' bundle':'');
-    el.innerHTML=`
-      <div class="cover">${badge}${coverInner}</div>
-      <div class="body">
-        <div class="tag-row">
-          <span class="tag accent" style="background:${p.accent}">${pMeta(p)}</span>
-          ${p.real?`<span class="tag">${t('سعر مؤكّد','confirmed price')}</span>`:''}
-        </div>
-        <h3>${pTitle(p)}</h3>
-        <p class="desc">${pDesc(p)}</p>
-        <div class="price">${priceInner}</div>
-        <div class="acts">
-          <button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}')">${t('أضف للسلة','Add to cart')}</button>
-          <button class="btn btn-ghost btn-sm" onclick="showProduct('${p.id}')">${t('تفاصيل','Details')}</button>
-        </div>
-      </div>`;
+const P=p=>LANG==='ar'?{t:p.tAr,d:p.dAr,m:p.mAr,f:p.fAr,b:p.badgeAr}:{t:p.tEn,d:p.dEn,m:p.mEn,f:p.fEn,b:p.badgeEn};
+let filter='all';
+function counts(){return{all:PRODUCTS.length,single:PRODUCTS.filter(p=>p.kind==='single').length,bundle:PRODUCTS.filter(p=>p.kind==='bundle').length}}
+function renderSeg(){
+  const c=counts(),segs=[['all',t('الكل','All'),c.all],['single',t('كتب مفردة','Single books'),c.single],['bundle',t('السلسلة كاملة','Full series'),c.bundle]];
+  document.getElementById('seg').innerHTML=segs.map(([k,l,n])=>`<button class="${filter===k?'on':''}" onclick="setFilter('${k}')">${l}<i>${n}</i></button>`).join('');
+}
+function setFilter(f){filter=f;renderSeg();renderProds()}
+function renderProds(){
+  const box=document.getElementById('prods');box.innerHTML='';
+  PRODUCTS.filter(p=>filter==='all'||p.kind===filter).forEach(p=>{
+    const x=P(p);
+    const badge=x.b?`<span class="badge" style="background:${p.badgeBg};color:${p.badgeInk}">${x.b}</span>`:'';
+    const cv=p.kind==='bundle'
+      ? `<div class="cv bundle">${badge}${p.imgs.map(s=>`<img src="${s}" alt="">`).join('')}</div>`
+      : `<div class="cv">${badge}<img src="${p.img}" alt="${x.t}" loading="lazy"></div>`;
+    const price=p.oldPrice?`<span class="old">${p.oldPrice}</span><span class="n">${p.price}</span><span class="c">${t('ج','EGP')}</span>`
+                          :`<span class="n">${p.price}</span><span class="c">${t('ج','EGP')}</span>`;
+    const el=document.createElement('div');el.className='card';
+    el.innerHTML=`${cv}<div class="cbody">
+      <div class="tags"><span class="tag" style="background:${p.accent}">${x.m}</span></div>
+      <h3>${x.t}</h3><p>${x.d}</p>
+      <div class="price">${price}</div>
+      <div class="acts">
+        <button class="btn b-o b-sm" onclick="add('${p.id}')">${t('أضف للسلة','Add to cart')}</button>
+        <button class="btn b-g b-sm" onclick="showProd('${p.id}')">${t('تفاصيل','Details')}</button>
+      </div></div>`;
     box.appendChild(el);
   });
 }
-function showProduct(id){
-  const p=PRODUCTS.find(x=>x.id===id);
-  const feats=(LANG==='ar'?p.featAr:p.featEn)||[];
-  const coverInner = p.kind==='bundle'
-    ? `<div class="bundle-grid">${p.imgs.map(s=>`<img src="${s}" alt="">`).join('')}</div>`
-    : `<img src="${p.img}" alt="${pTitle(p)}">`;
-  const priceInner = p.oldPrice
-    ? `<span class="old">${p.oldPrice}</span><span class="num">${p.price}</span><span class="cur">${t('جنيه','EGP')}</span>`
-    : `<span class="num">${p.price}</span><span class="cur">${t('جنيه','EGP')}</span>`;
-  document.getElementById('prodBody').innerHTML=`
-    <div class="pd">
-      <div class="cover">${coverInner}</div>
-      <div>
-        <div class="tag-row" style="margin-bottom:8px"><span class="tag accent" style="background:${p.accent}">${pMeta(p)}</span></div>
-        <h3>${pTitle(p)}</h3>
-        <p style="color:var(--muted);margin:10px 0">${pDesc(p)}</p>
-        <ul>${feats.map(f=>`<li>${f}</li>`).join('')}</ul>
-        <div class="price" style="margin:14px 0">${priceInner}</div>
-        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="addToCart('${p.id}');closeModal('prodModal')">${t('أضف للسلة','Add to cart')}</button>
-      </div>
-    </div>`;
-  openModal('prodModal');
+function showProd(id){
+  const p=PRODUCTS.find(v=>v.id===id),x=P(p);
+  const cv=p.kind==='bundle'?`<div class="cv bundle">${p.imgs.map(s=>`<img src="${s}" alt="">`).join('')}</div>`:`<div class="cv"><img src="${p.img}" alt=""></div>`;
+  const price=p.oldPrice?`<span class="old">${p.oldPrice}</span><span class="n">${p.price}</span><span class="c">${t('جنيه','EGP')}</span>`:`<span class="n">${p.price}</span><span class="c">${t('جنيه','EGP')}</span>`;
+  document.getElementById('pdBody').innerHTML=`<div class="pd">${cv}<div>
+    <div class="tags" style="margin-bottom:8px"><span class="tag" style="background:${p.accent}">${x.m}</span></div>
+    <h3>${x.t}</h3><p style="color:var(--muted);margin:10px 0;font-size:14px">${x.d}</p>
+    <ul>${x.f.map(f=>`<li>${f}</li>`).join('')}</ul>
+    <div class="price" style="margin:14px 0">${price}</div>
+    <button class="btn b-o" style="width:100%" onclick="add('${p.id}');closeModal('mProd')">${t('أضف للسلة','Add to cart')}</button>
+  </div></div>`;
+  openModal('mProd');
 }
-document.getElementById('filters').addEventListener('click',e=>{
-  if(e.target.classList.contains('chip')){
-    document.querySelectorAll('#filters .chip').forEach(c=>c.classList.remove('active'));
-    e.target.classList.add('active'); renderProducts(e.target.dataset.f);
-  }
-});
 
-/* ===== Cart ===== */
-let cart = JSON.parse(localStorage.getItem('senior_cart')||'{}');
-function saveCart(){localStorage.setItem('senior_cart',JSON.stringify(cart))}
-function thumbFor(p){return p.kind==='bundle'?p.imgs[3]:p.img}
-function addToCart(id){cart[id]=(cart[id]||0)+1; saveCart(); renderCart(); openCart(); toast(t('تمت الإضافة للسلة ✓','Added to cart ✓'));}
-function changeQty(id,d){cart[id]=(cart[id]||0)+d; if(cart[id]<=0)delete cart[id]; saveCart(); renderCart();}
-function removeItem(id){delete cart[id]; saveCart(); renderCart();}
-function cartTotal(){let s=0;for(const id in cart){const p=PRODUCTS.find(x=>x.id===id); if(p)s+=p.price*cart[id];}return s;}
-function cartCount(){let c=0;for(const id in cart)c+=cart[id];return c;}
+/* cart */
+let cart=JSON.parse(localStorage.getItem('senior_cart')||'{}');
+const save=()=>localStorage.setItem('senior_cart',JSON.stringify(cart));
+function add(id){cart[id]=(cart[id]||0)+1;save();renderCart();openCart();toast(t('تمت الإضافة للسلة','Added to cart'))}
+function chg(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];save();renderCart()}
+function rm(id){delete cart[id];save();renderCart()}
+function total(){let s=0;for(const k in cart){const p=PRODUCTS.find(v=>v.id===k);if(p)s+=p.price*cart[k]}return s}
+function count(){let c=0;for(const k in cart)c+=cart[k];return c}
 function renderCart(){
-  const wrap=document.getElementById('cartItems'), foot=document.getElementById('cartFoot');
-  const ids=Object.keys(cart), cc=cartCount(), badge=document.getElementById('cartCount');
-  badge.style.display = cc>0?'grid':'none'; badge.textContent=cc;
-  if(ids.length===0){wrap.innerHTML=`<div class="cart-empty">🛒<br><br>${t('السلّة فارغة. تصفّح السلسلة الآن.','Your cart is empty. Browse the series.')}</div>`; foot.style.display='none'; return;}
-  wrap.innerHTML='';
-  ids.forEach(id=>{
-    const p=PRODUCTS.find(x=>x.id===id); if(!p)return;
-    const el=document.createElement('div'); el.className='citem';
-    el.innerHTML=`
-      <img class="ci-cv" src="${thumbFor(p)}" alt="">
-      <div class="ci-info"><h4>${pTitle(p)}</h4><div class="p">${p.price} ${t('ج','EGP')}</div><button class="ci-rm" onclick="removeItem('${id}')">${t('حذف','Remove')}</button></div>
-      <div class="qty"><button onclick="changeQty('${id}',-1)">−</button><span>${cart[id]}</span><button onclick="changeQty('${id}',1)">+</button></div>`;
-    wrap.appendChild(el);
-  });
-  foot.style.display='block';
-  document.getElementById('cartTotal').textContent=cartTotal();
+  const w=document.getElementById('citems'),f=document.getElementById('dfoot'),n=document.getElementById('cartN');
+  const ids=Object.keys(cart),c=count();
+  n.style.display=c>0?'grid':'none';n.textContent=c;
+  if(!ids.length){w.innerHTML=`<div class="empty">🛒<br><br>${t('السلّة فارغة. تصفّح السلسلة الآن.','Your cart is empty. Browse the series.')}</div>`;f.style.display='none';return}
+  w.innerHTML='';
+  ids.forEach(id=>{const p=PRODUCTS.find(v=>v.id===id);if(!p)return;const x=P(p);
+    const th=p.kind==='bundle'?p.imgs[3]:p.img;
+    const el=document.createElement('div');el.className='ci';
+    el.innerHTML=`<img src="${th}" alt=""><div class="in"><h4>${x.t}</h4><div class="p">${p.price} ${t('ج','EGP')}</div>
+      <button class="rm" onclick="rm('${id}')">${t('حذف','Remove')}</button></div>
+      <div class="qty"><button onclick="chg('${id}',-1)">−</button><span>${cart[id]}</span><button onclick="chg('${id}',1)">+</button></div>`;
+    w.appendChild(el)});
+  f.style.display='block';document.getElementById('ctot').textContent=total();
 }
-function openCart(){document.getElementById('drawer').classList.add('show');document.getElementById('overlay').classList.add('show');}
-function closeCart(){document.getElementById('drawer').classList.remove('show');document.getElementById('overlay').classList.remove('show');}
+const openCart=()=>{document.getElementById('drawer').classList.add('on');document.getElementById('ov').classList.add('on')};
+const closeCart=()=>{document.getElementById('drawer').classList.remove('on');document.getElementById('ov').classList.remove('on')};
 
-/* ===== Checkout / WhatsApp ===== */
-const WA='201010101445';
-function buildOrderText(info){
-  let lines=[];
-  lines.push(LANG==='ar'?'🟠 طلب جديد من موقع Senior':'🟠 New order from Senior website');
-  lines.push('—————————');
-  for(const id in cart){const p=PRODUCTS.find(x=>x.id===id); if(p)lines.push(`• ${LANG==='ar'?p.titleAr:p.titleEn} ×${cart[id]} = ${p.price*cart[id]} ${t('ج','EGP')}`);}
-  lines.push('—————————');
-  lines.push(`${t('الإجمالي','Total')}: ${cartTotal()} ${t('ج','EGP')} (${t('دفع عند الاستلام','cash on delivery')})`);
-  if(info){
-    lines.push('');
-    lines.push(`${t('الاسم','Name')}: ${info.name}`);
-    lines.push(`${t('الموبايل','Mobile')}: ${info.phone}`);
-    lines.push(`${t('المحافظة','Governorate')}: ${info.gov}`);
-    lines.push(`${t('المسار','Track')}: ${info.grade}`);
-    lines.push(`${t('العنوان','Address')}: ${info.addr}`);
-    if(info.notes)lines.push(`${t('ملاحظات','Notes')}: ${info.notes}`);
-  }
-  return encodeURIComponent(lines.join('\n'));
+/* payments */
+let METHOD='cod';
+const PAYS=[
+ {k:'cod',ic:'💵',bAr:'الدفع عند الاستلام',bEn:'Cash on delivery',sAr:'ادفع نقداً عند وصول الكتب',sEn:'Pay cash when the books arrive',tag:'hot',tAr:'الأكثر استخداماً',tEn:'Most used'},
+ {k:'instapay',ic:'⚡',bAr:'InstaPay — تحويل فوري',bEn:'InstaPay — instant transfer',sAr:'حوّل من أي بنك خلال ثوانٍ',sEn:'Transfer from any bank in seconds',tag:'',tAr:'فوري',tEn:'Instant'},
+ {k:'wallet',ic:'📱',bAr:'محفظة الموبايل',bEn:'Mobile wallet',sAr:'فودافون كاش · أورنج · اتصالات',sEn:'Vodafone Cash · Orange · e&',tag:'',tAr:'شائع',tEn:'Popular'},
+ {k:'fawry',ic:'🏪',bAr:'فوري',bEn:'Fawry',sAr:'ادفع نقداً من أي منفذ فوري',sEn:'Pay cash at any Fawry outlet',tag:'',tAr:'',tEn:''},
+];
+function renderPays(){
+  document.getElementById('pays').innerHTML=PAYS.map(p=>{
+    const b=LANG==='ar'?p.bAr:p.bEn,s=LANG==='ar'?p.sAr:p.sEn,tg=LANG==='ar'?p.tAr:p.tEn;
+    return `<div class="pay ${METHOD===p.k?'on':''}" onclick="pickPay('${p.k}')">
+      <div class="ic">${p.ic}</div><div class="tx"><b>${b}</b><span>${s}</span></div>
+      ${tg?`<span class="tg ${p.tag}">${tg}</span>`:''}</div>`}).join('');
+  document.getElementById('payPanel').innerHTML=panel(METHOD);
 }
-function orderWhatsApp(){if(cartCount()===0){toast(t('السلّة فارغة','Cart is empty'));return;} window.open(`https://wa.me/${WA}?text=${buildOrderText(null)}`,'_blank');}
-function openCheckout(){if(cartCount()===0){toast(t('السلّة فارغة','Cart is empty'));return;} document.getElementById('co-total').textContent=cartTotal(); openModal('checkoutModal');}
-function submitCheckout(){
-  const name=document.getElementById('co-name').value.trim(), phone=document.getElementById('co-phone').value.trim(), addr=document.getElementById('co-addr').value.trim();
-  if(!name||!phone||!addr){toast(t('من فضلك أكمل البيانات','Please complete the fields'));return;}
-  const info={name,phone,addr,gov:document.getElementById('co-gov').value,grade:document.getElementById('co-grade').selectedOptions[0].textContent,notes:document.getElementById('co-notes').value.trim()};
-  window.open(`https://wa.me/${WA}?text=${buildOrderText(info)}`,'_blank');
-  closeModal('checkoutModal'); toast(t('تم تجهيز طلبك على واتساب ✓','Your order is ready on WhatsApp ✓'));
+function pickPay(k){METHOD=k;renderPays()}
+function panel(k){
+  if(k==='instapay')return `<div class="panel"><b>${t('التحويل عبر InstaPay','Transfer via InstaPay')}</b>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:6px">${t('حوّل المبلغ إلى العنوان التالي من تطبيق InstaPay أو تطبيق بنكك، ثم أرفق صورة الإيصال.','Transfer to the address below from InstaPay or your bank app, then attach the receipt.')}</p>
+    <div class="copy"><span>seniorbooks@instapay</span><button onclick="cp('seniorbooks@instapay')">${t('نسخ','Copy')}</button></div>
+    <div class="upl" onclick="this.classList.add('ok');this.textContent='${t('✅ تم إرفاق الإيصال','✅ Receipt attached')}'">📎 ${t('أرفق صورة إيصال التحويل','Attach transfer receipt')}</div></div>`;
+  if(k==='wallet')return `<div class="panel"><b>${t('محفظة الموبايل','Mobile wallet')}</b>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:6px">${t('حوّل من فودافون كاش أو أورنج أو اتصالات إلى الرقم التالي، ثم أرفق الإيصال.','Transfer from Vodafone Cash, Orange or e& to this number, then attach the receipt.')}</p>
+    <div class="copy"><span dir="ltr">010 1010 1445</span><button onclick="cp('01010101445')">${t('نسخ','Copy')}</button></div>
+    <div class="upl" onclick="this.classList.add('ok');this.textContent='${t('✅ تم إرفاق الإيصال','✅ Receipt attached')}'">📎 ${t('أرفق صورة إيصال التحويل','Attach transfer receipt')}</div></div>`;
+  if(k==='fawry')return `<div class="panel"><b>${t('الدفع عبر فوري','Pay via Fawry')}</b>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:6px">${t('سنرسل لك كود فوري بعد تأكيد الطلب، وتدفع به نقداً من أي منفذ خلال ٤٨ ساعة.',"We will send you a Fawry code after confirming the order — pay cash at any outlet within 48 hours.")}</p></div>`;
+  return `<div class="panel"><b>${t('الدفع عند الاستلام','Cash on delivery')}</b>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:6px">${t('تدفع للمندوب نقداً عند تسليم الكتب. سنتصل بك لتأكيد الطلب قبل الشحن.',"Pay the courier in cash on delivery. We will call to confirm before shipping.")}</p></div>`;
 }
-function notifyPlus(){const msg=encodeURIComponent(LANG==='ar'?'أرغب في إشعاري عند إطلاق منصة Senior الرقمية':'Notify me when the Senior digital platform launches'); window.open(`https://wa.me/${WA}?text=${msg}`,'_blank');}
+function cp(v){navigator.clipboard&&navigator.clipboard.writeText(v);toast(t('تم النسخ','Copied')+': '+v)}
+
+function orderText(info){
+  const L=[];L.push(t('طلب جديد من موقع Senior','New order from Senior website'));L.push('—————');
+  for(const k in cart){const p=PRODUCTS.find(v=>v.id===k);if(p)L.push(`• ${LANG==='ar'?p.tAr:p.tEn} ×${cart[k]} = ${p.price*cart[k]} ${t('ج','EGP')}`)}
+  L.push('—————');L.push(`${t('الإجمالي','Total')}: ${total()} ${t('ج','EGP')}`);
+  if(info){L.push('');L.push(`${t('الاسم','Name')}: ${info.n}`);L.push(`${t('الموبايل','Mobile')}: ${info.p}`);
+    L.push(`${t('المحافظة','Governorate')}: ${info.g}`);L.push(`${t('المسار','Track')}: ${info.tr}`);
+    L.push(`${t('العنوان','Address')}: ${info.a}`);L.push(`${t('وسيلة الدفع','Payment')}: ${info.m}`)}
+  return encodeURIComponent(L.join('\n'));
+}
+function orderWA(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}window.open(`https://wa.me/${WA}?text=${orderText(null)}`,'_blank')}
+function openCheckout(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}document.getElementById('cotot').textContent=total();renderPays();openModal('mCheck')}
+function submitOrder(){
+  const n=document.getElementById('co-n').value.trim(),p=document.getElementById('co-p').value.trim(),a=document.getElementById('co-a').value.trim();
+  if(!n||!p||!a){toast(t('من فضلك أكمل البيانات','Please complete the fields'));return}
+  const mp=PAYS.find(v=>v.k===METHOD);
+  const info={n,p,a,g:document.getElementById('co-g').value,tr:document.getElementById('co-t').selectedOptions[0].textContent,m:LANG==='ar'?mp.bAr:mp.bEn};
+  window.open(`https://wa.me/${WA}?text=${orderText(info)}`,'_blank');
+  closeModal('mCheck');toast(t('تم تجهيز طلبك على واتساب','Your order is ready on WhatsApp'));
+}
 function sendContact(e){
   e.preventDefault();
-  const n=document.getElementById('cf-name').value.trim(), ph=document.getElementById('cf-phone').value.trim();
-  const role=document.getElementById('cf-role').selectedOptions[0].textContent, m=document.getElementById('cf-msg').value.trim();
-  const txt=encodeURIComponent(`${t('رسالة من الموقع','Website message')}\n${t('الاسم','Name')}: ${n}\n${t('الموبايل','Mobile')}: ${ph}\n${t('الصفة','Role')}: ${role}\n${t('الرسالة','Message')}: ${m}`);
-  window.open(`https://wa.me/${WA}?text=${txt}`,'_blank');
+  const n=document.getElementById('cf-n').value.trim(),p=document.getElementById('cf-p').value.trim();
+  const r=document.getElementById('cf-r').selectedOptions[0].textContent,m=document.getElementById('cf-m').value.trim();
+  const x=encodeURIComponent(`${t('رسالة من الموقع','Website message')}\n${t('الاسم','Name')}: ${n}\n${t('الموبايل','Mobile')}: ${p}\n${t('الصفة','Role')}: ${r}\n${t('الرسالة','Message')}: ${m}`);
+  window.open(`https://wa.me/${WA}?text=${x}`,'_blank');
+}
+function verifyCode(){
+  const c=document.getElementById('vcode').value.trim();
+  if(!c){toast(t('أدخل الكود المطبوع داخل الكتاب','Enter the code printed in your book'));return}
+  const msg=encodeURIComponent(t('أرغب في التأكد من أصالة نسختي. الكود: ','I want to verify my copy is genuine. Code: ')+c);
+  window.open(`https://wa.me/${WA}?text=${msg}`,'_blank');
+  toast(t('سنؤكّد لك أصالة النسخة عبر واتساب',"We will confirm your copy on WhatsApp"));
 }
 
-/* ===== Misc ===== */
-function openModal(id){document.getElementById(id).classList.add('show')}
-function closeModal(id){document.getElementById(id).classList.remove('show')}
-let toastTimer;
-function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2400);}
-document.querySelectorAll('#navlinks a').forEach(a=>a.addEventListener('click',()=>document.getElementById('navlinks').classList.remove('open')));
+const openModal=id=>document.getElementById(id).classList.add('on');
+const closeModal=id=>document.getElementById(id).classList.remove('on');
+let tT;function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('on');clearTimeout(tT);tT=setTimeout(()=>e.classList.remove('on'),2400)}
+document.querySelectorAll('#nav a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav').classList.remove('open')));
 
-/* ===== Init ===== */
-const govSel=document.getElementById('co-gov');
-GOVS.forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=g;govSel.appendChild(o);});
-const waMsg=encodeURIComponent(LANG==='ar'?'مرحباً، أرغب في معرفة المزيد عن سلسلة Senior':'Hi, I\'d like to know more about the Senior series');
-['waFloat','waLine','teacherWa'].forEach(id=>{const e=document.getElementById(id); if(e)e.href=`https://wa.me/${WA}?text=${waMsg}`;});
-renderProducts('all'); applyLang(); renderCart();
+const gs=document.getElementById('co-g');GOVS.forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=g;gs.appendChild(o)});
+const waMsg=encodeURIComponent(LANG==='ar'?'مرحباً، أرغب في معرفة المزيد عن سلسلة Senior':'Hi, I would like to know more about the Senior series');
+['waF','wal','twa'].forEach(id=>{const e=document.getElementById(id);if(e)e.href=`https://wa.me/${WA}?text=${waMsg}`});
+applyLang();
 </script>
 </body>
 </html>
