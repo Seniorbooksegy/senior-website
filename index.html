@@ -613,9 +613,9 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
     </div>
   </div>
   <div class="hero-art">
-    <img class="bk bk1" src="book-comprehension.png" alt="Comprehension">
-    <img class="bk bk2" src="book-exercises.png" alt="Exercises">
-    <img class="bk bk3" src="book-skills.png" alt="Skills">
+    <img class="bk bk1" src="book-comprehension.png?v=2" alt="Comprehension">
+    <img class="bk bk2" src="book-exercises.png?v=2" alt="Exercises">
+    <img class="bk bk3" src="book-skills.png?v=2" alt="Skills">
     <div class="float f1"><b style="background:var(--teal)">✓</b><span data-ar="دفع عند الاستلام" data-en="Cash on delivery">دفع عند الاستلام</span></div>
     <div class="float f2"><b style="background:var(--orange)">★</b><span data-ar="إجابات نموذجية" data-en="Model answers">إجابات نموذجية</span></div>
   </div>
@@ -994,32 +994,32 @@ function applyLang(){
 function toggleLang(){LANG=LANG==='ar'?'en':'ar';localStorage.setItem('senior_lang',LANG);applyLang()}
 
 const PRODUCTS=[
- {id:'grammar',kind:'single',img:'book-grammar.png',price:120,accent:'#E23B3B',
+ {id:'grammar',kind:'single',img:'book-grammar.png?v=2',price:120,accent:'#E23B3B',
   tAr:'Grammar — القواعد',tEn:'English Grammar',mAr:'كل صفوف الثانوي',mEn:'All secondary',
   dAr:'تعلّم قواعد الإنجليزية بطريقة سهلة ومبسّطة لكل طلاب المرحلة الثانوية — الإصدار الثاني.',
   dEn:'Learn English grammar the easy way for all secondary students — 2nd edition.',
   fAr:['شرح مبسّط لكل قاعدة','أمثلة وتدريبات محلولة','مناسب للعام والأزهر'],
   fEn:['Every rule simplified','Worked examples &amp; drills','Fits General &amp; Azhar']},
- {id:'exercises',kind:'single',img:'book-exercises.png',price:110,accent:'#C0421C',
+ {id:'exercises',kind:'single',img:'book-exercises.png?v=2',price:110,accent:'#C0421C',
   tAr:'Exercises — كتاب التمارين',tEn:'Exercises Book',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
   dAr:'بنك تمارين شامل على المنهج ورواية The Count of Monte Cristo — بالإجابات النموذجية.',
   dEn:'A full exercise bank on the curriculum and the novel The Count of Monte Cristo — with model answers.',
   fAr:['تمارين على كل الوحدات','أسئلة على الرواية','مجاب عنه بالكامل'],
   fEn:['Drills on every unit','Questions on the novel','Fully answered']},
- {id:'skills',kind:'single',img:'book-skills.png',price:110,accent:'#B07419',
+ {id:'skills',kind:'single',img:'book-skills.png?v=2',price:110,accent:'#B07419',
   tAr:'Skills — المهارات',tEn:'Skills',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
   dAr:'فقرات كتابة وقطع فهم وتدريبات مكثّفة على مهارات الكتابة — تدريب على نمط الامتحان.',
   dEn:'Paragraphs, comprehension passages and intensive writing-skills drills — exam-style practice.',
   fAr:['Paragraphs + Comprehension','تدريب على مهارات الكتابة','أسئلة اختيار من متعدد'],
   fEn:['Paragraphs + Comprehension','Writing-skills practice','Multiple-choice questions']},
- {id:'comprehension',kind:'single',img:'book-comprehension.png',price:110,accent:'#0E6E60',
+ {id:'comprehension',kind:'single',img:'book-comprehension.png?v=2',price:110,accent:'#0E6E60',
   badgeAr:'مجاب عنه بالكامل',badgeEn:'Fully answered',badgeBg:'#0E6E60',badgeInk:'#fff',
   tAr:'Comprehension — قطع الفهم',tEn:'Comprehension',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
   dAr:'100 قطعة فهم بإجابات نموذجية + 150 ترجمة داخل الكتاب — مجاب عنه بالكامل.',
   dEn:'100 reading passages with model answers + 150 translations inside — fully answered.',
   fAr:['100 قطعة بإجابات نموذجية','150 ترجمة داخل الكتاب','مجاب عنه بالكامل'],
   fEn:['100 passages with model answers','150 translations inside','Fully answered']},
- {id:'bundle',kind:'bundle',imgs:['book-grammar.png','book-exercises.png','book-skills.png','book-comprehension.png'],
+ {id:'bundle',kind:'bundle',imgs:['book-grammar.png?v=2','book-exercises.png?v=2','book-skills.png?v=2','book-comprehension.png?v=2'],
   price:380,oldPrice:450,accent:'#F2A03D',badgeAr:'شحن مجاني',badgeEn:'Free shipping',badgeBg:'#F2A03D',badgeInk:'#0A3B33',
   tAr:'السلسلة كاملة — ٤ كتب',tEn:'The full series — 4 books',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
   dAr:'المجموعة الكاملة: Grammar + Exercises + Skills + Comprehension في طلب واحد بسعر أوفر وشحن مجاني.',
