@@ -271,6 +271,9 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
 .toast{position:fixed;bottom:28px;inset-inline-end:28px;background:var(--ink);color:#fff;padding:14px 22px;border-radius:13px;font-weight:600;font-size:14px;z-index:200;opacity:0;transform:translateY(20px);transition:.3s}
 .toast.on{opacity:1;transform:translateY(0)}
 
+/* mobile-only "read more" section toggles (desktop: hidden, content always shown) */
+.mread{display:none}
+
 @media(max-width:1000px){
   .hero,.about,.cgrid{grid-template-columns:1fr}
   .hero-art{height:340px;order:-1}
@@ -304,7 +307,7 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
   .wrap{padding:0 18px}
   .nav-in{height:64px;gap:10px}
   .brand img{height:26px}
-  .brand span{display:none}
+  .brand span{font-size:8.5px;margin-top:3px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .hero-cta .btn{flex:1;justify-content:center}
   .plat-cta{gap:10px}
   .tot{font-size:15px}
@@ -474,6 +477,22 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
   .mbar .btn{padding:11px 18px;font-size:13.5px}
   body.hasbar{padding-bottom:70px}
   .wa{bottom:78px}
+
+  /* collapsible sections: show subtitle + brief, expand on "read more" */
+  .mcol:not(.mo) .mhide{display:none!important}
+  .mcol .head-c{margin-bottom:0}
+  .mcol.mo .head-c{margin-bottom:16px}
+  .mcol .mread{display:flex;align-items:center;gap:6px;width:max-content;margin:16px auto 0;padding:9px 24px;
+    border-radius:999px;border:1.5px solid var(--teal);background:#fff;color:var(--teal);
+    font-family:inherit;font-weight:600;font-size:13px;cursor:pointer}
+  #plus.mcol .mread{border-color:rgba(255,255,255,.5);background:transparent;color:#fff}
+  .mcol.mo .rm-m{display:none}
+  .mcol:not(.mo) .rm-l{display:none}
+
+  /* teachers card moves below the collapsed sections, just above the footer */
+  body{display:flex;flex-direction:column}
+  #teachers{order:1}
+  footer{order:2}
 }
 
 /* ===== SENIOR PLUS PLATFORM ===== */
@@ -653,7 +672,7 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
 </section>
 
 <!-- SENIOR PLUS -->
-<section id="plus">
+<section id="plus" class="mcol">
   <div class="wrap">
     <div class="head-c">
       <div class="eyebrow">Senior Plus</div>
@@ -661,13 +680,13 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
       <p class="lead" data-ar="داخل كل نسخة أصلية كود خاص بها. الكود مجاني تماماً مع الكتاب، وصالح حتى نهاية العام الدراسي في ٣٠ يونيو — لأن قيمة كتابك الأصلي يجب أن تبقى معك حتى الامتحان." data-en="Inside every original copy there is a unique code. It is completely free with the book and valid until 30 June — because the value of your original copy should stay with you until the exam."></p>
     </div>
 
-    <div class="pcards" style="margin-top:26px">
+    <div class="pcards mhide" style="margin-top:26px">
       <div class="pcard"><div class="ic">📝</div><h4 data-ar="تدريبات تُصحَّح فوراً" data-en="Instantly graded practice"></h4><p data-ar="أسئلة على نمط الامتحان تُصحَّح لحظياً مع شرح سبب الإجابة، لا مجرّد مفتاح إجابات." data-en="Exam-style questions graded instantly with an explanation of the answer — not just an answer key."></p><span class="soon" data-ar="قيد التطوير" data-en="In development"></span></div>
       <div class="pcard"><div class="ic">▶️</div><h4 data-ar="فيديوهات حلول" data-en="Solution videos"></h4><p data-ar="شرح بالفيديو لأصعب أنواع الأسئلة والقطع من مؤلّف السلسلة نفسه." data-en="Video walkthroughs of the hardest question types, from the author himself."></p><span class="soon" data-ar="قيد التطوير" data-en="In development"></span></div>
       <div class="pcard"><div class="ic">📈</div><h4 data-ar="متابعة تقدّمك" data-en="Track your progress"></h4><p data-ar="تقرير بسيط يوضّح ما أتقنته وما يحتاج مراجعة، ليعرف الطالب أين يركّز جهده." data-en="A simple report showing what you've mastered and what needs review, so you know where to focus."></p><span class="soon" data-ar="قيد التطوير" data-en="In development"></span></div>
     </div>
 
-    <div class="incl">
+    <div class="incl mhide">
       <span class="em">🎁</span>
       <div>
         <h4 data-ar="مجاناً مع الكتاب — بلا اشتراكات ولا رسوم إضافية" data-en="Free with the book — no subscriptions, no extra fees"></h4>
@@ -675,22 +694,23 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
       </div>
     </div>
 
-    <div class="plat-cta">
+    <div class="plat-cta mhide">
       <button class="btn b-o" onclick="openPlat()" data-ar="🚀 ادخل إلى المنصّة — نسخة تجريبية" data-en="🚀 Enter the platform — trial version"></button>
       <span style="color:#BFE0DA;font-size:13.5px" data-ar="جرّب تجربة الطالب كاملة: مجموعة أسبوعية، تصحيح فوري، تقرير وخطة تحسين." data-en="Try the full student experience: a weekly set, instant grading, a report and an improvement plan."></span>
     </div>
+    <button class="mread" type="button" onclick="mToggle(this)"><span class="rm-m" data-ar="اقرأ المزيد ↓" data-en="Read more ↓"></span><span class="rm-l" data-ar="عرض أقل ↑" data-en="Show less ↑"></span></button>
   </div>
 </section>
 
 <!-- CONTENT -->
-<section id="content" class="sec-white">
+<section id="content" class="sec-white mcol">
   <div class="wrap">
     <div class="head-c">
       <div class="eyebrow" data-ar="مدوّنة Senior" data-en="Senior Blog"></div>
       <h2 class="t" data-ar="نصائح للمذاكرة الصحيحة" data-en="Tips to study the right way"></h2>
       <p class="lead" data-ar="مقالات قصيرة لطالب الثانوية ولوليّ الأمر عن المذاكرة والاستعداد للامتحان وأساليب تعلّم اللغة الإنجليزية." data-en="Short reads for the secondary student and the parent — about studying, exam preparation, and methods for learning English."></p>
     </div>
-    <div class="posts">
+    <div class="posts mhide">
       <div class="post" onclick="toast(t('قريباً: المقال كامل','Coming soon: full article'))">
         <div class="ph" style="background:linear-gradient(150deg,#1C7A46,#0E6E60)">📖</div>
         <div class="pb"><div class="cat" data-ar="مذاكرة الإنجليزي" data-en="Studying English"></div>
@@ -713,6 +733,7 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
           <span class="r" data-ar="اقرأ المقال ←" data-en="Read more →"></span></div>
       </div>
     </div>
+    <button class="mread" type="button" onclick="mToggle(this)"><span class="rm-m" data-ar="اقرأ المزيد ↓" data-en="Read more ↓"></span><span class="rm-l" data-ar="عرض أقل ↑" data-en="Show less ↑"></span></button>
   </div>
 </section>
 
@@ -739,36 +760,37 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
 </section>
 
 <!-- ABOUT -->
-<section id="about" class="sec-white">
+<section id="about" class="sec-white mcol">
   <div class="wrap about">
     <div>
       <div class="eyebrow" data-ar="من نحن" data-en="About"></div>
       <h2 class="t" data-ar="اسم موثوق في إنجليزي الثانوي" data-en="A trusted name in secondary English"></h2>
       <p class="lead" data-ar="Senior سلسلة كتب خارجية متخصّصة في اللغة الإنجليزية للمرحلة الثانوية، من تأليف الأستاذ صلاح علي وتوزيع مؤسسة الكتب الذهبية. نقدّم شرحاً وتمارين وقطع فهم مجاباً عنها بالكامل لطلاب الثانوية العامة والأزهرية." data-en="Senior is a specialist external English series for secondary school, authored by Mr. Salah Ali and distributed by Golden Books. We provide explanation, exercises and fully-answered reading passages for General and Azhari students."></p>
-      <div class="astats">
+      <div class="astats mhide">
         <div class="astat"><div class="n">+31K</div><div class="l" data-ar="متابع على فيسبوك" data-en="Facebook followers"></div></div>
         <div class="astat"><div class="n">4</div><div class="l" data-ar="كتب في السلسلة" data-en="books in the series"></div></div>
         <div class="astat"><div class="n" data-ar="عام + أزهر" data-en="Gen + Azhar"></div><div class="l" data-ar="تغطية كاملة" data-en="full coverage"></div></div>
         <div class="astat"><div class="n">100%</div><div class="l" data-ar="مجاب عنه بالكامل" data-en="fully answered"></div></div>
       </div>
     </div>
-    <div class="avis">
+    <div class="avis mhide">
       <img src="logo-white.png?v=2" alt="Senior">
       <p style="color:#BFD3D8;font-size:15px" data-ar="المتخصّص الأول في إنجليزي الثانوي" data-en="The #1 specialist in secondary English"></p>
       <div style="height:1px;background:rgba(255,255,255,.15);margin:22px 0"></div>
       <p style="font-size:13.5px;color:#9DB4BA" data-ar="تأليف: الأستاذ صلاح م. علي · توزيع: مؤسسة الكتب الذهبية — القاهرة، الفجالة" data-en="By Mr. Salah M. Ali · Distributed by Golden Books — El-Fagala, Cairo"></p>
     </div>
+    <button class="mread" type="button" onclick="mToggle(this)"><span class="rm-m" data-ar="اقرأ المزيد ↓" data-en="Read more ↓"></span><span class="rm-l" data-ar="عرض أقل ↑" data-en="Show less ↑"></span></button>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact">
+<section id="contact" class="mcol">
   <div class="wrap">
     <div class="head-c">
       <div class="eyebrow" data-ar="تواصل واطلب" data-en="Contact &amp; order"></div>
       <h2 class="t" data-ar="اطلب أو اسأل في أي وقت" data-en="Order or ask, anytime"></h2>
     </div>
-    <div class="cgrid">
+    <div class="cgrid mhide">
       <div class="cinfo">
         <a class="cline" id="wal" target="_blank" rel="noopener"><div class="ic">💬</div><div><b data-ar="واتساب للطلب السريع" data-en="WhatsApp — fast orders"></b><span dir="ltr">+20 10 10101445</span></div></a>
         <a class="cline" href="tel:+201031373132"><div class="ic">📣</div><div><b data-ar="الدعاية والتسويق" data-en="Sales &amp; marketing"></b><span dir="ltr">+20 10 3137 3132 · +20 10 0072 1887</span></div></a>
@@ -785,6 +807,7 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
         <button class="btn b-wa" style="width:100%" type="submit" data-ar="إرسال عبر واتساب" data-en="Send via WhatsApp"></button>
       </form>
     </div>
+    <button class="mread" type="button" onclick="mToggle(this)"><span class="rm-m" data-ar="اقرأ المزيد ↓" data-en="Read more ↓"></span><span class="rm-l" data-ar="عرض أقل ↑" data-en="Show less ↑"></span></button>
   </div>
 </section>
 
@@ -992,6 +1015,9 @@ function applyLang(){
   renderSeg();renderProds();renderCart();renderPays();
 }
 function toggleLang(){LANG=LANG==='ar'?'en':'ar';localStorage.setItem('senior_lang',LANG);applyLang()}
+
+/* mobile "read more" section toggle */
+function mToggle(b){const s=b.closest('section');const opening=!s.classList.contains('mo');s.classList.toggle('mo');if(!opening)s.scrollIntoView({behavior:'smooth',block:'start'})}
 
 const PRODUCTS=[
  {id:'grammar',kind:'single',img:'book-grammar.png?v=2',price:120,accent:'#E23B3B',
