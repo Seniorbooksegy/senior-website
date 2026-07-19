@@ -1012,6 +1012,7 @@ header.scr .brand img{height:26px}
           <div id="brkRows"></div>
         </div>
         </div>
+        <div class="pacebox" id="cmpBox"></div>
         <div class="pacebox" id="paceBox"></div>
         <div class="plan">
           <h4 data-ar="📋 خطة التحسين المقترحة" data-en="📋 Suggested improvement plan"></h4>
@@ -1291,8 +1292,34 @@ const QS={
   {q:'Where was the treasure hidden?',o:['In Marseilles','On the island of Monte Cristo','In Paris','In the prison'],a:1,ex:'كان الكنز مخبّأً في جزيرة مونت كريستو، ومنها اتّخذ دانتيس لقبه.'},
   {q:'Who was Dantès engaged to before his arrest?',o:['Mercédès','Haydée','Valentine','Julie'],a:0,ex:'كان دانتيس مخطوباً لمرسيدس قبل أن يُقبض عليه يوم خطبته.'},
   {q:'What did Dantès mainly seek after his escape?',o:['Revenge','Wealth only','A new job','To travel'],a:0,ex:'الدافع الأساسي بعد هروبه كان الانتقام ممن تآمروا عليه.'}]};
-let WEEK=[],qi=0,SC={};
-function buildWeek(){WEEK=[];TYPES.forEach(t=>QS[t.k].forEach(q=>WEEK.push(Object.assign({tk:t.k},q))));SC={};TYPES.forEach(t=>SC[t.k]={ok:0,done:0,n:QS[t.k].length,sec:0})}
+let WEEK=[],qi=0,SC={},WEEKID=0;
+function buildWeek(){WEEK=[];TYPES.forEach(t=>QS[t.k].forEach(q=>WEEK.push(Object.assign({tk:t.k},q))));SC={};TYPES.forEach(t=>SC[t.k]={ok:0,done:0,n:QS[t.k].length,sec:0});WEEKID=Date.now()}
+
+/* ===== REPORT HISTORY (saved locally per student code) ===== */
+const REPKEY='senior_reports';
+function repAll(){try{return JSON.parse(localStorage.getItem(REPKEY)||'{}')}catch(e){return{}}}
+function saveSnapshot(pct,ok,dn,sec,exp){
+  const all=repAll(),arr=all[SCODE]||(all[SCODE]=[]);
+  const snap={wid:WEEKID,d:new Date().toISOString(),pct,ok,dn,sec,exp,types:{}};
+  TYPES.forEach(ty=>{const s=SC[ty.k];snap.types[ty.k]={ok:s.ok,done:s.done}});
+  if(arr.length&&arr[arr.length-1].wid===WEEKID)arr[arr.length-1]=snap;else arr.push(snap);
+  if(arr.length>12)arr.splice(0,arr.length-12);
+  try{localStorage.setItem(REPKEY,JSON.stringify(all))}catch(e){}
+}
+function prevSnap(){const arr=repAll()[SCODE]||[];return arr.length>=2?arr[arr.length-2]:null}
+function cmpDate(iso){try{return new Date(iso).toLocaleDateString(LANG==='ar'?'ar-EG':'en-GB',{day:'numeric',month:'long'})}catch(e){return''}}
+function typeDeltas(prev){
+  const ups=[],downs=[];
+  TYPES.forEach(ty=>{
+    const a=prev.types&&prev.types[ty.k],b=SC[ty.k];
+    if(a&&a.done>0&&b.done>0){
+      const pa=Math.round(a.ok/a.done*100),pb=Math.round(b.ok/b.done*100),dd=pb-pa;
+      const item={name:LANG==='ar'?ty.ar:ty.en,ic:ty.ic,from:pa,to:pb,dd};
+      if(dd>=5)ups.push(item);else if(dd<=-5)downs.push(item);
+    }
+  });
+  return{ups,downs};
+}
 let qStart=0,qTimer=null;
 function fmtT(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
 function paintWM(){const el=document.getElementById('pwm');if(!el)return;const tx=`${STU} · ${SCODE}`;el.innerHTML='';for(let r=0;r<12;r++)for(let c=0;c<2;c++){const s=document.createElement('span');s.textContent=tx;s.style.top=(r*90)+'px';s.style.insetInlineStart=(c*230-30)+'px';el.appendChild(s)}}
@@ -1387,12 +1414,38 @@ function showReport(){
      <div class="row"><span>${t('نسبتك إلى الزمن المثالي','Your pace vs ideal')}</span><b style="color:${ratio<0.7?'#B07419':ratio<=1.3?'#1C7A46':'#C0421C'}">${Math.round(ratio*100)}%</b></div>
      <div class="verdict ${vv.c}">${LANG==='ar'?vv.ar:vv.en}</div>
      <p style="color:var(--muted-2);font-size:12px;margin-top:9px">${t('يُحسب الزمن المثالي حسب صعوبة كل نوع: القواعد ٣٠ث · الفهم ٦٠ث · الترجمة ٧٥ث · الرواية ٢٥ث لكل سؤال.','Ideal time is weighted by difficulty: Grammar 30s · Comprehension 60s · Translation 75s · Novel 25s per question.')}</p>`;
+  /* ===== WEEKLY COMPARISON ===== */
+  if(dn>0){saveSnapshot(pct,ok,dn,sec,exp);renderCompare(prevSnap(),pct)}
+  else document.getElementById('cmpBox').style.display='none';
   const weak=TYPES.filter(ty=>SC[ty.k].done>0&&(SC[ty.k].ok/SC[ty.k].done)<0.7);
   const list=document.getElementById('planList');
   if(!weak.length){list.innerHTML=`<li>${t('أداؤك ممتاز في كل الأنواع — واصل بمعدّل مجموعة أسبوعية واحدة، وراجع أخطاءك القديمة كل أسبوعين.','Excellent across all types — keep one weekly set, and review past mistakes every two weeks.')}</li>`}
   else{list.innerHTML=weak.map(ty=>`<li>${LANG==='ar'?PLAN[ty.k].ar:PLAN[ty.k].en}</li>`).join('')+
        `<li>${t('أعد حلّ الأسئلة التي أخطأت فيها بعد يومين لتثبيت المعلومة.','Redo the questions you got wrong after two days to consolidate.')}</li>`}
   pshow('ps-rep');
+}
+function renderCompare(prev,pct){
+  const box=document.getElementById('cmpBox');box.style.display='block';
+  const head=`<div class="pt" style="font-size:16px;margin-bottom:8px">${t('📊 مقارنة أسبوعية','📊 Weekly comparison')}</div>`;
+  if(!prev){
+    box.innerHTML=head+`<p style="font-size:13.5px;color:var(--muted);line-height:1.8">${t('حُفظ هذا التقرير على جهازك. عند حلّ المجموعة القادمة سنقارن نتيجتك به تلقائياً ونوضّح ما تحسّنت فيه.','This report has been saved on your device. When you solve the next set, we will automatically compare your result with it and show where you improved.')}</p>`;
+    return;
+  }
+  const d=pct-prev.pct;
+  const dCol=d>0?'#1C7A46':d<0?'#C0421C':'var(--muted-2)';
+  const dTxt=d>0?`+${d} ${t('نقطة','points')} ▲`:d<0?`${d} ${t('نقطة','points')} ▼`:t('بدون تغيير','No change');
+  const {ups,downs}=typeDeltas(prev);
+  let html=head;
+  html+=`<div class="row"><span>${t('تقرير ','Report of ')+cmpDate(prev.d)}</span><b>${prev.pct}% (${prev.ok}/${prev.dn})</b></div>`;
+  html+=`<div class="row"><span>${t('هذا التقرير','This report')}</span><b>${pct}%</b></div>`;
+  html+=`<div class="row"><span>${t('التغيير','Change')}</span><b style="color:${dCol}">${dTxt}</b></div>`;
+  if(ups.length)
+    html+=`<div style="background:#E8F5EC;border:1px solid #CBE7D3;border-radius:12px;padding:11px 14px;margin-top:11px;font-size:13.5px;color:#14532D;line-height:1.9"><b>${t('✅ تحسّنت في:','✅ You improved in:')}</b><br>${ups.map(u=>`${u.ic} ${u.name}: ${t('من','from')} ${u.from}% ${t('إلى','to')} ${u.to}% (+${u.dd})`).join('<br>')}</div>`;
+  if(downs.length)
+    html+=`<div style="background:var(--amber-l);border:1px solid #F0DCB5;border-radius:12px;padding:11px 14px;margin-top:11px;font-size:13.5px;color:#7A5511;line-height:1.9"><b>${t('⚠️ تحتاج إلى انتباه:','⚠️ Needs attention:')}</b><br>${downs.map(u=>`${u.ic} ${u.name}: ${t('من','from')} ${u.from}% ${t('إلى','to')} ${u.to}% (${u.dd})`).join('<br>')}</div>`;
+  if(!ups.length&&!downs.length)
+    html+=`<p style="font-size:13px;color:var(--muted-2);margin-top:10px">${t('أداؤك مستقرّ مقارنةً بالتقرير السابق — واصل التدريب المنتظم.','Your performance is steady compared with the previous report — keep up the regular practice.')}</p>`;
+  box.innerHTML=html;
 }
 function sendReport(who){
   let ok=0,dn=0;TYPES.forEach(t=>{ok+=SC[t.k].ok;dn+=SC[t.k].done});
@@ -1406,6 +1459,15 @@ function sendReport(who){
   L.push(t('الوقت الإجمالي: ','Total time: ')+fmtT(sc)+t(` (${rt}% من الزمن المثالي)`,` (${rt}% of ideal)`));
   L.push('—————');
   TYPES.forEach(ty=>{const s=SC[ty.k];if(s.done)L.push(`${LANG==='ar'?ty.ar:ty.en}: ${Math.round(s.ok/s.done*100)}% (${s.ok}/${s.done})`)});
+  const prev=prevSnap();
+  if(prev&&dn){
+    const d=pct-prev.pct;
+    L.push('—————');
+    L.push(t(`مقارنة بتقرير ${cmpDate(prev.d)}: `,`Compared with the ${cmpDate(prev.d)} report: `)+(d>0?'+':'')+d+t(' نقطة',' points'));
+    const td=typeDeltas(prev);
+    if(td.ups.length)L.push(t('تحسّن في: ','Improved in: ')+td.ups.map(u=>`${u.name} (+${u.dd})`).join(t('، ',', ')));
+    if(td.downs.length)L.push(t('يحتاج مراجعة: ','Needs review: ')+td.downs.map(u=>`${u.name} (${u.dd})`).join(t('، ',', ')));
+  }
   const weak=TYPES.filter(ty=>SC[ty.k].done>0&&(SC[ty.k].ok/SC[ty.k].done)<0.7);
   if(weak.length){L.push('—————');L.push(t('خطة التحسين:','Improvement plan:'));
     weak.forEach(ty=>L.push('• '+(LANG==='ar'?PLAN[ty.k].ar:PLAN[ty.k].en).replace(/<[^>]+>/g,'')))}
