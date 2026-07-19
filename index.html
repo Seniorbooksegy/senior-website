@@ -76,6 +76,8 @@ nav.links a:hover{color:var(--teal)}
 .hero p.sub{font-size:16px;line-height:1.85;color:var(--muted);margin:20px 0 28px;max-width:32em}
 .hero-cta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .stats{display:flex;gap:34px;margin-top:38px;flex-wrap:wrap}
+.stats>div{text-align:center}
+#plus .eyebrow{font-size:24px;font-weight:700;letter-spacing:.3px;margin-bottom:14px}
 .stats .n{font-weight:700;font-size:30px;color:var(--teal);line-height:1}
 .stats .l{font-size:12.5px;color:var(--muted-2);font-weight:500;margin-top:3px}
 .hero-art{position:relative;height:430px}
@@ -303,9 +305,42 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
   .brand img{height:26px}
   .brand span{display:none}
   .hero-cta .btn{flex:1;justify-content:center}
-  .verify{padding:20px}
   .plat-cta{gap:10px}
   .tot{font-size:15px}
+  /* tighter type so lines stop wrapping */
+  h2.t{font-size:21px;line-height:1.35}
+  .lead{font-size:14px}
+  .seg{padding:4px;gap:2px}
+  .seg button{font-size:11.5px;padding:9px 10px;gap:5px}
+  .seg button i{min-width:17px;height:17px;font-size:10px;padding:0 4px}
+  .eyebrow{font-size:12px}
+  #plus .eyebrow{font-size:20px}
+  .feat h3{font-size:15px}
+  .feat p{font-size:12.5px}
+  .card h3{font-size:14.5px}
+  .card p{font-size:12.5px}
+  .acts .btn{font-size:12.5px;padding:10px 8px}
+  .b-sm{font-size:12.5px;padding:9px 14px}
+  .btn{font-size:14px;padding:12px 20px}
+  .tag{font-size:10px;padding:3px 8px}
+  .price .n{font-size:20px}
+  .pcard h4{font-size:15px}
+  .pcard p{font-size:12.5px}
+  .tbox h2{font-size:22px}
+  .tbox p,.tlist span{font-size:13.5px}
+  .post h3{font-size:15px}
+  .post p{font-size:12.5px}
+  .cline b{font-size:13.5px}
+  .cline span{font-size:12.5px}
+  .astat .n{font-size:20px}
+  .astat .l{font-size:12px}
+  .seg button{font-size:12.5px;padding:10px 16px}
+  .ship-note{font-size:13px}
+}
+@media(max-width:1000px) and (min-width:621px){
+  .feat h3{font-size:15.5px}
+  .card h3{font-size:15px}
+  .acts .btn{font-size:13px;padding:10px 10px}
 }
 
 /* ===== SENIOR PLUS PLATFORM ===== */
@@ -445,9 +480,9 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
     </div>
   </div>
   <div class="hero-art">
-    <img class="bk bk1" src="book-comprehension.jpg" alt="Comprehension">
-    <img class="bk bk2" src="book-exercises.jpg" alt="Exercises">
-    <img class="bk bk3" src="book-skills.jpg" alt="Skills">
+    <img class="bk bk1" src="book-comprehension.png" alt="Comprehension">
+    <img class="bk bk2" src="book-exercises.png" alt="Exercises">
+    <img class="bk bk3" src="book-skills.png" alt="Skills">
     <div class="float f1"><b style="background:var(--teal)">✓</b><span data-ar="دفع عند الاستلام" data-en="Cash on delivery">دفع عند الاستلام</span></div>
     <div class="float f2"><b style="background:var(--orange)">★</b><span data-ar="إجابات نموذجية" data-en="Model answers">إجابات نموذجية</span></div>
   </div>
@@ -459,7 +494,7 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
     <div class="head-c">
       <div class="eyebrow" data-ar="لماذا Senior" data-en="Why Senior">لماذا Senior</div>
       <h2 class="t" data-ar="التخصّص في مادة واحدة… هو الفارق" data-en="Specializing in one subject… that's the difference"></h2>
-      <p class="lead" data-ar="Senior ليست سلسلة عامة تغطّي كل المواد؛ اخترنا التخصّص في اللغة الإنجليزية وحدها، لنمنح طالب الثانوية شرحاً أعمق وتدريباتٍ أدقّ." data-en="Senior is not a general series covering every subject. We chose to specialize in English alone, to give the secondary student deeper explanation and sharper practice."></p>
+      <p class="lead" data-ar="اخترنا التخصّص في اللغة الإنجليزية وحدها، لنمنح طالب الثانوية شرحاً أعمق وتدريباتٍ أدقّ." data-en="We chose to specialize in English alone, to give the secondary student deeper explanation and sharper practice."></p>
     </div>
     <div class="g4">
       <div class="feat"><div class="ic i-o">🎯</div><h3 data-ar="متخصّصون في الإنجليزي فقط" data-en="English specialists only"></h3><p data-ar="كل تركيزنا على مادة واحدة من البداية إلى النهاية — شرح أعمق وتدريبات أدقّ." data-en="All our focus is on one subject from start to finish — deeper explanation and sharper practice."></p></div>
@@ -491,20 +526,6 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
       <div class="eyebrow">Senior Plus</div>
       <h2 class="t" data-ar="مع كل نسخة أصلية… منصّة Senior الرقمية" data-en="With every original copy… the Senior digital platform"></h2>
       <p class="lead" data-ar="داخل كل نسخة أصلية كود خاص بها. الكود مجاني تماماً مع الكتاب، وصالح حتى نهاية العام الدراسي في ٣٠ يونيو — لأن قيمة كتابك الأصلي يجب أن تبقى معك حتى الامتحان." data-en="Inside every original copy there is a unique code. It is completely free with the book and valid until 30 June — because the value of your original copy should stay with you until the exam."></p>
-    </div>
-
-    <!-- authenticity: ships first -->
-    <div class="verify">
-      <div>
-        <h3 data-ar="🛡️ تأكّد أن نسختك أصلية" data-en="🛡️ Check your copy is genuine"></h3>
-        <p data-ar="النسخ المقلّدة تنتشر في السوق، وقد تدفع ثمن نسخة أصلية وتحصل على نسخة مغشوشة ناقصة الصفحات. أدخل الكود المطبوع داخل غلاف كتابك وسنؤكّد لك أصالته." data-en="Counterfeit copies circulate in the market — you may pay for a genuine book and receive a faulty copy with missing pages. Enter the code printed inside your cover and we'll confirm it's genuine."></p>
-      </div>
-      <div>
-        <div class="vform">
-          <input id="vcode" placeholder="SNR-2027-XXXX" dir="ltr">
-          <button class="btn b-o b-sm" onclick="verifyCode()" data-ar="تحقّق" data-en="Verify">تحقّق</button>
-        </div>
-      </div>
     </div>
 
     <div class="pcards" style="margin-top:26px">
@@ -570,6 +591,7 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
         <h2 data-ar="شريكٌ للمدرّس… لا بديلٌ عنه" data-en="A partner to the teacher — never a replacement"></h2>
         <p data-ar="Senior كتابٌ يشرح ويُدرّب، لكن الشرح داخل الفصل يبقى دور المدرّس. نوفّر لمدرّسي اللغة الإنجليزية والمراكز التعليمية والمكتبات أسعار جملة ونُسخاً للمعاينة وشراكات بيع." data-en="Senior explains and drills, but classroom teaching remains the teacher's role. We offer English teachers, educational centres and bookshops wholesale pricing, review copies and sales partnerships."></p>
         <div class="tlist">
+          <span data-ar="خصم خاص لطلبة المدرّسين الشركاء" data-en="A special discount for partner teachers' students"></span>
           <span data-ar="أسعار جملة ومنافذ بيع للموزّعين" data-en="Wholesale pricing &amp; distributor points"></span>
           <span data-ar="نُسخ معاينة مجانية للمدرّسين" data-en="Free review copies for teachers"></span>
           <span data-ar="توزيع عبر مؤسسة الكتب الذهبية" data-en="Distribution via Golden Books"></span>
@@ -834,32 +856,32 @@ function applyLang(){
 function toggleLang(){LANG=LANG==='ar'?'en':'ar';localStorage.setItem('senior_lang',LANG);applyLang()}
 
 const PRODUCTS=[
- {id:'grammar',kind:'single',img:'book-grammar.jpg',price:120,accent:'#E23B3B',
+ {id:'grammar',kind:'single',img:'book-grammar.png',price:120,accent:'#E23B3B',
   tAr:'Grammar — القواعد',tEn:'English Grammar',mAr:'كل صفوف الثانوي',mEn:'All secondary',
   dAr:'تعلّم قواعد الإنجليزية بطريقة سهلة ومبسّطة لكل طلاب المرحلة الثانوية — الإصدار الثاني.',
   dEn:'Learn English grammar the easy way for all secondary students — 2nd edition.',
   fAr:['شرح مبسّط لكل قاعدة','أمثلة وتدريبات محلولة','مناسب للعام والأزهر'],
   fEn:['Every rule simplified','Worked examples &amp; drills','Fits General &amp; Azhar']},
- {id:'exercises',kind:'single',img:'book-exercises.jpg',price:110,accent:'#C0421C',
+ {id:'exercises',kind:'single',img:'book-exercises.png',price:110,accent:'#C0421C',
   tAr:'Exercises — كتاب التمارين',tEn:'Exercises Book',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
   dAr:'بنك تمارين شامل على المنهج ورواية The Count of Monte Cristo — بالإجابات النموذجية.',
   dEn:'A full exercise bank on the curriculum and the novel The Count of Monte Cristo — with model answers.',
   fAr:['تمارين على كل الوحدات','أسئلة على الرواية','مجاب عنه بالكامل'],
   fEn:['Drills on every unit','Questions on the novel','Fully answered']},
- {id:'skills',kind:'single',img:'book-skills.jpg',price:110,accent:'#B07419',
+ {id:'skills',kind:'single',img:'book-skills.png',price:110,accent:'#B07419',
   tAr:'Skills — المهارات',tEn:'Skills',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
   dAr:'فقرات كتابة وقطع فهم وتدريبات مكثّفة على مهارات الكتابة — تدريب على نمط الامتحان.',
   dEn:'Paragraphs, comprehension passages and intensive writing-skills drills — exam-style practice.',
   fAr:['Paragraphs + Comprehension','تدريب على مهارات الكتابة','أسئلة اختيار من متعدد'],
   fEn:['Paragraphs + Comprehension','Writing-skills practice','Multiple-choice questions']},
- {id:'comprehension',kind:'single',img:'book-comprehension.jpg',price:110,accent:'#0E6E60',
+ {id:'comprehension',kind:'single',img:'book-comprehension.png',price:110,accent:'#0E6E60',
   badgeAr:'مجاب عنه بالكامل',badgeEn:'Fully answered',badgeBg:'#0E6E60',badgeInk:'#fff',
   tAr:'Comprehension — قطع الفهم',tEn:'Comprehension',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
   dAr:'100 قطعة فهم بإجابات نموذجية + 150 ترجمة داخل الكتاب — مجاب عنه بالكامل.',
   dEn:'100 reading passages with model answers + 150 translations inside — fully answered.',
   fAr:['100 قطعة بإجابات نموذجية','150 ترجمة داخل الكتاب','مجاب عنه بالكامل'],
   fEn:['100 passages with model answers','150 translations inside','Fully answered']},
- {id:'bundle',kind:'bundle',imgs:['book-grammar.jpg','book-exercises.jpg','book-skills.jpg','book-comprehension.jpg'],
+ {id:'bundle',kind:'bundle',imgs:['book-grammar.png','book-exercises.png','book-skills.png','book-comprehension.png'],
   price:380,oldPrice:450,accent:'#F2A03D',badgeAr:'شحن مجاني',badgeEn:'Free shipping',badgeBg:'#F2A03D',badgeInk:'#0A3B33',
   tAr:'السلسلة كاملة — ٤ كتب',tEn:'The full series — 4 books',mAr:'٣ ثانوي · عام وأزهر',mEn:'Grade 3 · Gen &amp; Azhar',
   dAr:'المجموعة الكاملة: Grammar + Exercises + Skills + Comprehension في طلب واحد بسعر أوفر وشحن مجاني.',
