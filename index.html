@@ -301,6 +301,26 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
 .pt-banner .bs{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .pt-banner .lk{background:none;border:none;color:var(--teal);font-family:inherit;font-weight:600;font-size:12.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 
+/* ===== SENIOR PLUS DASHBOARD ===== */
+.dhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.dhead .who b{font-size:16.5px;display:block}
+.dhead .who span{font-size:12px;color:var(--muted-2)}
+.dhead .cloud{font-size:11px;font-weight:700;border-radius:999px;padding:4px 11px;background:var(--teal-l);color:var(--teal)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:10px;margin-bottom:12px}
+.dstat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.dstat .n{font-weight:700;font-size:20px;color:var(--teal);line-height:1.4}
+.dstat .l{font-size:11.5px;color:var(--muted-2)}
+.dbars{display:flex;align-items:flex-end;gap:10px;height:130px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 14px 10px;margin-bottom:12px}
+.dbar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.dbar i{display:block;width:100%;max-width:34px;background:var(--teal);border-radius:6px 6px 0 0;min-height:4px;transition:height .5s ease}
+.dbar:last-child i{background:var(--orange)}
+.dbar span{font-size:10px;color:var(--muted-2);white-space:nowrap}
+.dbar b{font-size:11px;color:var(--ink)}
+.dtable{background:#fff;border:1px solid var(--line);border-radius:14px;padding:4px 16px;margin-bottom:2px}
+.dtable .r{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.dtable .r:last-child{border:none}
+.dup{color:#1C7A46;font-weight:700}.ddn{color:#C0421C;font-weight:700}
+
 /* ===== MOTION ===== */
 /* scroll reveal (classes added by JS; no-JS visitors never get .rv, so nothing hides) */
 .rv{opacity:0;transform:translateY(24px);transition:opacity .65s cubic-bezier(.22,.9,.3,1) var(--rvd,0s),transform .65s cubic-bezier(.22,.9,.3,1) var(--rvd,0s)}
@@ -1109,6 +1129,8 @@ header.scr .brand img{height:26px}
         <div id="typeList"></div>
         <button class="btn b-o" style="width:100%;margin-top:14px" onclick="startWeek()" id="startBtn"></button>
         <button class="btn b-g" style="width:100%;margin-top:9px" onclick="showReport()" data-ar="عرض التقرير وخطة التحسين" data-en="View report &amp; improvement plan"></button>
+        <button class="btn b-t" style="width:100%;margin-top:9px" onclick="showDash()" data-ar="📊 لوحتي — سجلّ تقدّمي" data-en="📊 My dashboard — progress record"></button>
+        <button class="pt-guest" onclick="pshow('ps-act')" data-ar="تغيير الحساب" data-en="Switch account"></button>
       </div>
 
       <!-- quiz -->
@@ -1161,6 +1183,13 @@ header.scr .brand img{height:26px}
           <button class="btn b-wa" onclick="sendReport('parent')" data-ar="إرسال لوليّ الأمر" data-en="Send to parent"></button>
           <button class="btn b-t" onclick="sendReport('teacher')" data-ar="إرسال للمدرّس" data-en="Send to teacher"></button>
         </div>
+        <button class="btn b-g" style="width:100%;margin-top:9px" onclick="pshow('ps-home')" data-ar="العودة للرئيسية" data-en="Back to home"></button>
+      </div>
+
+      <!-- dashboard -->
+      <div class="pscr" id="ps-dash">
+        <div id="dashBox"></div>
+        <button class="btn b-o" style="width:100%;margin-top:12px" onclick="startWeek()" data-ar="ابدأ مجموعة هذا الأسبوع" data-en="Start this week's set"></button>
         <button class="btn b-g" style="width:100%;margin-top:9px" onclick="pshow('ps-home')" data-ar="العودة للرئيسية" data-en="Back to home"></button>
       </div>
 
@@ -1480,9 +1509,10 @@ function saveSnapshot(pct,ok,dn,sec,exp){
   if(arr.length&&arr[arr.length-1].wid===WEEKID)arr[arr.length-1]=snap;else arr.push(snap);
   if(arr.length>12)arr.splice(0,arr.length-12);
   try{localStorage.setItem(REPKEY,JSON.stringify(all))}catch(e){}
+  apiFetch('/api/report',{method:'POST',body:JSON.stringify({studentCode:SCODE,weekId:String(WEEKID),payload:snap})});
 }
 function prevSnap(){const arr=repAll()[SCODE]||[];return arr.length>=2?arr[arr.length-2]:null}
-function cmpDate(iso){try{return new Date(iso).toLocaleDateString(LANG==='ar'?'ar-EG':'en-GB',{day:'numeric',month:'long'})}catch(e){return''}}
+function cmpDate(iso){try{const d=new Date(iso);if(isNaN(d))return'';return d.toLocaleDateString(LANG==='ar'?'ar-EG':'en-GB',{day:'numeric',month:'long'})}catch(e){return''}}
 function typeDeltas(prev){
   const ups=[],downs=[];
   TYPES.forEach(ty=>{
@@ -1498,13 +1528,89 @@ function typeDeltas(prev){
 let qStart=0,qTimer=null;
 function fmtT(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
 function paintWM(){const el=document.getElementById('pwm');if(!el)return;const tx=`${STU} · ${SCODE}`;el.innerHTML='';for(let r=0;r<12;r++)for(let c=0;c<2;c++){const s=document.createElement('span');s.textContent=tx;s.style.top=(r*90)+'px';s.style.insetInlineStart=(c*230-30)+'px';el.appendChild(s)}}
-function openPlat(){document.getElementById('plat').classList.add('on');document.body.style.overflow='hidden';if(!WEEK.length)buildWeek();paintWM()}
+function openPlat(){
+  document.getElementById('plat').classList.add('on');document.body.style.overflow='hidden';
+  if(!WEEK.length)buildWeek();
+  const sv=localStorage.getItem('senior_student');
+  if(sv&&document.getElementById('ps-act').classList.contains('on')){
+    try{const s=JSON.parse(sv);
+      if(s&&s.code){STU=s.name||STU;SCODE=s.code;REMOTE_OK=true;
+        document.getElementById('pname').value=STU;document.getElementById('pcode').value=SCODE;
+        pshow('ps-home');syncReportsDown()}
+    }catch(e){}
+  }
+  paintWM();
+}
 function closePlat(){document.getElementById('plat').classList.remove('on');document.body.style.overflow=''}
-function pshow(id){['ps-act','ps-home','ps-quiz','ps-rep'].forEach(s=>document.getElementById(s).classList.remove('on'));document.getElementById(id).classList.add('on');if(id==='ps-home')renderHome()}
-function platActivate(){
-  STU=(document.getElementById('pname').value||'الطالب').trim();
-  SCODE=document.getElementById('pcode').value.trim()||'SNR-2027-0000';
+function pshow(id){['ps-act','ps-home','ps-quiz','ps-rep','ps-dash'].forEach(s=>document.getElementById(s).classList.remove('on'));document.getElementById(id).classList.add('on');if(id==='ps-home')renderHome()}
+let REMOTE_OK=false;
+async function platActivate(){
+  const name=(document.getElementById('pname').value||'الطالب').trim();
+  const code=(document.getElementById('pcode').value.trim()||'SNR-2027-0000').toUpperCase();
+  const d=await apiFetch('/api/student/activate',{method:'POST',body:JSON.stringify({code,name})});
+  if(d&&d.ok){
+    STU=d.name||name;SCODE=code;REMOTE_OK=true;
+    localStorage.setItem('senior_student',JSON.stringify({name:STU,code:SCODE}));
+    toast(d.fresh?t('تم تفعيل حسابك — أهلاً بك في Senior Plus!','Account activated — welcome to Senior Plus!'):t('مرحباً بعودتك، ','Welcome back, ')+STU);
+    await syncReportsDown();
+  }else if(d&&d.error==='invalid_code'){
+    STU=name;SCODE=code;REMOTE_OK=false;
+    toast(t('الكود غير مسجَّل — وضع تجريبي على هذا الجهاز فقط','Code not registered — trial mode on this device only'));
+  }else{STU=name;SCODE=code;REMOTE_OK=false}
   buildWeek();qi=0;paintWM();pshow('ps-home');
+}
+async function syncReportsDown(){
+  const d=await apiFetch('/api/student/summary?code='+encodeURIComponent(SCODE));
+  if(!d||!d.ok||!d.reports)return;
+  REMOTE_OK=true;
+  const all=repAll(),arr=all[SCODE]||(all[SCODE]=[]);
+  d.reports.forEach(r=>{if(!arr.some(x=>String(x.wid)===String(r.weekId)))arr.push(Object.assign({},r.payload,{wid:+r.weekId||r.weekId}))});
+  arr.sort((a,b)=>String(a.wid)<String(b.wid)?-1:1);
+  if(arr.length>12)arr.splice(0,arr.length-12);
+  try{localStorage.setItem(REPKEY,JSON.stringify(all))}catch(e){}
+}
+function showDash(){pshow('ps-dash');renderDash()}
+function renderDash(){
+  const box=document.getElementById('dashBox');
+  const arr=(repAll()[SCODE]||[]).slice();
+  const cloud=REMOTE_OK?t('☁️ محفوظ سحابياً','☁️ Saved to the cloud'):t('📱 على هذا الجهاز','📱 On this device only');
+  const head=`<div class="dhead"><div class="who"><b>${STU}</b><span dir="ltr">${SCODE}</span></div><span class="cloud">${cloud}</span></div>`;
+  if(!arr.length){
+    box.innerHTML=head+`<div class="pcard2" style="text-align:center"><div style="font-size:38px;margin-bottom:8px">📊</div>
+      <div class="pt">${t('لا توجد تقارير بعد','No reports yet')}</div>
+      <p class="psub" style="margin-bottom:0">${t('حلّ مجموعتك الأسبوعية الأولى وسيبدأ سجلّ تقدّمك من هنا.','Solve your first weekly set and your progress record starts here.')}</p></div>`;
+    return;
+  }
+  const n=arr.length,last=arr[n-1],prev=n>1?arr[n-2]:null;
+  const avg=Math.round(arr.reduce((s,r)=>s+(r.pct||0),0)/n);
+  const best=Math.max(...arr.map(r=>r.pct||0));
+  const delta=prev?(last.pct-prev.pct):null;
+  const dtxt=delta===null?'—':(delta>0?`+${delta} ▲`:delta<0?`${delta} ▼`:'=');
+  const dcol=delta>0?'#1C7A46':delta<0?'#C0421C':'var(--muted-2)';
+  const bars=arr.slice(-8).map(r=>`<div class="dbar"><b>${r.pct}%</b><i style="height:${Math.max(4,r.pct)}%"></i><span>${cmpDate(r.d)||''}</span></div>`).join('');
+  const types=TYPES.map(ty=>{
+    const s=last.types&&last.types[ty.k];
+    if(!s||!s.done)return '';
+    const p=Math.round(s.ok/s.done*100);
+    return `<div class="r"><span>${ty.ic} ${LANG==='ar'?ty.ar:ty.en}</span><b style="color:${p>=70?'#1C7A46':p>=40?'#B07419':'#C0421C'}">${p}%</b></div>`;
+  }).join('');
+  const hist=arr.slice().reverse().map((r,i,rev)=>{
+    const pr=rev[i+1];const dd=pr?r.pct-pr.pct:null;
+    return `<div class="r"><span>${cmpDate(r.d)||('#'+(n-i))}</span><span>${r.pct}% (${r.ok}/${r.dn}) ${dd===null?'':dd>0?`<span class="dup">+${dd}</span>`:dd<0?`<span class="ddn">${dd}</span>`:'='}</span></div>`;
+  }).join('');
+  box.innerHTML=head+
+    `<div class="dgrid">
+      <div class="dstat"><div class="n">${n}</div><div class="l">${t('مجموعات محلولة','sets completed')}</div></div>
+      <div class="dstat"><div class="n">${avg}%</div><div class="l">${t('متوسط النتيجة','average score')}</div></div>
+      <div class="dstat"><div class="n">${best}%</div><div class="l">${t('أفضل نتيجة','best score')}</div></div>
+      <div class="dstat"><div class="n" style="color:${dcol}">${dtxt}</div><div class="l">${t('عن الأسبوع السابق','vs last week')}</div></div>
+    </div>
+    <div class="pt" style="font-size:15px;margin-bottom:8px">${t('📈 نتائجك عبر الأسابيع','📈 Your scores across the weeks')}</div>
+    <div class="dbars">${bars}</div>
+    <div class="pt" style="font-size:15px;margin-bottom:8px">${t('آخر تقرير حسب النوع','Latest report by type')}</div>
+    <div class="dtable">${types||`<div class="r"><span>—</span></div>`}</div>
+    <div class="pt" style="font-size:15px;margin:12px 0 8px">${t('سجلّ التقارير','Report history')}</div>
+    <div class="dtable">${hist}</div>`;
 }
 function doneCount(){let d=0;TYPES.forEach(t=>d+=SC[t.k].done);return d}
 function renderHome(){

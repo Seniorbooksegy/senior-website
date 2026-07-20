@@ -9,30 +9,42 @@
 <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Readex Pro',system-ui,sans-serif;background:#FBF8F3;color:#16323C;line-height:1.7;padding:20px;max-width:960px;margin:0 auto}
+body{font-family:'Readex Pro',system-ui,sans-serif;background:#FBF8F3;color:#16323C;line-height:1.7;padding:20px;max-width:1080px;margin:0 auto}
 h1{font-size:22px;margin-bottom:4px}
 .sub{color:#5E7078;font-size:13.5px;margin-bottom:18px}
 .card{background:#fff;border:1px solid #EAE2D6;border-radius:16px;padding:18px;margin-bottom:14px}
 label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
-input,select{width:100%;padding:10px 12px;border:1.5px solid #D8E3E0;border-radius:10px;font-family:inherit;font-size:14px;margin-bottom:10px}
-button{font-family:inherit;font-weight:600;font-size:13.5px;border:none;border-radius:999px;padding:9px 18px;cursor:pointer}
+input,select{padding:9px 12px;border:1.5px solid #D8E3E0;border-radius:10px;font-family:inherit;font-size:13.5px}
+input,select{width:100%;margin-bottom:10px}
+button{font-family:inherit;font-weight:600;font-size:13px;border:none;border-radius:999px;padding:8px 16px;cursor:pointer}
 .b-t{background:#0E6E60;color:#fff}.b-o{background:#E4572E;color:#fff}.b-g{background:#fff;border:1.5px solid #D8E3E0;color:#0E6E60}
-.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.b-wa{background:#25D366;color:#fff}
+.tabs{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
 .tabs button.on{background:#16323C;color:#fff}
-table{width:100%;border-collapse:collapse;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
 th,td{padding:8px 6px;border-bottom:1px dashed #EAE2D6;text-align:right;vertical-align:top}
-th{color:#5E7078;font-weight:600}
+th{color:#5E7078;font-weight:600;white-space:nowrap}
 .code{font-weight:700;color:#0E6E60;direction:ltr;display:inline-block}
-.pill{font-size:11px;font-weight:700;border-radius:999px;padding:2px 10px}
-.p-new{background:#FDE9E0;color:#C0421C}.p-ok{background:#DDF1ED;color:#0E6E60}
 .msg{font-size:13px;color:#5E7078;margin-top:8px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:600px){.row2{grid-template-columns:1fr}}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end}
+.filters input,.filters select{width:auto;min-width:150px;margin-bottom:0}
+.stat{background:#DDF1ED;border-radius:14px;padding:14px;text-align:center}
+.stat .n{font-size:23px;font-weight:700;color:#0E6E60;line-height:1.3}
+.stat .l{font-size:12px;color:#5E7078}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.low{color:#C0421C;font-weight:700}
+.tag{font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 9px;background:#F1EDE6;color:#5E7078}
+.iconb{padding:6px 10px;font-size:12px}
+h3{font-size:15.5px;margin-bottom:10px}
+.note{background:#FDF0DC;border:1px solid #F0DCB5;border-radius:10px;padding:9px 13px;font-size:12.5px;color:#7A5511;margin-bottom:12px}
+@media(max-width:640px){.row2,.row3{grid-template-columns:1fr}body{padding:12px}}
 </style>
 </head>
 <body>
 <h1>Senior — لوحة الفريق</h1>
-<p class="sub">مراجعة المدرّسين الجدد، وأكواد المناديب، ومتابعة الطلبات.</p>
+<p class="sub">المدرّسون · المناديب · الطلبات · الإحصاءات · العمولات · المخزون · أكواد الطلاب</p>
 
 <div class="card" id="loginCard">
   <div class="row2">
@@ -44,16 +56,8 @@ th{color:#5E7078;font-weight:600}
 </div>
 
 <div id="panel" style="display:none">
-  <div class="tabs">
-    <button class="on" id="tb-t" onclick="show('t')">المدرّسون الجدد</button>
-    <button id="tb-r" onclick="show('r')">المناديب</button>
-    <button id="tb-o" onclick="show('o')">الطلبات</button>
-  </div>
-
-  <div class="card" id="tab-t">
-    <div id="tList">…</div>
-  </div>
-
+  <div class="tabs" id="tabBar"></div>
+  <div class="card" id="tab-t"><div id="tList">…</div></div>
   <div class="card" id="tab-r" style="display:none">
     <div class="row2">
       <div><label>اسم المندوب</label><input id="repName"></div>
@@ -63,19 +67,46 @@ th{color:#5E7078;font-weight:600}
     <div class="msg" id="repMsg"></div>
     <div id="rList" style="margin-top:14px">…</div>
   </div>
-
   <div class="card" id="tab-o" style="display:none">
+    <div class="filters">
+      <div><label>بحث (اسم / موبايل)</label><input id="oq" oninput="renderOrders()"></div>
+      <div><label>الحالة</label><select id="ofs" onchange="renderOrders()"><option value="">الكل</option></select></div>
+      <div><label>المحافظة</label><select id="ofg" onchange="renderOrders()"><option value="">الكل</option></select></div>
+      <button class="b-g" onclick="exportOrdersCSV()">⬇️ تصدير Excel (CSV)</button>
+      <button class="b-g" onclick="loadOrders()">↻ تحديث</button>
+    </div>
     <div id="oList">…</div>
+  </div>
+  <div class="card" id="tab-s" style="display:none"><div id="sBox">…</div></div>
+  <div class="card" id="tab-c" style="display:none">
+    <div class="note">⚠️ نسب العمولات الحالية مؤقتة (مدرّس 10% · مندوب 5%) حتى تصلنا الأرقام النهائية.</div>
+    <button class="b-g" onclick="exportCommCSV()">⬇️ تصدير CSV</button>
+    <div id="cList" style="margin-top:12px">…</div>
+  </div>
+  <div class="card" id="tab-i" style="display:none"><div id="iList">…</div></div>
+  <div class="card" id="tab-k" style="display:none">
+    <div class="filters">
+      <div><label>عدد الأكواد الجديدة</label><input id="kCount" type="number" value="100" min="1" max="5000" style="width:120px"></div>
+      <button class="b-t" onclick="genCodes()">إنشاء وتنزيل CSV</button>
+      <button class="b-g" onclick="dlUnactivated()">⬇️ الأكواد غير المفعَّلة</button>
+    </div>
+    <div class="msg" id="kMsg"></div>
+    <div class="grid4" id="kStats"></div>
+    <h3>آخر الأكواد المفعَّلة</h3>
+    <div id="kList">…</div>
   </div>
 </div>
 
 <script>
-/* Deployed 2026-07-20 */
 const API='https://senior-api.seniorbooksegy.workers.dev';
-
-let BASE=localStorage.getItem('snr_api')||API, KEY=localStorage.getItem('snr_key')||'';
-if(BASE)document.getElementById('apiUrl').value=BASE;
+const TABS=[['t','المدرّسون الجدد'],['r','المناديب'],['o','الطلبات'],['s','الإحصاءات'],['c','العمولات'],['i','المخزون'],['k','أكواد الطلاب']];
+const BOOKS={sharh:'الشرح',exercises:'التمارين',skills:'المهارات',comprehension:'قطع الفهم',grammar:'القواعد',bundle:'المجموعة كاملة'};
+const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي'};
+const BT={student:'طالب',teacher:'مدرّس',library:'مكتبة',guest:'زائر'};
+let BASE=localStorage.getItem('snr_api')||API, KEY=localStorage.getItem('snr_key')||'', ORDERS=[], COMMS=[];
+document.getElementById('apiUrl').value=BASE;
 if(KEY)document.getElementById('adminKey').value=KEY;
+document.getElementById('tabBar').innerHTML=TABS.map(([k,l],i)=>`<button id="tb-${k}" class="${i===0?'on':''}" onclick="show('${k}')">${l}</button>`).join('');
 
 async function api(path,opts={}){
   const r=await fetch(BASE+path,{...opts,headers:{'Content-Type':'application/json','x-admin-key':KEY,...(opts.headers||{})}});
@@ -93,15 +124,13 @@ async function connect(){
     localStorage.setItem('snr_api',BASE);localStorage.setItem('snr_key',KEY);
     document.getElementById('loginCard').style.display='none';
     document.getElementById('panel').style.display='block';
-    loadTeachers();loadReps();loadOrders();
+    loadTeachers();loadReps();loadOrders();loadStats();loadComms();loadInv();loadCodes();
   }catch(e){m.textContent='تعذّر الاتصال: '+e.message}
 }
-function show(k){
-  ['t','r','o'].forEach(x=>{
-    document.getElementById('tab-'+x).style.display=x===k?'block':'none';
-    document.getElementById('tb-'+x).classList.toggle('on',x===k);
-  });
-}
+function show(k){TABS.forEach(([x])=>{document.getElementById('tab-'+x).style.display=x===k?'block':'none';document.getElementById('tb-'+x).classList.toggle('on',x===k)})}
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---- teachers ---- */
 async function loadTeachers(){
   const el=document.getElementById('tList');
   try{
@@ -109,25 +138,24 @@ async function loadTeachers(){
     if(!d.teachers.length){el.innerHTML='<p class="msg">لا توجد طلبات قيد المراجعة.</p>';return}
     el.innerHTML='<table><tr><th>الاسم</th><th>المنطقة</th><th>الخبرة</th><th>موبايل</th><th></th></tr>'+
       d.teachers.map(t=>`<tr>
-        <td>${t.first_name} ${t.last_name}<br><span style="color:#8A9499;font-size:12px">${t.email||''}</span></td>
-        <td>${t.area||'—'}</td><td>${t.seniority||'—'}</td>
-        <td dir="ltr">${t.mobile}</td>
-        <td style="white-space:nowrap">
-          <button class="b-t" onclick="approve(${t.id},'${t.mobile}')">اعتماد</button>
-          <button class="b-g" onclick="reject(${t.id})">رفض</button>
-        </td></tr>`).join('')+'</table>';
-  }catch(e){el.innerHTML='<p class="msg">خطأ: '+e.message+'</p>'}
+        <td>${esc(t.first_name)} ${esc(t.last_name)}<br><span style="color:#8A9499;font-size:12px">${esc(t.email||'')}</span></td>
+        <td>${esc(t.area||'—')}</td><td>${esc(t.seniority||'—')}</td>
+        <td dir="ltr">${esc(t.mobile)}</td>
+        <td style="white-space:nowrap"><button class="b-t iconb" onclick="approve(${t.id},'${esc(t.mobile)}')">اعتماد</button>
+        <button class="b-g iconb" onclick="reject(${t.id})">رفض</button></td></tr>`).join('')+'</table>';
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 async function approve(id,mobile){
   const d=await api('/api/admin/teacher/approve',{method:'POST',body:JSON.stringify({id})});
   if(d.code){
     const msg=encodeURIComponent(`أهلاً بك في برنامج مدرّسي Senior.\nتم اعتماد تسجيلك، وهذا كود الخصم الخاص بك: ${d.code}\nشاركه مع طلابك ليحصلوا على خصمهم عند الطلب من seniorbookegy.com`);
-    if(confirm('تم الاعتماد. الكود: '+d.code+'\nفتح واتساب لإرساله للمدرّس؟'))
-      window.open(`https://wa.me/2${mobile}?text=${msg}`,'_blank');
+    if(confirm('تم الاعتماد. الكود: '+d.code+'\nفتح واتساب لإرساله للمدرّس؟'))window.open(`https://wa.me/2${mobile}?text=${msg}`,'_blank');
     loadTeachers();
   }
 }
 async function reject(id){if(confirm('رفض هذا الطلب؟')){await api('/api/admin/teacher/reject',{method:'POST',body:JSON.stringify({id})});loadTeachers()}}
+
+/* ---- reps ---- */
 async function addRep(){
   const name=document.getElementById('repName').value.trim(),mobile=document.getElementById('repMob').value.trim();
   const m=document.getElementById('repMsg');
@@ -142,28 +170,167 @@ async function loadReps(){
   try{
     const d=await api('/api/admin/reps');
     el.innerHTML=d.reps.length?'<table><tr><th>الاسم</th><th>موبايل</th><th>الكود</th></tr>'+
-      d.reps.map(r=>`<tr><td>${r.name}</td><td dir="ltr">${r.mobile||'—'}</td><td><span class="code">${r.code}</span></td></tr>`).join('')+'</table>'
+      d.reps.map(r=>`<tr><td>${esc(r.name)}</td><td dir="ltr">${esc(r.mobile||'—')}</td><td><span class="code">${esc(r.code)}</span></td></tr>`).join('')+'</table>'
       :'<p class="msg">لا يوجد مناديب بعد.</p>';
-  }catch(e){el.innerHTML='<p class="msg">خطأ: '+e.message+'</p>'}
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
-const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي'};
+
+/* ---- orders ---- */
+const WAMSGS={
+  new:o=>`أهلاً ${o.name}، استلمنا طلبك رقم ${o.id} من Senior وسنتواصل معك لتأكيده قريباً.`,
+  confirmed:o=>`أهلاً ${o.name}، تم تأكيد طلبك رقم ${o.id} من Senior وجارٍ تجهيزه للشحن. الإجمالي: ${o.total} جنيه.`,
+  shipped:o=>`أهلاً ${o.name}، تم شحن طلبك رقم ${o.id} من Senior وسيصلك خلال أيام قليلة. المبلغ المستحق عند الاستلام: ${o.total} جنيه.`,
+  delivered:o=>`أهلاً ${o.name}، نتمنى أن تكون الكتب قد وصلتك بحالة ممتازة. نتمنى لك عاماً دراسياً موفقاً مع Senior!`,
+  cancelled:o=>`أهلاً ${o.name}، تم إلغاء طلبك رقم ${o.id} من Senior. إن كان ذلك عن طريق الخطأ فتواصل معنا في أي وقت.`,
+};
 async function loadOrders(){
-  const el=document.getElementById('oList');
   try{
-    const d=await api('/api/admin/orders');
-    if(!d.orders.length){el.innerHTML='<p class="msg">لا توجد طلبات بعد.</p>';return}
-    el.innerHTML='<table><tr><th>#</th><th>المشتري</th><th>الكتب</th><th>الإجمالي</th><th>كود</th><th>الحالة</th></tr>'+
-      d.orders.map(o=>`<tr>
-        <td>${o.id}</td>
-        <td>${o.name}<br><span dir="ltr" style="font-size:12px">${o.mobile}</span><br><span style="color:#8A9499;font-size:11.5px">${o.buyer_type} · ${o.governorate||''}</span></td>
-        <td>${o.items.map(i=>i.id+'×'+i.qty).join('، ')}</td>
-        <td>${o.total} ج</td>
-        <td>${o.ref_code?'<span class="code">'+o.ref_code+'</span>':'—'}</td>
-        <td><select onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></td>
-      </tr>`).join('')+'</table>';
-  }catch(e){el.innerHTML='<p class="msg">خطأ: '+e.message+'</p>'}
+    const d=await api('/api/admin/orders');ORDERS=d.orders;
+    const fs=document.getElementById('ofs');fs.innerHTML='<option value="">الكل</option>'+Object.keys(ST).map(k=>`<option value="${k}">${ST[k]}</option>`).join('');
+    const govs=[...new Set(ORDERS.map(o=>o.governorate).filter(Boolean))];
+    document.getElementById('ofg').innerHTML='<option value="">الكل</option>'+govs.map(g=>`<option>${esc(g)}</option>`).join('');
+    renderOrders();
+  }catch(e){document.getElementById('oList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
-async function setStatus(id,status){await api('/api/admin/order/status',{method:'POST',body:JSON.stringify({id,status})})}
+function filteredOrders(){
+  const q=(document.getElementById('oq').value||'').trim(),s=document.getElementById('ofs').value,g=document.getElementById('ofg').value;
+  return ORDERS.filter(o=>(!q||o.name.includes(q)||o.mobile.includes(q))&&(!s||o.status===s)&&(!g||o.governorate===g));
+}
+function renderOrders(){
+  const el=document.getElementById('oList'),list=filteredOrders();
+  if(!list.length){el.innerHTML='<p class="msg">لا توجد طلبات مطابقة.</p>';return}
+  el.innerHTML=`<p class="msg" style="margin:0 0 8px">${list.length} طلب</p><table><tr><th>#</th><th>المشتري</th><th>الكتب</th><th>الإجمالي</th><th>كود</th><th>الحالة</th><th></th></tr>`+
+    list.map(o=>`<tr>
+      <td>${o.id}<br><span style="color:#8A9499;font-size:11px">${esc((o.created_at||'').slice(0,10))}</span></td>
+      <td>${esc(o.name)}<br><span dir="ltr" style="font-size:12px">${esc(o.mobile)}</span><br><span class="tag">${BT[o.buyer_type]||o.buyer_type} · ${esc(o.governorate||'')}</span></td>
+      <td>${o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join('، ')}</td>
+      <td>${o.total} ج</td>
+      <td>${o.ref_code?'<span class="code">'+esc(o.ref_code)+'</span>':'—'}</td>
+      <td><select style="margin:0;width:auto" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></td>
+      <td style="white-space:nowrap">
+        <button class="b-wa iconb" title="واتساب للعميل" onclick="waCustomer(${o.id})">💬</button>
+        <button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🖨</button>
+      </td></tr>`).join('')+'</table>';
+}
+async function setStatus(id,status){await api('/api/admin/order/status',{method:'POST',body:JSON.stringify({id,status})});const o=ORDERS.find(x=>x.id===id);if(o)o.status=status}
+function waCustomer(id){
+  const o=ORDERS.find(x=>x.id===id);if(!o)return;
+  window.open(`https://wa.me/2${o.mobile}?text=${encodeURIComponent((WAMSGS[o.status]||WAMSGS.new)(o))}`,'_blank');
+}
+function exportOrdersCSV(){
+  const rows=[['رقم','التاريخ','الاسم','الموبايل','المحافظة','العنوان','الصفة','الكتب','الإجمالي','كود الخصم','الدفع','الحالة']];
+  filteredOrders().forEach(o=>rows.push([o.id,(o.created_at||'').slice(0,16),o.name,o.mobile,o.governorate||'',o.address||'',BT[o.buyer_type]||o.buyer_type,
+    o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join(' + '),o.total,o.ref_code||'',o.pay_method||'',ST[o.status]||o.status]));
+  dlCSV(rows,'senior-orders');
+}
+/* ---- invoice (بيانات البائع placeholders حتى تصل البيانات الرسمية) ---- */
+function invoice(id){
+  const o=ORDERS.find(x=>x.id===id);if(!o)return;
+  const rows=o.items.map(i=>`<tr><td>${BOOKS[i.id]||i.id}</td><td>${i.qty}</td><td>${i.price}</td><td>${i.qty*i.price}</td></tr>`).join('');
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>فاتورة ${o.id}</title>
+  <style>body{font-family:'Readex Pro',system-ui,sans-serif;padding:28px;color:#16323C;max-width:640px;margin:0 auto}
+  h2{color:#0E6E60}table{width:100%;border-collapse:collapse;margin:14px 0}td,th{border:1px solid #ccc;padding:8px;text-align:right;font-size:13.5px}
+  .tot{font-weight:700;font-size:16px}.ph{color:#999;font-size:12px}.hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #0E6E60;padding-bottom:12px;margin-bottom:14px}</style></head><body>
+  <div class="hd"><div><h2>Senior Books</h2>
+    <div class="ph">[اسم النشاط القانوني — placeholder]<br>س.ت: —————— · ب.ض: ——————<br>القاهرة — الفجالة · 01010101445</div></div>
+    <div style="text-align:left"><b>فاتورة رقم ${o.id}</b><br><span class="ph">${(o.created_at||'').slice(0,10)}</span></div></div>
+  <p><b>العميل:</b> ${o.name} · <span dir="ltr">${o.mobile}</span><br><b>العنوان:</b> ${o.governorate||''} — ${o.address||''}</p>
+  <table><tr><th>الكتاب</th><th>الكمية</th><th>السعر</th><th>القيمة</th></tr>${rows}
+  <tr class="tot"><td colspan="3">الإجمالي${o.ref_code?' (قبل خصم الكود '+o.ref_code+')':''}</td><td>${o.total} ج</td></tr></table>
+  <p>طريقة الدفع: ${o.pay_method||'—'} · الحالة: ${ST[o.status]||o.status}</p>
+  <p class="ph">شكراً لثقتكم في سلسلة Senior — طريقك للتفوق في اللغة الإنجليزية.</p>
+  <script>window.print()<\/script></body></html>`);
+  w.document.close();
+}
+
+/* ---- stats ---- */
+async function loadStats(){
+  const el=document.getElementById('sBox');
+  try{
+    const s=await api('/api/admin/stats');
+    el.innerHTML=`<div class="grid4">
+      <div class="stat"><div class="n">${s.today.c||0}</div><div class="l">طلبات اليوم (${s.today.s||0} ج)</div></div>
+      <div class="stat"><div class="n">${s.week.c||0}</div><div class="l">آخر ٧ أيام (${s.week.s||0} ج)</div></div>
+      <div class="stat"><div class="n">${s.month.c||0}</div><div class="l">آخر ٣٠ يوماً (${s.month.s||0} ج)</div></div>
+      <div class="stat"><div class="n">${s.ref.withCode||0}/${s.ref.total||0}</div><div class="l">طلبات بكود خصم</div></div>
+      <div class="stat"><div class="n">${s.plus.activated||0}/${s.plus.codes||0}</div><div class="l">أكواد Senior Plus مفعَّلة</div></div>
+      <div class="stat"><div class="n">${s.plus.reports||0}</div><div class="l">تقارير طلاب محفوظة</div></div></div>
+    <div class="row2"><div><h3>المبيعات حسب الكتاب</h3><table><tr><th>الكتاب</th><th>نسخ</th></tr>${(s.byBook||[]).map(b=>`<tr><td>${BOOKS[b.id]||b.id}</td><td>${b.qty}</td></tr>`).join('')||'<tr><td colspan="2">—</td></tr>'}</table></div>
+    <div><h3>أعلى المحافظات</h3><table><tr><th>المحافظة</th><th>طلبات</th></tr>${(s.byGov||[]).map(g=>`<tr><td>${esc(g.g||'—')}</td><td>${g.c}</td></tr>`).join('')||'<tr><td colspan="2">—</td></tr>'}</table></div></div>
+    <h3 style="margin-top:12px">حالات الطلبات</h3><table><tr>${(s.byStatus||[]).map(x=>`<td>${ST[x.status]||x.status}: <b>${x.c}</b></td>`).join('')||'<td>—</td>'}</tr></table>`;
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+
+/* ---- commissions ---- */
+async function loadComms(){
+  const el=document.getElementById('cList');
+  try{
+    const d=await api('/api/admin/commissions');COMMS=d.commissions;
+    el.innerHTML=COMMS.length?'<table><tr><th>الكود</th><th>الاسم</th><th>الصفة</th><th>طلبات</th><th>مبيعات</th><th>النسبة</th><th>العمولة</th></tr>'+
+      COMMS.map(c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(c.name)}</td><td>${c.kind==='teacher'?'مدرّس':c.kind==='rep'?'مندوب':'—'}</td>
+      <td>${c.orders}</td><td>${c.revenue} ج</td><td>${c.pct}%</td><td><b>${c.commission} ج</b></td></tr>`).join('')+'</table>'
+      :'<p class="msg">لا توجد طلبات بأكواد بعد.</p>';
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+function exportCommCSV(){
+  const rows=[['الكود','الاسم','الصفة','طلبات','مبيعات','النسبة %','العمولة']];
+  COMMS.forEach(c=>rows.push([c.code,c.name,c.kind==='teacher'?'مدرّس':'مندوب',c.orders,c.revenue,c.pct,c.commission]));
+  dlCSV(rows,'senior-commissions');
+}
+
+/* ---- inventory ---- */
+async function loadInv(){
+  const el=document.getElementById('iList');
+  try{
+    const d=await api('/api/admin/inventory');
+    el.innerHTML='<table><tr><th>الكتاب</th><th>المخزون</th><th>آخر تحديث</th><th></th></tr>'+
+      d.inventory.map(i=>`<tr><td>${BOOKS[i.book_id]||i.book_id}</td>
+      <td class="${i.stock<100?'low':''}"><input type="number" id="inv-${i.book_id}" value="${i.stock}" min="0" style="width:110px;margin:0"></td>
+      <td style="color:#8A9499;font-size:11.5px">${esc((i.updated_at||'').slice(0,16))}</td>
+      <td><button class="b-t iconb" onclick="saveInv('${i.book_id}')">حفظ</button></td></tr>`).join('')+'</table>'+
+      '<p class="msg">يُخصم المخزون تلقائياً مع كل طلب (المجموعة تخصم من كتبها الأربعة)، ويعود عند إلغاء الطلب.</p>';
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+async function saveInv(id){
+  const v=+document.getElementById('inv-'+id).value;
+  await api('/api/admin/inventory/set',{method:'POST',body:JSON.stringify({book_id:id,stock:v})});
+  loadInv();
+}
+
+/* ---- student codes ---- */
+async function loadCodes(){
+  try{
+    const d=await api('/api/admin/codes?activated=1');
+    document.getElementById('kStats').innerHTML=
+      `<div class="stat"><div class="n">${d.total}</div><div class="l">إجمالي الأكواد</div></div>
+       <div class="stat"><div class="n">${d.activated}</div><div class="l">مفعَّلة</div></div>
+       <div class="stat"><div class="n">${d.total-d.activated}</div><div class="l">متبقية</div></div>`;
+    document.getElementById('kList').innerHTML=d.list.length?'<table><tr><th>الكود</th><th>الطالب</th><th>موبايل</th><th>تاريخ التفعيل</th></tr>'+
+      d.list.slice(0,50).map(c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(c.student_name||'—')}</td><td dir="ltr">${esc(c.mobile||'—')}</td><td>${esc((c.activated_at||'').slice(0,16))}</td></tr>`).join('')+'</table>'
+      :'<p class="msg">لا توجد أكواد مفعَّلة بعد.</p>';
+  }catch(e){document.getElementById('kList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+async function genCodes(){
+  const n=+document.getElementById('kCount').value||0,m=document.getElementById('kMsg');
+  if(n<1){m.textContent='أدخل عدداً صحيحاً.';return}
+  m.textContent='جارٍ الإنشاء…';
+  const d=await api('/api/admin/codes/generate',{method:'POST',body:JSON.stringify({count:n})});
+  if(d.ok){dlCSV([['code'],...d.codes.map(c=>[c])],'senior-student-codes-'+d.count);m.textContent=`تم إنشاء ${d.count} كوداً وتنزيلها.`;loadCodes()}
+  else m.textContent='خطأ.';
+}
+async function dlUnactivated(){
+  const d=await api('/api/admin/codes?activated=0');
+  dlCSV([['code'],...d.list.map(c=>[c.code])],'senior-codes-unactivated');
+}
+
+/* ---- CSV helper (UTF-8 BOM for Excel Arabic) ---- */
+function dlCSV(rows,name){
+  const csv='﻿'+rows.map(r=>r.map(v=>`"${String(v==null?'':v).replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download=name+'.csv';a.click();URL.revokeObjectURL(a.href);
+}
 if(BASE&&KEY)connect();
 </script>
 </body>
