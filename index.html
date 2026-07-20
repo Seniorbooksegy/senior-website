@@ -1181,9 +1181,8 @@ header.scr .brand img{height:26px}
 <script>
 let LANG=localStorage.getItem('senior_lang')||'ar';
 const WA='201010101445';
-/* Backend API base — set after deploying backend/ (see backend/DEPLOY.md), e.g. 'https://senior-api.xxx.workers.dev'.
-   While empty, the site falls back to WhatsApp-only flows. */
-const API='';
+/* Backend API base — deployed 2026-07-20. If ever emptied, the site falls back to WhatsApp-only flows. */
+const API='https://senior-api.seniorbooksegy.workers.dev';
 async function apiFetch(path,opts){
   if(!API)return null;
   try{
@@ -1325,7 +1324,7 @@ function renderCart(){
   const mb=document.getElementById('mbar');
   if(mb){
     if(c>0){mb.classList.add('on');document.body.classList.add('hasbar');
-      document.getElementById('mbarTot').textContent=total();
+      document.getElementById('mbarTot').textContent=payTotal();
       document.getElementById('mbarCount').textContent=t(c+' كتاب في السلّة',c+' in cart');}
     else{mb.classList.remove('on');document.body.classList.remove('hasbar')}
   }
@@ -1338,7 +1337,8 @@ function renderCart(){
       <button class="rm" onclick="rm('${id}')">${t('حذف','Remove')}</button></div>
       <div class="qty"><button onclick="chg('${id}',-1)">−</button><span>${cart[id]}</span><button onclick="chg('${id}',1)">+</button></div>`;
     w.appendChild(el)});
-  f.style.display='block';document.getElementById('ctot').textContent=total();
+  f.style.display='block';
+  document.getElementById('ctot').textContent=discAmt()>0?`${payTotal()} (${t('بعد خصم','after')} ${discountPct()}%${LANG==='ar'?'':' off'})`:total();
 }
 const openCart=()=>{document.getElementById('drawer').classList.add('on');document.getElementById('ov').classList.add('on')};
 const closeCart=()=>{document.getElementById('drawer').classList.remove('on');document.getElementById('ov').classList.remove('on')};
@@ -1379,7 +1379,11 @@ function cp(v){navigator.clipboard&&navigator.clipboard.writeText(v);toast(t('ت
 function orderText(info){
   const L=[];L.push(t('طلب جديد من موقع Senior','New order from Senior website'));L.push('—————');
   for(const k in cart){const p=PRODUCTS.find(v=>v.id===k);if(p)L.push(`• ${LANG==='ar'?p.tAr:p.tEn} ×${cart[k]} = ${p.price*cart[k]} ${t('ج','EGP')}`)}
-  L.push('—————');L.push(`${t('الإجمالي','Total')}: ${total()} ${t('ج','EGP')}`);
+  L.push('—————');
+  if(discAmt()>0){L.push(`${t('الإجمالي قبل الخصم','Subtotal')}: ${total()} ${t('ج','EGP')}`);
+    L.push(`${t('الخصم','Discount')} (${discountPct()}%): −${discAmt()} ${t('ج','EGP')}`);
+    L.push(`${t('الإجمالي المستحق','Total due')}: ${payTotal()} ${t('ج','EGP')}`);}
+  else L.push(`${t('الإجمالي','Total')}: ${total()} ${t('ج','EGP')}`);
   if(info){L.push('');L.push(`${t('الاسم','Name')}: ${info.n}`);L.push(`${t('الموبايل','Mobile')}: ${info.p}`);
     L.push(`${t('المحافظة','Governorate')}: ${info.g}`);L.push(`${t('المسار','Track')}: ${info.tr}`);
     L.push(`${t('العنوان','Address')}: ${info.a}`);L.push(`${t('وسيلة الدفع','Payment')}: ${info.m}`)}
@@ -1388,10 +1392,11 @@ function orderText(info){
   return encodeURIComponent(L.join('\n'));
 }
 function orderWA(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}window.open(`https://wa.me/${WA}?text=${orderText(null)}`,'_blank')}
-function openCheckout(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}document.getElementById('cotot').textContent=total();renderPays();
+function openCheckout(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}
+  document.getElementById('cotot').textContent=payTotal();renderPays();
   const cb=document.getElementById('coBuyer');
-  if(cb){if(BUYER&&BUYER.code){cb.style.display='block';
-      cb.textContent=`${t('سيُحتسب خصم','The discount for the')} ${LANG==='ar'?BTYPE[BUYER.type][0]:BTYPE[BUYER.type][1]} (${t('كود','code')} ${BUYER.code}) ${t('عند تأكيد الطلب.','is applied when the order is confirmed.')}`}
+  if(cb){if(discAmt()>0){cb.style.display='block';
+      cb.textContent=`${t('خصم','Discount')} ${LANG==='ar'?BTYPE[BUYER.type][0]:BTYPE[BUYER.type][1]} ${discountPct()}% (${t('كود','code')} ${BUYER.code}): −${discAmt()} ${t('ج، من إجمالي','EGP, off')} ${total()} ${t('ج.','EGP.')}`}
     else cb.style.display='none'}
   openModal('mCheck')}
 function submitOrder(){
@@ -1662,7 +1667,7 @@ function renderPtBanner(){
     const code=BUYER.code?` · ${t('كود','code')} <b dir="ltr">${BUYER.code}</b>`:'';
     const ver=BUYER.code&&!BUYER.verified?'🕓':'✅';
     el.classList.add('ok');
-    el.innerHTML=`<div class="tx">${ver} ${t('مسجَّل بصفة','Registered as')}: <b>${ty}</b>${code}<small>${BUYER.code?t('يُحتسب الخصم عند تأكيد الطلب.','The discount is applied when the order is confirmed.'):''}</small></div>
+    el.innerHTML=`<div class="tx">${ver} ${t('مسجَّل بصفة','Registered as')}: <b>${ty}</b>${code}<small>${discountPct()>0?t(`خصم ${discountPct()}% مفعَّل على طلباتك.`,`A ${discountPct()}% discount is active on your orders.`):''}</small></div>
       <div class="bs"><button class="lk" onclick="openPortal()">${t('تغيير','Change')}</button><button class="lk" onclick="clearBuyer()">${t('إلغاء','Remove')}</button></div>`;
   }else{
     el.classList.remove('ok');
@@ -1674,6 +1679,11 @@ function renderPtBanner(){
       </div>`;
   }
 }
+/* TEMPORARY discount percentages until Mr. Salah confirms the real numbers */
+const DISCOUNTS={student:5,teacher:15,library:25};
+function discountPct(){return BUYER&&BUYER.code?(DISCOUNTS[BUYER.type]||0):0}
+function discAmt(){return Math.round(total()*discountPct()/100)}
+function payTotal(){return total()-discAmt()}
 const mobOK=v=>/^01[0-9]{9}$/.test((v||'').replace(/\D/g,''));
 async function ptStudent(){
   const n=document.getElementById('pts-n').value.trim(),p=document.getElementById('pts-p').value.trim(),
