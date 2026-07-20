@@ -276,6 +276,31 @@ html[dir="rtl"] .drawer{transform:translateX(-100%)}
 /* mobile-only "read more" section toggles (desktop: hidden, content always shown) */
 .mread{display:none}
 
+/* ===== PURCHASE PORTAL ===== */
+.portal{position:fixed;inset:0;z-index:300;background:var(--cream);display:none;flex-direction:column}
+.portal.on{display:flex}
+.pt-wrap{flex:1;overflow:auto;padding:26px 18px 40px;max-width:640px;margin:0 auto;width:100%}
+.pt-scr{display:none}.pt-scr.on{display:block}
+.pt-h{font-size:21px;font-weight:700;margin-bottom:6px;text-align:center}
+.pt-sub{color:var(--muted);font-size:14px;text-align:center;margin-bottom:20px;line-height:1.8}
+.pt-cards{display:grid;gap:12px}
+.pt-card{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:18px;cursor:pointer;display:flex;gap:14px;align-items:flex-start;transition:.2s}
+.pt-card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:var(--sh-card)}
+.pt-card .em{font-size:26px;flex-shrink:0}
+.pt-card h4{font-size:16px;font-weight:700;margin-bottom:3px}
+.pt-card p{font-size:12.5px;color:var(--muted);line-height:1.7}
+.pt-guest{display:block;margin:18px auto 0;background:none;border:none;color:var(--muted-2);font-family:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.pt-form{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px}
+.pt-form .pt-h{margin-bottom:14px}
+.pt-back{background:none;border:none;color:var(--teal);font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;margin-bottom:12px}
+.pt-note{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.8}
+.pt-banner{background:linear-gradient(135deg,var(--teal-l),#fff);border:1.5px solid var(--line-2);border-radius:16px;padding:14px 18px;margin-bottom:22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.pt-banner.ok{background:#E8F5EC;border-color:#CBE7D3}
+.pt-banner .tx{font-size:14px;font-weight:600}
+.pt-banner .tx small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.pt-banner .bs{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pt-banner .lk{background:none;border:none;color:var(--teal);font-family:inherit;font-weight:600;font-size:12.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
 /* ===== MOTION ===== */
 /* scroll reveal (classes added by JS; no-JS visitors never get .rv, so nothing hides) */
 .rv{opacity:0;transform:translateY(24px);transition:opacity .65s cubic-bezier(.22,.9,.3,1) var(--rvd,0s),transform .65s cubic-bezier(.22,.9,.3,1) var(--rvd,0s)}
@@ -704,6 +729,7 @@ header.scr .brand img{height:26px}
       <h2 class="t" data-ar="كتب الصف الثالث الثانوي — عام وأزهر" data-en="Grade 3 Secondary books — General &amp; Azhar"></h2>
       <p class="lead" data-ar="خمسة كتب متكاملة — الشرح والتمارين والمهارات وقطع الفهم والقواعد، جميعها بإجابات نموذجية. اطلب الكتاب الذي تحتاجه أو المجموعة كاملة بسعر أوفر." data-en="Five complete books — Explanation, Exercises, Skills, Comprehension and Grammar, all with model answers. Order the book you need, or the full set at a better price."></p>
     </div>
+    <div class="pt-banner" id="ptBanner"></div>
     <div class="seg-wrap"><div class="seg" id="seg"></div></div>
     <div class="prods" id="prods"></div>
     <p class="ship-note" data-ar="🚚 <b>شحن مجاني</b> عند طلب السلسلة كاملة · الدفع عند الاستلام لكل المحافظات" data-en="🚚 <b>Free shipping</b> on the full series · cash on delivery nationwide"></p>
@@ -918,6 +944,7 @@ header.scr .brand img{height:26px}
       <div id="pays"></div>
       <div id="payPanel"></div>
       <div class="tot" style="margin-top:14px"><span data-ar="الإجمالي" data-en="Total"></span><span><span class="v" id="cotot">0</span> <span data-ar="ج" data-en="EGP">ج</span></span></div>
+      <div class="note" id="coBuyer" style="display:none"></div>
       <button class="btn b-wa" style="width:100%;margin-top:8px" onclick="submitOrder()" data-ar="إرسال الطلب عبر واتساب" data-en="Send order via WhatsApp"></button>
       <div class="note" data-ar="سنتواصل معك لتأكيد الطلب قبل الشحن." data-en="We'll contact you to confirm the order before shipping."></div>
     </div>
@@ -930,6 +957,114 @@ header.scr .brand img{height:26px}
   <div class="mcard">
     <div class="mhead"><h3 data-ar="تفاصيل الكتاب" data-en="Book details"></h3><button class="x" onclick="closeModal('mProd')">×</button></div>
     <div class="mbody" id="pdBody"></div>
+  </div>
+</div>
+
+<!-- ===== PURCHASE PORTAL ===== -->
+<div class="portal" id="portal">
+  <div class="plat-bar">
+    <img src="logo-white.png?v=2" alt="Senior">
+    <span style="font-weight:700;font-size:14.5px" data-ar="بوابة الشراء" data-en="Purchase portal"></span>
+    <button class="cl" onclick="closePortal()">×</button>
+  </div>
+  <div class="pt-wrap">
+
+    <div class="pt-scr on" id="pt-choose">
+      <h3 class="pt-h" data-ar="أهلاً بك في بوابة الشراء" data-en="Welcome to the purchase portal"></h3>
+      <p class="pt-sub" data-ar="اختر صفتك ليصلك السعر والخصم المناسبان لك." data-en="Choose who you are to get the right price and discount."></p>
+      <div class="pt-cards">
+        <div class="pt-card" onclick="ptShow('pt-student')"><div class="em">🎓</div><div><h4 data-ar="طالب" data-en="Student"></h4><p data-ar="اطلب كتبك، وأدخل كود مدرّسك إن وُجد للحصول على خصمه." data-en="Order your books, and enter your teacher's code — if you have one — for its discount."></p></div></div>
+        <div class="pt-card" onclick="ptShow('pt-teacher')"><div class="em">🧑‍🏫</div><div><h4 data-ar="مدرّس" data-en="Teacher"></h4><p data-ar="لديك كود؟ فعّله مباشرة. مدرّس جديد؟ سجّل بياناتك ليصلك كودك الخاص بعد المراجعة." data-en="Have a code? Activate it. New teacher? Register and receive your own code after review."></p></div></div>
+        <div class="pt-card" onclick="ptShow('pt-lib')"><div class="em">🏪</div><div><h4 data-ar="مكتبة / موزّع" data-en="Bookshop / Distributor"></h4><p data-ar="أسعار الجملة عبر كود المندوب الخاص بمنطقتك." data-en="Wholesale pricing via your area representative's code."></p></div></div>
+      </div>
+      <button class="pt-guest" onclick="closePortal()" data-ar="المتابعة كزائر بدون خصم" data-en="Continue as a guest without a discount"></button>
+    </div>
+
+    <div class="pt-scr" id="pt-student">
+      <button class="pt-back" onclick="ptShow('pt-choose')" data-ar="→ رجوع" data-en="← Back"></button>
+      <div class="pt-form">
+        <h3 class="pt-h" data-ar="🎓 حساب طالب" data-en="🎓 Student account"></h3>
+        <div class="fld"><label data-ar="الاسم" data-en="Name"></label><input id="pts-n" data-ar-ph="اسمك بالكامل" data-en-ph="Your full name"></div>
+        <div class="two">
+          <div class="fld"><label data-ar="رقم الموبايل" data-en="Mobile"></label><input id="pts-p" data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
+          <div class="fld"><label data-ar="المحافظة" data-en="Governorate"></label><select id="pts-g"></select></div>
+        </div>
+        <div class="fld"><label data-ar="كود المدرّس (اختياري)" data-en="Teacher code (optional)"></label><input id="pts-c" dir="ltr" data-ar-ph="SNR-T-0000" data-en-ph="SNR-T-0000"></div>
+        <button class="btn b-o" style="width:100%" onclick="ptStudent()" data-ar="تفعيل وبدء الشراء" data-en="Activate &amp; start shopping"></button>
+        <p class="pt-note" data-ar="إن أدخلت كود مدرّسك، يُحتسب خصمه لك عند تأكيد الطلب." data-en="If you enter your teacher's code, its discount is applied when we confirm the order."></p>
+      </div>
+    </div>
+
+    <div class="pt-scr" id="pt-teacher">
+      <button class="pt-back" onclick="ptShow('pt-choose')" data-ar="→ رجوع" data-en="← Back"></button>
+      <div class="pt-cards">
+        <div class="pt-card" onclick="ptShow('pt-texist')"><div class="em">🔑</div><div><h4 data-ar="لديّ كود مدرّس" data-en="I have a teacher code"></h4><p data-ar="فعّل كودك واستمتع بخصمك مباشرة." data-en="Activate your code and get your discount right away."></p></div></div>
+        <div class="pt-card" onclick="ptShow('pt-tnew')"><div class="em">📝</div><div><h4 data-ar="مدرّس جديد — التسجيل" data-en="New teacher — register"></h4><p data-ar="سجّل بياناتك، وبعد مراجعة فريقنا يصلك كودك الخاص عبر واتساب." data-en="Submit your details; after our team's review, your code arrives on WhatsApp."></p></div></div>
+      </div>
+    </div>
+
+    <div class="pt-scr" id="pt-texist">
+      <button class="pt-back" onclick="ptShow('pt-teacher')" data-ar="→ رجوع" data-en="← Back"></button>
+      <div class="pt-form">
+        <h3 class="pt-h" data-ar="🔑 تفعيل كود مدرّس" data-en="🔑 Activate a teacher code"></h3>
+        <div class="two">
+          <div class="fld"><label data-ar="الاسم" data-en="Name"></label><input id="ptt-n" data-ar-ph="اسمك بالكامل" data-en-ph="Your full name"></div>
+          <div class="fld"><label data-ar="رقم الموبايل" data-en="Mobile"></label><input id="ptt-p" data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
+        </div>
+        <div class="fld"><label data-ar="كود المدرّس" data-en="Teacher code"></label><input id="ptt-c" dir="ltr" data-ar-ph="SNR-T-0000" data-en-ph="SNR-T-0000"></div>
+        <button class="btn b-o" style="width:100%" onclick="ptTeacherExist()" data-ar="تفعيل الكود" data-en="Activate the code"></button>
+      </div>
+    </div>
+
+    <div class="pt-scr" id="pt-tnew">
+      <button class="pt-back" onclick="ptShow('pt-teacher')" data-ar="→ رجوع" data-en="← Back"></button>
+      <div class="pt-form">
+        <h3 class="pt-h" data-ar="📝 تسجيل مدرّس جديد" data-en="📝 New teacher registration"></h3>
+        <div class="two">
+          <div class="fld"><label data-ar="الاسم الأول" data-en="First name"></label><input id="ptn-f"></div>
+          <div class="fld"><label data-ar="اسم العائلة" data-en="Last name"></label><input id="ptn-l"></div>
+        </div>
+        <div class="two">
+          <div class="fld"><label data-ar="المنطقة / المحافظة" data-en="Area / governorate"></label><select id="ptn-a"></select></div>
+          <div class="fld"><label data-ar="سنوات الخبرة" data-en="Years of experience"></label>
+            <select id="ptn-s"><option data-ar="أقل من ٥ سنوات" data-en="Under 5 years"></option><option data-ar="٥ – ١٠ سنوات" data-en="5–10 years"></option><option data-ar="١٠ – ١٥ سنة" data-en="10–15 years"></option><option data-ar="أكثر من ١٥ سنة" data-en="Over 15 years"></option></select></div>
+        </div>
+        <div class="two">
+          <div class="fld"><label data-ar="رقم الموبايل" data-en="Mobile"></label><input id="ptn-p" data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
+          <div class="fld"><label data-ar="البريد الإلكتروني" data-en="Email"></label><input id="ptn-e" dir="ltr" type="email"></div>
+        </div>
+        <button class="btn b-o" style="width:100%" onclick="ptTeacherNew()" data-ar="إرسال طلب التسجيل" data-en="Submit registration"></button>
+        <p class="pt-note" data-ar="يراجع فريقنا الطلب، ثم يصلك كودك الخاص عبر واتساب خلال يومي عمل." data-en="Our team reviews the request, then your code arrives on WhatsApp within two working days."></p>
+      </div>
+    </div>
+
+    <div class="pt-scr" id="pt-tdone">
+      <div class="pt-form" style="text-align:center">
+        <div style="font-size:44px;margin-bottom:8px">✅</div>
+        <h3 class="pt-h" data-ar="تم استلام طلبك" data-en="Request received"></h3>
+        <p class="pt-sub" id="ptDoneMsg"></p>
+        <button class="btn b-t" onclick="closePortal()" data-ar="العودة للموقع" data-en="Back to the site"></button>
+      </div>
+    </div>
+
+    <div class="pt-scr" id="pt-lib">
+      <button class="pt-back" onclick="ptShow('pt-choose')" data-ar="→ رجوع" data-en="← Back"></button>
+      <div class="pt-form">
+        <h3 class="pt-h" data-ar="🏪 مكتبة / موزّع" data-en="🏪 Bookshop / Distributor"></h3>
+        <div class="two">
+          <div class="fld"><label data-ar="اسم المكتبة" data-en="Bookshop name"></label><input id="ptl-n"></div>
+          <div class="fld"><label data-ar="اسم المسؤول" data-en="Contact person"></label><input id="ptl-o"></div>
+        </div>
+        <div class="two">
+          <div class="fld"><label data-ar="رقم الموبايل" data-en="Mobile"></label><input id="ptl-p" data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
+          <div class="fld"><label data-ar="المنطقة / المحافظة" data-en="Area / governorate"></label><select id="ptl-g"></select></div>
+        </div>
+        <div class="fld"><label data-ar="كود المندوب" data-en="Representative code"></label><input id="ptl-c" dir="ltr" data-ar-ph="SNR-R-0000" data-en-ph="SNR-R-0000"></div>
+        <button class="btn b-o" style="width:100%" onclick="ptLib()" data-ar="تفعيل حساب المكتبة" data-en="Activate the bookshop account"></button>
+        <p class="pt-note" data-ar="تُحتسب أسعار الجملة عبر كود مندوب منطقتك، ويتواصل معك فريق التوزيع لتأكيد الكميات." data-en="Wholesale pricing is applied via your area representative's code; our distribution team contacts you to confirm quantities."></p>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1046,6 +1181,16 @@ header.scr .brand img{height:26px}
 <script>
 let LANG=localStorage.getItem('senior_lang')||'ar';
 const WA='201010101445';
+/* Backend API base — set after deploying backend/ (see backend/DEPLOY.md), e.g. 'https://senior-api.xxx.workers.dev'.
+   While empty, the site falls back to WhatsApp-only flows. */
+const API='';
+async function apiFetch(path,opts){
+  if(!API)return null;
+  try{
+    const r=await fetch(API+path,{headers:{'Content-Type':'application/json'},...opts});
+    return await r.json();
+  }catch(e){return null}
+}
 const GOVS=["القاهرة","الجيزة","الإسكندرية","القليوبية","الدقهلية","الشرقية","الغربية","المنوفية","البحيرة","كفر الشيخ","دمياط","بورسعيد","الإسماعيلية","السويس","المنيا","بني سويف","الفيوم","أسيوط","سوهاج","قنا","الأقصر","أسوان","البحر الأحمر","مطروح","شمال سيناء","جنوب سيناء","الوادي الجديد"];
 function t(a,e){return LANG==='ar'?a:e}
 function applyLang(){
@@ -1055,6 +1200,7 @@ function applyLang(){
   document.querySelectorAll('[data-ar]').forEach(el=>{const v=el.getAttribute('data-'+LANG);if(v!==null)el.innerHTML=v});
   document.querySelectorAll('[data-ar-ph]').forEach(el=>{const v=el.getAttribute('data-'+LANG+'-ph');if(v!==null)el.placeholder=v});
   renderSeg();renderProds();renderCart();renderPays();
+  if(typeof renderPtBanner==='function')renderPtBanner();
 }
 function toggleLang(){LANG=LANG==='ar'?'en':'ar';localStorage.setItem('senior_lang',LANG);applyLang()}
 
@@ -1237,15 +1383,26 @@ function orderText(info){
   if(info){L.push('');L.push(`${t('الاسم','Name')}: ${info.n}`);L.push(`${t('الموبايل','Mobile')}: ${info.p}`);
     L.push(`${t('المحافظة','Governorate')}: ${info.g}`);L.push(`${t('المسار','Track')}: ${info.tr}`);
     L.push(`${t('العنوان','Address')}: ${info.a}`);L.push(`${t('وسيلة الدفع','Payment')}: ${info.m}`)}
+  if(BUYER){L.push('');L.push(`${t('نوع المشتري','Buyer type')}: ${LANG==='ar'?BTYPE[BUYER.type][0]:BTYPE[BUYER.type][1]}`);
+    if(BUYER.code)L.push(`${t('كود الخصم','Discount code')}: ${BUYER.code}${BUYER.verified?'':t(' (بانتظار التحقق)',' (pending verification)')}`)}
   return encodeURIComponent(L.join('\n'));
 }
 function orderWA(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}window.open(`https://wa.me/${WA}?text=${orderText(null)}`,'_blank')}
-function openCheckout(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}document.getElementById('cotot').textContent=total();renderPays();openModal('mCheck')}
+function openCheckout(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}document.getElementById('cotot').textContent=total();renderPays();
+  const cb=document.getElementById('coBuyer');
+  if(cb){if(BUYER&&BUYER.code){cb.style.display='block';
+      cb.textContent=`${t('سيُحتسب خصم','The discount for the')} ${LANG==='ar'?BTYPE[BUYER.type][0]:BTYPE[BUYER.type][1]} (${t('كود','code')} ${BUYER.code}) ${t('عند تأكيد الطلب.','is applied when the order is confirmed.')}`}
+    else cb.style.display='none'}
+  openModal('mCheck')}
 function submitOrder(){
   const n=document.getElementById('co-n').value.trim(),p=document.getElementById('co-p').value.trim(),a=document.getElementById('co-a').value.trim();
   if(!n||!p||!a){toast(t('من فضلك أكمل البيانات','Please complete the fields'));return}
   const mp=PAYS.find(v=>v.k===METHOD);
   const info={n,p,a,g:document.getElementById('co-g').value,tr:document.getElementById('co-t').selectedOptions[0].textContent,m:LANG==='ar'?mp.bAr:mp.bEn};
+  apiFetch('/api/order',{method:'POST',body:JSON.stringify({
+    buyerType:BUYER?BUYER.type:'guest',name:n,mobile:p,governorate:info.g,address:a,track:info.tr,
+    items:Object.keys(cart).map(k=>{const pr=PRODUCTS.find(v=>v.id===k);return{id:k,qty:cart[k],price:pr?pr.price:0}}),
+    refCode:BUYER&&BUYER.code?BUYER.code:null,payMethod:METHOD})});
   window.open(`https://wa.me/${WA}?text=${orderText(info)}`,'_blank');
   closeModal('mCheck');toast(t('تم تجهيز طلبك على واتساب','Your order is ready on WhatsApp'));
 }
@@ -1489,6 +1646,86 @@ function sendReport(who){
   window.open(`https://wa.me/?text=${encodeURIComponent(L.join('\n'))}`,'_blank');
   toast(who==='parent'?t('تم تجهيز التقرير لوليّ الأمر','Report ready for the parent'):t('تم تجهيز التقرير للمدرّس','Report ready for the teacher'));
 }
+
+/* ===== PURCHASE PORTAL ===== */
+let BUYER=null;try{BUYER=JSON.parse(localStorage.getItem('senior_buyer')||'null')}catch(e){}
+const BTYPE={student:['طالب','Student'],teacher:['مدرّس','Teacher'],library:['مكتبة / موزّع','Bookshop / Distributor']};
+function openPortal(scr){document.getElementById('portal').classList.add('on');document.body.style.overflow='hidden';ptShow(scr||'pt-choose')}
+function closePortal(){document.getElementById('portal').classList.remove('on');document.body.style.overflow=''}
+function ptShow(id){document.querySelectorAll('.pt-scr').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on')}
+function setBuyer(b){BUYER=b;localStorage.setItem('senior_buyer',JSON.stringify(b));renderPtBanner()}
+function clearBuyer(){BUYER=null;localStorage.removeItem('senior_buyer');renderPtBanner()}
+function renderPtBanner(){
+  const el=document.getElementById('ptBanner');if(!el)return;
+  if(BUYER){
+    const ty=LANG==='ar'?BTYPE[BUYER.type][0]:BTYPE[BUYER.type][1];
+    const code=BUYER.code?` · ${t('كود','code')} <b dir="ltr">${BUYER.code}</b>`:'';
+    const ver=BUYER.code&&!BUYER.verified?'🕓':'✅';
+    el.classList.add('ok');
+    el.innerHTML=`<div class="tx">${ver} ${t('مسجَّل بصفة','Registered as')}: <b>${ty}</b>${code}<small>${BUYER.code?t('يُحتسب الخصم عند تأكيد الطلب.','The discount is applied when the order is confirmed.'):''}</small></div>
+      <div class="bs"><button class="lk" onclick="openPortal()">${t('تغيير','Change')}</button><button class="lk" onclick="clearBuyer()">${t('إلغاء','Remove')}</button></div>`;
+  }else{
+    el.classList.remove('ok');
+    el.innerHTML=`<div class="tx">${t('لكل صفةٍ سعرها وخصمها — اختر صفتك قبل الطلب.','Every buyer has their price and discount — choose yours before ordering.')}</div>
+      <div class="bs">
+        <button class="btn b-t b-sm" onclick="openPortal('pt-student')">🎓 ${t('طالب','Student')}</button>
+        <button class="btn b-t b-sm" onclick="openPortal('pt-teacher')">🧑‍🏫 ${t('مدرّس','Teacher')}</button>
+        <button class="btn b-t b-sm" onclick="openPortal('pt-lib')">🏪 ${t('مكتبة','Bookshop')}</button>
+      </div>`;
+  }
+}
+const mobOK=v=>/^01[0-9]{9}$/.test((v||'').replace(/\D/g,''));
+async function ptStudent(){
+  const n=document.getElementById('pts-n').value.trim(),p=document.getElementById('pts-p').value.trim(),
+        g=document.getElementById('pts-g').value,c=document.getElementById('pts-c').value.trim().toUpperCase();
+  if(!n||!mobOK(p)){toast(t('أكمل الاسم ورقم موبايل صحيحاً','Enter your name and a valid mobile number'));return}
+  let verified=false,tname='';
+  if(c){
+    const d=await apiFetch('/api/code/check?code='+encodeURIComponent(c));
+    if(d){if(!d.valid||d.kind!=='teacher'){toast(t('كود المدرّس غير صحيح','Invalid teacher code'));return}verified=true;tname=d.name||''}
+  }
+  setBuyer({type:'student',name:n,mobile:p,gov:g,code:c||null,teacher:tname,verified});
+  closePortal();toast(t('تم تفعيل حساب الطالب','Student account activated'));
+}
+async function ptTeacherExist(){
+  const n=document.getElementById('ptt-n').value.trim(),p=document.getElementById('ptt-p').value.trim(),
+        c=document.getElementById('ptt-c').value.trim().toUpperCase();
+  if(!n||!mobOK(p)||!c){toast(t('أكمل الاسم والموبايل والكود','Complete the name, mobile and code'));return}
+  const d=await apiFetch('/api/code/check?code='+encodeURIComponent(c));
+  if(d&&(!d.valid||d.kind!=='teacher')){toast(t('الكود غير صحيح أو لم يُعتمد بعد','The code is invalid or not approved yet'));return}
+  setBuyer({type:'teacher',name:n,mobile:p,code:c,verified:!!(d&&d.valid)});
+  closePortal();toast(t('تم تفعيل كود المدرّس','Teacher code activated'));
+}
+async function ptTeacherNew(){
+  const f=document.getElementById('ptn-f').value.trim(),l=document.getElementById('ptn-l').value.trim(),
+        a=document.getElementById('ptn-a').value,s=document.getElementById('ptn-s').selectedOptions[0].textContent,
+        p=document.getElementById('ptn-p').value.trim(),e=document.getElementById('ptn-e').value.trim();
+  if(!f||!l||!mobOK(p)){toast(t('أكمل الاسم بشقّيه ورقم موبايل صحيحاً','Complete both names and a valid mobile number'));return}
+  const d=await apiFetch('/api/teacher/register',{method:'POST',body:JSON.stringify({first:f,last:l,area:a,seniority:s,mobile:p,email:e})});
+  const done=document.getElementById('ptDoneMsg');
+  if(d&&d.ok){
+    done.textContent=d.duplicate
+      ?t('يوجد طلب مسجَّل بهذا الرقم من قبل، وهو قيد المراجعة. يصلك الكود فور اعتماده.','A request with this number already exists and is under review. Your code arrives once approved.')
+      :t('استلم فريقنا بياناتك. بعد المراجعة يصلك كودك الخاص عبر واتساب خلال يومي عمل.','Our team received your details. After review, your code arrives on WhatsApp within two working days.');
+  }else{
+    const msg=encodeURIComponent(`${t('طلب تسجيل مدرّس جديد — Senior','New teacher registration — Senior')}\n${t('الاسم','Name')}: ${f} ${l}\n${t('المنطقة','Area')}: ${a}\n${t('سنوات الخبرة','Experience')}: ${s}\n${t('الموبايل','Mobile')}: ${p}\n${t('البريد الإلكتروني','Email')}: ${e||'—'}`);
+    window.open(`https://wa.me/${WA}?text=${msg}`,'_blank');
+    done.textContent=t('تم تجهيز طلبك على واتساب — أرسله ليراجعه فريقنا، ثم يصلك كودك الخاص.','Your request is ready on WhatsApp — send it for our team to review, then your code arrives.');
+  }
+  ptShow('pt-tdone');
+}
+async function ptLib(){
+  const n=document.getElementById('ptl-n').value.trim(),o=document.getElementById('ptl-o').value.trim(),
+        p=document.getElementById('ptl-p').value.trim(),g=document.getElementById('ptl-g').value,
+        c=document.getElementById('ptl-c').value.trim().toUpperCase();
+  if(!n||!mobOK(p)||!c){toast(t('أكمل اسم المكتبة والموبايل وكود المندوب','Complete the bookshop name, mobile and representative code'));return}
+  const d=await apiFetch('/api/code/check?code='+encodeURIComponent(c));
+  if(d&&(!d.valid||d.kind!=='rep')){toast(t('كود المندوب غير صحيح','Invalid representative code'));return}
+  setBuyer({type:'library',name:n,contact:o,mobile:p,gov:g,code:c,verified:!!(d&&d.valid)});
+  closePortal();toast(t('تم تفعيل حساب المكتبة','Bookshop account activated'));
+}
+['pts-g','ptn-a','ptl-g'].forEach(id=>{const s=document.getElementById(id);if(s&&!s.options.length)GOVS.forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=g;s.appendChild(o)})});
+renderPtBanner();
 
 /* ===== MOTION: scroll reveal, counters, header shrink ===== */
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;

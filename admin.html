@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Senior — لوحة الفريق</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Readex Pro',system-ui,sans-serif;background:#FBF8F3;color:#16323C;line-height:1.7;padding:20px;max-width:960px;margin:0 auto}
+h1{font-size:22px;margin-bottom:4px}
+.sub{color:#5E7078;font-size:13.5px;margin-bottom:18px}
+.card{background:#fff;border:1px solid #EAE2D6;border-radius:16px;padding:18px;margin-bottom:14px}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+input,select{width:100%;padding:10px 12px;border:1.5px solid #D8E3E0;border-radius:10px;font-family:inherit;font-size:14px;margin-bottom:10px}
+button{font-family:inherit;font-weight:600;font-size:13.5px;border:none;border-radius:999px;padding:9px 18px;cursor:pointer}
+.b-t{background:#0E6E60;color:#fff}.b-o{background:#E4572E;color:#fff}.b-g{background:#fff;border:1.5px solid #D8E3E0;color:#0E6E60}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tabs button.on{background:#16323C;color:#fff}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 6px;border-bottom:1px dashed #EAE2D6;text-align:right;vertical-align:top}
+th{color:#5E7078;font-weight:600}
+.code{font-weight:700;color:#0E6E60;direction:ltr;display:inline-block}
+.pill{font-size:11px;font-weight:700;border-radius:999px;padding:2px 10px}
+.p-new{background:#FDE9E0;color:#C0421C}.p-ok{background:#DDF1ED;color:#0E6E60}
+.msg{font-size:13px;color:#5E7078;margin-top:8px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.row2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<h1>Senior — لوحة الفريق</h1>
+<p class="sub">مراجعة المدرّسين الجدد، وأكواد المناديب، ومتابعة الطلبات.</p>
+
+<div class="card" id="loginCard">
+  <div class="row2">
+    <div><label>رابط الخادم (API)</label><input id="apiUrl" placeholder="https://senior-api.xxx.workers.dev" dir="ltr"></div>
+    <div><label>مفتاح الفريق</label><input id="adminKey" type="password" dir="ltr"></div>
+  </div>
+  <button class="b-t" onclick="connect()">دخول</button>
+  <div class="msg" id="loginMsg"></div>
+</div>
+
+<div id="panel" style="display:none">
+  <div class="tabs">
+    <button class="on" id="tb-t" onclick="show('t')">المدرّسون الجدد</button>
+    <button id="tb-r" onclick="show('r')">المناديب</button>
+    <button id="tb-o" onclick="show('o')">الطلبات</button>
+  </div>
+
+  <div class="card" id="tab-t">
+    <div id="tList">…</div>
+  </div>
+
+  <div class="card" id="tab-r" style="display:none">
+    <div class="row2">
+      <div><label>اسم المندوب</label><input id="repName"></div>
+      <div><label>موبايل</label><input id="repMob" dir="ltr"></div>
+    </div>
+    <button class="b-t" onclick="addRep()">إنشاء كود مندوب</button>
+    <div class="msg" id="repMsg"></div>
+    <div id="rList" style="margin-top:14px">…</div>
+  </div>
+
+  <div class="card" id="tab-o" style="display:none">
+    <div id="oList">…</div>
+  </div>
+</div>
+
+<script>
+/* Set after deployment (or type it in the form once — it is remembered on this device) */
+const API='';
+
+let BASE=localStorage.getItem('snr_api')||API, KEY=localStorage.getItem('snr_key')||'';
+if(BASE)document.getElementById('apiUrl').value=BASE;
+if(KEY)document.getElementById('adminKey').value=KEY;
+
+async function api(path,opts={}){
+  const r=await fetch(BASE+path,{...opts,headers:{'Content-Type':'application/json','x-admin-key':KEY,...(opts.headers||{})}});
+  if(r.status===401)throw new Error('مفتاح الفريق غير صحيح');
+  return r.json();
+}
+async function connect(){
+  BASE=document.getElementById('apiUrl').value.trim().replace(/\/+$/,'');
+  KEY=document.getElementById('adminKey').value.trim();
+  const m=document.getElementById('loginMsg');
+  if(!BASE||!KEY){m.textContent='أدخل الرابط والمفتاح.';return}
+  m.textContent='جارٍ الاتصال…';
+  try{
+    await api('/api/admin/teachers?status=pending');
+    localStorage.setItem('snr_api',BASE);localStorage.setItem('snr_key',KEY);
+    document.getElementById('loginCard').style.display='none';
+    document.getElementById('panel').style.display='block';
+    loadTeachers();loadReps();loadOrders();
+  }catch(e){m.textContent='تعذّر الاتصال: '+e.message}
+}
+function show(k){
+  ['t','r','o'].forEach(x=>{
+    document.getElementById('tab-'+x).style.display=x===k?'block':'none';
+    document.getElementById('tb-'+x).classList.toggle('on',x===k);
+  });
+}
+async function loadTeachers(){
+  const el=document.getElementById('tList');
+  try{
+    const d=await api('/api/admin/teachers?status=pending');
+    if(!d.teachers.length){el.innerHTML='<p class="msg">لا توجد طلبات قيد المراجعة.</p>';return}
+    el.innerHTML='<table><tr><th>الاسم</th><th>المنطقة</th><th>الخبرة</th><th>موبايل</th><th></th></tr>'+
+      d.teachers.map(t=>`<tr>
+        <td>${t.first_name} ${t.last_name}<br><span style="color:#8A9499;font-size:12px">${t.email||''}</span></td>
+        <td>${t.area||'—'}</td><td>${t.seniority||'—'}</td>
+        <td dir="ltr">${t.mobile}</td>
+        <td style="white-space:nowrap">
+          <button class="b-t" onclick="approve(${t.id},'${t.mobile}')">اعتماد</button>
+          <button class="b-g" onclick="reject(${t.id})">رفض</button>
+        </td></tr>`).join('')+'</table>';
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+e.message+'</p>'}
+}
+async function approve(id,mobile){
+  const d=await api('/api/admin/teacher/approve',{method:'POST',body:JSON.stringify({id})});
+  if(d.code){
+    const msg=encodeURIComponent(`أهلاً بك في برنامج مدرّسي Senior.\nتم اعتماد تسجيلك، وهذا كود الخصم الخاص بك: ${d.code}\nشاركه مع طلابك ليحصلوا على خصمهم عند الطلب من seniorbookegy.com`);
+    if(confirm('تم الاعتماد. الكود: '+d.code+'\nفتح واتساب لإرساله للمدرّس؟'))
+      window.open(`https://wa.me/2${mobile}?text=${msg}`,'_blank');
+    loadTeachers();
+  }
+}
+async function reject(id){if(confirm('رفض هذا الطلب؟')){await api('/api/admin/teacher/reject',{method:'POST',body:JSON.stringify({id})});loadTeachers()}}
+async function addRep(){
+  const name=document.getElementById('repName').value.trim(),mobile=document.getElementById('repMob').value.trim();
+  const m=document.getElementById('repMsg');
+  if(!name){m.textContent='أدخل اسم المندوب.';return}
+  const d=await api('/api/admin/rep',{method:'POST',body:JSON.stringify({name,mobile})});
+  m.textContent=d.code?('تم إنشاء الكود: '+d.code):'خطأ.';
+  document.getElementById('repName').value='';document.getElementById('repMob').value='';
+  loadReps();
+}
+async function loadReps(){
+  const el=document.getElementById('rList');
+  try{
+    const d=await api('/api/admin/reps');
+    el.innerHTML=d.reps.length?'<table><tr><th>الاسم</th><th>موبايل</th><th>الكود</th></tr>'+
+      d.reps.map(r=>`<tr><td>${r.name}</td><td dir="ltr">${r.mobile||'—'}</td><td><span class="code">${r.code}</span></td></tr>`).join('')+'</table>'
+      :'<p class="msg">لا يوجد مناديب بعد.</p>';
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+e.message+'</p>'}
+}
+const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي'};
+async function loadOrders(){
+  const el=document.getElementById('oList');
+  try{
+    const d=await api('/api/admin/orders');
+    if(!d.orders.length){el.innerHTML='<p class="msg">لا توجد طلبات بعد.</p>';return}
+    el.innerHTML='<table><tr><th>#</th><th>المشتري</th><th>الكتب</th><th>الإجمالي</th><th>كود</th><th>الحالة</th></tr>'+
+      d.orders.map(o=>`<tr>
+        <td>${o.id}</td>
+        <td>${o.name}<br><span dir="ltr" style="font-size:12px">${o.mobile}</span><br><span style="color:#8A9499;font-size:11.5px">${o.buyer_type} · ${o.governorate||''}</span></td>
+        <td>${o.items.map(i=>i.id+'×'+i.qty).join('، ')}</td>
+        <td>${o.total} ج</td>
+        <td>${o.ref_code?'<span class="code">'+o.ref_code+'</span>':'—'}</td>
+        <td><select onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></td>
+      </tr>`).join('')+'</table>';
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+e.message+'</p>'}
+}
+async function setStatus(id,status){await api('/api/admin/order/status',{method:'POST',body:JSON.stringify({id,status})})}
+if(BASE&&KEY)connect();
+</script>
+</body>
+</html>
