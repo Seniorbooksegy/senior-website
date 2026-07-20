@@ -1313,7 +1313,7 @@ function renderProds(){
       <div class="tags"><span class="tag" style="background:${p.accent}">${x.m}</span></div>
       <h3>${x.t}</h3><p>${x.d}</p>
       <div class="price">${price}</div>
-      ${p.sample?`<a class="smp" href="${p.sample}" target="_blank" rel="noopener">📄 ${t('تصفّح عينة من الكتاب','Browse a sample')}</a>`:''}
+      ${p.sample?`<a class="smp" href="${p.sample}" target="_blank" rel="noopener" onclick="track('ev','sample','${p.id}')">📄 ${t('تصفّح عينة من الكتاب','Browse a sample')}</a>`:''}
       <div class="acts">
         <button class="btn b-o b-sm" onclick="add('${p.id}')">${t('أضف للسلة','Add to cart')}</button>
         <button class="btn b-g b-sm" onclick="showProd('${p.id}')">${t('تفاصيل','Details')}</button>
@@ -1341,6 +1341,7 @@ function showProd(id){
 let cart=JSON.parse(localStorage.getItem('senior_cart')||'{}');
 const save=()=>localStorage.setItem('senior_cart',JSON.stringify(cart));
 function add(id){cart[id]=(cart[id]||0)+1;save();renderCart();openCart();toast(t('تمت الإضافة للسلة','Added to cart'));
+  if(typeof track==='function')track('ev','cart',id);
   const cb=document.querySelector('.cart-b');if(cb){cb.classList.remove('pop');void cb.offsetWidth;cb.classList.add('pop')}}
 function chg(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];save();renderCart()}
 function rm(id){delete cart[id];save();renderCart()}
@@ -1422,6 +1423,7 @@ function orderText(info){
 }
 function orderWA(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}window.open(`https://wa.me/${WA}?text=${orderText(null)}`,'_blank')}
 function openCheckout(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}
+  if(typeof track==='function')track('ev','checkout');
   document.getElementById('cotot').textContent=payTotal();renderPays();
   const cb=document.getElementById('coBuyer');
   if(cb){if(discAmt()>0){cb.style.display='block';
@@ -1437,6 +1439,7 @@ function submitOrder(){
     buyerType:BUYER?BUYER.type:'guest',name:n,mobile:p,governorate:info.g,address:a,track:info.tr,
     items:Object.keys(cart).map(k=>{const pr=PRODUCTS.find(v=>v.id===k);return{id:k,qty:cart[k],price:pr?pr.price:0}}),
     refCode:BUYER&&BUYER.code?BUYER.code:null,payMethod:METHOD})});
+  if(typeof track==='function')track('ev','order',''+payTotal());
   window.open(`https://wa.me/${WA}?text=${orderText(info)}`,'_blank');
   closeModal('mCheck');toast(t('تم تجهيز طلبك على واتساب','Your order is ready on WhatsApp'));
 }
@@ -1529,6 +1532,7 @@ let qStart=0,qTimer=null;
 function fmtT(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
 function paintWM(){const el=document.getElementById('pwm');if(!el)return;const tx=`${STU} · ${SCODE}`;el.innerHTML='';for(let r=0;r<12;r++)for(let c=0;c<2;c++){const s=document.createElement('span');s.textContent=tx;s.style.top=(r*90)+'px';s.style.insetInlineStart=(c*230-30)+'px';el.appendChild(s)}}
 function openPlat(){
+  if(typeof track==='function')track('ev','plus');
   document.getElementById('plat').classList.add('on');document.body.style.overflow='hidden';
   if(!WEEK.length)buildWeek();
   const sv=localStorage.getItem('senior_student');
@@ -1761,7 +1765,7 @@ function sendReport(who){
 /* ===== PURCHASE PORTAL ===== */
 let BUYER=null;try{BUYER=JSON.parse(localStorage.getItem('senior_buyer')||'null')}catch(e){}
 const BTYPE={student:['طالب','Student'],teacher:['مدرّس','Teacher'],library:['مكتبة / موزّع','Bookshop / Distributor']};
-function openPortal(scr){document.getElementById('portal').classList.add('on');document.body.style.overflow='hidden';ptShow(scr||'pt-choose')}
+function openPortal(scr){document.getElementById('portal').classList.add('on');document.body.style.overflow='hidden';ptShow(scr||'pt-choose');if(typeof track==='function')track('ev','portal',scr||'choose')}
 function closePortal(){document.getElementById('portal').classList.remove('on');document.body.style.overflow=''}
 function ptShow(id){document.querySelectorAll('.pt-scr').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on')}
 function setBuyer(b){BUYER=b;localStorage.setItem('senior_buyer',JSON.stringify(b));renderPtBanner()}
@@ -1871,6 +1875,24 @@ function countUp(box){
 }
 const hdrEl=document.querySelector('header');
 addEventListener('scroll',()=>hdrEl.classList.toggle('scr',scrollY>14),{passive:true});
+
+/* ===== SITE ANALYTICS (first-party, cookie-free) ===== */
+const SID=(()=>{try{let s=sessionStorage.getItem('snr_sid');if(!s){s=Math.random().toString(36).slice(2,12);sessionStorage.setItem('snr_sid',s)}return s}catch(e){return 'anon'}})();
+function track(t,name,extra){
+  if(!API)return;
+  try{navigator.sendBeacon(API+'/api/hit',new Blob([JSON.stringify({t,name:name||'',extra:extra||'',sid:SID,dev:innerWidth<700?'mobile':'desktop',ref:document.referrer||''})],{type:'text/plain'}))}catch(e){}
+}
+track('pv','home');
+let T0=Date.now();
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden'){const s=Math.round((Date.now()-T0)/1000);if(s>0&&s<7200)track('dur','',s)}
+  T0=Date.now();
+});
+const SECSEEN=new Set();
+if('IntersectionObserver' in window){
+  const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&!SECSEEN.has(e.target.id)){SECSEEN.add(e.target.id);track('sec',e.target.id)}}),{threshold:.4});
+  ['why','shop','plus','content','teachers','about','contact'].forEach(id=>{const el=document.getElementById(id);if(el)so.observe(el)});
+}
 
 applyLang();
 initReveal();

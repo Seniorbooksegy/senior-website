@@ -92,6 +92,17 @@ h3{font-size:15px;margin-bottom:10px}
       <div class="card"><h3>🧾 حالة الطلبات</h3><div class="donutwrap"><div class="donut" id="dDonut"></div><div class="leg" id="dLeg"></div></div></div>
     </div>
     <div class="card"><h3>🗺️ أعلى المحافظات</h3><div id="dGovs"></div></div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+        <h3 style="margin:0">🌐 تحليلات الموقع</h3>
+        <div class="chips" style="margin:0">
+          <button class="chip on" id="an7" onclick="loadAnalytics(7)">٧ أيام</button>
+          <button class="chip" id="an30" onclick="loadAnalytics(30)">٣٠ يوماً</button>
+        </div>
+      </div>
+      <div id="anBox">…</div>
+    </div>
   </div>
 
   <!-- orders -->
@@ -179,7 +190,7 @@ async function connect(){
     refreshAll();
   }catch(e){m.textContent='تعذّر الاتصال: '+e.message}
 }
-function refreshAll(){loadStats();loadOrders();loadInv();loadTeachers();loadReps();loadComms();loadCodes()}
+function refreshAll(){loadStats();loadAnalytics(7);loadOrders();loadInv();loadTeachers();loadReps();loadComms();loadCodes()}
 function show(k){TABS.forEach(([x])=>{document.getElementById('tab-'+x).style.display=x===k?'block':'none';document.getElementById('tb-'+x).classList.toggle('on',x===k)})}
 
 /* ================= DASHBOARD ================= */
@@ -222,6 +233,49 @@ async function loadStats(){
     document.getElementById('dGovs').innerHTML=(s.byGov||[]).map(g=>
       `<div class="hbar"><span class="nm">${esc(g.g||'—')}</span><div class="tr"><i style="width:${g.c/gmx*100}%;background:linear-gradient(90deg,#12866F,#0E6E60)"></i></div><b>${g.c}</b></div>`).join('')||'<p class="msg">لا بيانات بعد.</p>';
   }catch(e){document.getElementById('dAlerts').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+
+/* ================= SITE ANALYTICS ================= */
+const SECN={why:'لماذا Senior',shop:'المتجر',plus:'Senior Plus',content:'المقالات',teachers:'للمدرّسين',about:'من نحن',contact:'تواصل واطلب'};
+const CTRY={EG:'مصر 🇪🇬',SA:'السعودية 🇸🇦',AE:'الإمارات 🇦🇪',KW:'الكويت 🇰🇼',QA:'قطر 🇶🇦',US:'أمريكا 🇺🇸',GB:'بريطانيا 🇬🇧',DE:'ألمانيا 🇩🇪'};
+const fmtDur=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+async function loadAnalytics(days){
+  days=days||7;
+  document.getElementById('an7').classList.toggle('on',days===7);
+  document.getElementById('an30').classList.toggle('on',days===30);
+  const el=document.getElementById('anBox');
+  try{
+    const a=await api('/api/admin/analytics?days='+days);
+    const mob=(a.device.find(d=>d.device==='mobile')||{}).c||0, dsk=(a.device.find(d=>d.device==='desktop')||{}).c||0;
+    const mobPct=(mob+dsk)?Math.round(mob/(mob+dsk)*100):0;
+    let html=`<div class="kpis">
+      <div class="kpi" style="--c:#0E6E60"><div class="n">${a.visitors}</div><div class="l">زائر فريد</div></div>
+      <div class="kpi" style="--c:#E4572E"><div class="n">${a.views}</div><div class="l">زيارة للصفحة</div></div>
+      <div class="kpi" style="--c:#F2A03D"><div class="n">${fmtDur(a.avgSec)}</div><div class="l">متوسط مدة الزيارة</div></div>
+      <div class="kpi" style="--c:#3B82C4"><div class="n">${mobPct}%</div><div class="l">من الموبايل</div></div></div>`;
+    /* visitors per day */
+    const dayList=[];for(let i=days-1;i>=0;i--){dayList.push(new Date(Date.now()-i*86400000).toISOString().slice(0,10))}
+    const dmap={};(a.byDay||[]).forEach(r=>dmap[r.d]=r);
+    const dmx=Math.max(1,...dayList.map(d=>(dmap[d]||{}).v||0));
+    html+=`<h3>الزوّار يومياً</h3><div class="chart">`+dayList.map(d=>{
+      const r=dmap[d]||{v:0,pv:0};const dd=new Date(d);
+      return `<div class="cbar" title="${d}: ${r.v} زائر، ${r.pv} زيارة"><b>${r.v||''}</b><i style="height:${Math.max(3,(r.v||0)/dmx*100)}%;background:linear-gradient(180deg,#4a9fd8,#3B82C4)"></i><span>${dd.getDate()}/${dd.getMonth()+1}</span></div>`}).join('')+'</div>';
+    /* sections + funnel */
+    const smx=Math.max(1,...(a.sections||[]).map(s=>+s.c));
+    const fun=[['visit','زار الموقع'],['cart','أضاف للسلة'],['checkout','فتح إتمام الطلب'],['order','أرسل طلباً']];
+    const fmx=Math.max(1,a.funnel.visit||0);
+    html+=`<div class="grid2" style="margin-top:12px">
+      <div><h3>الأقسام الأكثر مشاهدة</h3>${(a.sections||[]).map(s=>`<div class="hbar"><span class="nm">${SECN[s.name]||s.name}</span><div class="tr"><i style="width:${s.c/smx*100}%"></i></div><b>${s.c}</b></div>`).join('')||'<p class="msg">—</p>'}</div>
+      <div><h3>مسار الشراء (زائر فريد)</h3>${fun.map(([k,l])=>{const v=a.funnel[k]||0;const pct=a.funnel.visit?Math.round(v/a.funnel.visit*100):0;
+        return `<div class="hbar"><span class="nm">${l}</span><div class="tr"><i style="width:${Math.max(2,v/fmx*100)}%;background:linear-gradient(90deg,#12866F,#0E6E60)"></i></div><b>${v} <span style="color:#8A9499;font-weight:400">(${pct}%)</span></b></div>`}).join('')}
+      <p class="msg" style="margin-top:6px">أيضاً: فتح بوابة الشراء ${a.funnel.portal||0} · جرّب Senior Plus ${a.funnel.plus||0} · تصفّح عينة ${a.funnel.sample||0}</p></div></div>`;
+    /* locations + sources */
+    html+=`<div class="grid2" style="margin-top:12px">
+      <div><h3>الموقع الجغرافي</h3>${(a.countries||[]).map(c=>`<div class="hbar"><span class="nm">${CTRY[c.country]||c.country}</span><div class="tr"><i style="width:${c.c/Math.max(1,(a.countries[0]||{}).c)*100}%"></i></div><b>${c.c}</b></div>`).join('')||'<p class="msg">—</p>'}
+      ${(a.cities||[]).length?'<p class="msg">أعلى المدن: '+a.cities.map(c=>`${c.city} (${c.c})`).join(' · ')+'</p>':''}</div>
+      <div><h3>مصادر الزيارات</h3>${(a.refs||[]).map(r=>`<div class="hbar"><span class="nm">${r.r==='direct'?'مباشر':esc(r.r)}</span><div class="tr"><i style="width:${r.c/Math.max(1,(a.refs[0]||{}).c)*100}%;background:linear-gradient(90deg,#9b7bd4,#7C5CBF)"></i></div><b>${r.c}</b></div>`).join('')||'<p class="msg">—</p>'}</div></div>`;
+    el.innerHTML=html;
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 
 /* ================= ORDERS ================= */
