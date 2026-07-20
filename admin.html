@@ -9,13 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Readex Pro',system-ui,sans-serif;background:#FBF8F3;color:#16323C;line-height:1.7;padding:20px;max-width:1080px;margin:0 auto}
-h1{font-size:22px;margin-bottom:4px}
-.sub{color:#5E7078;font-size:13.5px;margin-bottom:18px}
+body{font-family:'Readex Pro',system-ui,sans-serif;background:#FBF8F3;color:#16323C;line-height:1.7;padding:20px;max-width:1120px;margin:0 auto}
+h1{font-size:21px;margin-bottom:2px}
+.sub{color:#5E7078;font-size:13px;margin-bottom:16px}
 .card{background:#fff;border:1px solid #EAE2D6;border-radius:16px;padding:18px;margin-bottom:14px}
-label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
-input,select{padding:9px 12px;border:1.5px solid #D8E3E0;border-radius:10px;font-family:inherit;font-size:13.5px}
-input,select{width:100%;margin-bottom:10px}
+label{display:block;font-size:12.5px;font-weight:600;margin-bottom:4px}
+input,select{padding:9px 12px;border:1.5px solid #D8E3E0;border-radius:10px;font-family:inherit;font-size:13.5px;width:100%;margin-bottom:10px}
 button{font-family:inherit;font-weight:600;font-size:13px;border:none;border-radius:999px;padding:8px 16px;cursor:pointer}
 .b-t{background:#0E6E60;color:#fff}.b-o{background:#E4572E;color:#fff}.b-g{background:#fff;border:1.5px solid #D8E3E0;color:#0E6E60}
 .b-wa{background:#25D366;color:#fff}
@@ -27,24 +26,49 @@ th{color:#5E7078;font-weight:600;white-space:nowrap}
 .code{font-weight:700;color:#0E6E60;direction:ltr;display:inline-block}
 .msg{font-size:13px;color:#5E7078;margin-top:8px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end}
 .filters input,.filters select{width:auto;min-width:150px;margin-bottom:0}
-.stat{background:#DDF1ED;border-radius:14px;padding:14px;text-align:center}
-.stat .n{font-size:23px;font-weight:700;color:#0E6E60;line-height:1.3}
-.stat .l{font-size:12px;color:#5E7078}
-.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:#fff;border:1px solid #EAE2D6;border-radius:16px;padding:14px 16px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;background:var(--c,#0E6E60)}
+.kpi .n{font-size:24px;font-weight:700;color:#16323C;line-height:1.3}
+.kpi .l{font-size:12px;color:#5E7078}
+.kpi .s{font-size:11.5px;color:#0E6E60;font-weight:600}
+.alert{background:#FDF0DC;border:1px solid #F0DCB5;border-radius:12px;padding:10px 14px;font-size:13px;color:#7A5511;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.alert button{padding:5px 13px;font-size:12px}
+.ok-line{background:#E8F5EC;border:1px solid #CBE7D3;color:#14532D;border-radius:12px;padding:10px 14px;font-size:13px}
+.chart{display:flex;align-items:flex-end;gap:6px;height:150px;padding:10px 4px 4px;direction:ltr}
+.cbar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:3px;min-width:0}
+.cbar i{display:block;width:100%;max-width:30px;background:linear-gradient(180deg,#12866F,#0E6E60);border-radius:5px 5px 0 0;min-height:3px}
+.cbar span{font-size:9.5px;color:#8A9499;white-space:nowrap}
+.cbar b{font-size:10.5px}
+.hbar{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12.5px}
+.hbar .nm{width:110px;flex-shrink:0}
+.hbar .tr{flex:1;background:#F1EDE6;border-radius:999px;height:14px;overflow:hidden}
+.hbar .tr i{display:block;height:100%;background:linear-gradient(90deg,#F2A03D,#E4572E);border-radius:999px}
+.hbar b{width:44px;text-align:left;flex-shrink:0}
+.donutwrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.donut{width:120px;height:120px;border-radius:50%;position:relative;flex-shrink:0}
+.donut::after{content:'';position:absolute;inset:26px;background:#fff;border-radius:50%}
+.leg{font-size:12.5px}
+.leg div{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.leg i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.chip{background:#F1EDE6;color:#5E7078;border:none;border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:600;cursor:pointer}
+.chip.on{background:#16323C;color:#fff}
+.chip b{color:#E4572E}.chip.on b{color:#F2A03D}
 .low{color:#C0421C;font-weight:700}
 .tag{font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 9px;background:#F1EDE6;color:#5E7078}
-.iconb{padding:6px 10px;font-size:12px}
-h3{font-size:15.5px;margin-bottom:10px}
+.iconb{padding:6px 12px;font-size:12px}
+h3{font-size:15px;margin-bottom:10px}
 .note{background:#FDF0DC;border:1px solid #F0DCB5;border-radius:10px;padding:9px 13px;font-size:12.5px;color:#7A5511;margin-bottom:12px}
-@media(max-width:640px){.row2,.row3{grid-template-columns:1fr}body{padding:12px}}
+@media(max-width:720px){.row2,.grid2{grid-template-columns:1fr}body{padding:12px}.hbar .nm{width:80px}}
 </style>
 </head>
 <body>
 <h1>Senior — لوحة الفريق</h1>
-<p class="sub">المدرّسون · المناديب · الطلبات · الإحصاءات · العمولات · المخزون · أكواد الطلاب</p>
+<p class="sub">الرئيسية · الطلبات · المخزون · المدرّسون · المناديب · العمولات · أكواد الطلاب</p>
 
 <div class="card" id="loginCard">
   <div class="row2">
@@ -57,7 +81,41 @@ h3{font-size:15.5px;margin-bottom:10px}
 
 <div id="panel" style="display:none">
   <div class="tabs" id="tabBar"></div>
-  <div class="card" id="tab-t"><div id="tList">…</div></div>
+
+  <!-- dashboard -->
+  <div id="tab-d">
+    <div id="dAlerts"></div>
+    <div class="kpis" id="dKpis"></div>
+    <div class="card"><h3>📈 الطلبات — آخر ١٤ يوماً</h3><div class="chart" id="dDays"></div></div>
+    <div class="grid2">
+      <div class="card"><h3>📚 المبيعات حسب الكتاب</h3><div id="dBooks"></div></div>
+      <div class="card"><h3>🧾 حالة الطلبات</h3><div class="donutwrap"><div class="donut" id="dDonut"></div><div class="leg" id="dLeg"></div></div></div>
+    </div>
+    <div class="card"><h3>🗺️ أعلى المحافظات</h3><div id="dGovs"></div></div>
+  </div>
+
+  <!-- orders -->
+  <div class="card" id="tab-o" style="display:none">
+    <div class="chips" id="oChips"></div>
+    <div class="filters">
+      <div><label>بحث (اسم / موبايل)</label><input id="oq" oninput="renderOrders()"></div>
+      <div><label>المحافظة</label><select id="ofg" onchange="renderOrders()"><option value="">الكل</option></select></div>
+      <button class="b-g" onclick="exportOrdersCSV()">⬇️ تصدير Excel (CSV)</button>
+      <button class="b-g" onclick="refreshAll()">↻ تحديث</button>
+    </div>
+    <div class="note">🧾 <b>الفواتير:</b> زر «فاتورة» بجوار كل طلب يفتح الفاتورة — للتنزيل اختر «حفظ بتنسيق PDF» من نافذة الطباعة.</div>
+    <div id="oList">…</div>
+  </div>
+
+  <!-- inventory -->
+  <div class="card" id="tab-i" style="display:none">
+    <div id="iList">…</div>
+  </div>
+
+  <!-- teachers -->
+  <div class="card" id="tab-t" style="display:none"><div id="tList">…</div></div>
+
+  <!-- reps -->
   <div class="card" id="tab-r" style="display:none">
     <div class="row2">
       <div><label>اسم المندوب</label><input id="repName"></div>
@@ -67,23 +125,15 @@ h3{font-size:15.5px;margin-bottom:10px}
     <div class="msg" id="repMsg"></div>
     <div id="rList" style="margin-top:14px">…</div>
   </div>
-  <div class="card" id="tab-o" style="display:none">
-    <div class="filters">
-      <div><label>بحث (اسم / موبايل)</label><input id="oq" oninput="renderOrders()"></div>
-      <div><label>الحالة</label><select id="ofs" onchange="renderOrders()"><option value="">الكل</option></select></div>
-      <div><label>المحافظة</label><select id="ofg" onchange="renderOrders()"><option value="">الكل</option></select></div>
-      <button class="b-g" onclick="exportOrdersCSV()">⬇️ تصدير Excel (CSV)</button>
-      <button class="b-g" onclick="loadOrders()">↻ تحديث</button>
-    </div>
-    <div id="oList">…</div>
-  </div>
-  <div class="card" id="tab-s" style="display:none"><div id="sBox">…</div></div>
+
+  <!-- commissions -->
   <div class="card" id="tab-c" style="display:none">
     <div class="note">⚠️ نسب العمولات الحالية مؤقتة (مدرّس 10% · مندوب 5%) حتى تصلنا الأرقام النهائية.</div>
     <button class="b-g" onclick="exportCommCSV()">⬇️ تصدير CSV</button>
     <div id="cList" style="margin-top:12px">…</div>
   </div>
-  <div class="card" id="tab-i" style="display:none"><div id="iList">…</div></div>
+
+  <!-- codes -->
   <div class="card" id="tab-k" style="display:none">
     <div class="filters">
       <div><label>عدد الأكواد الجديدة</label><input id="kCount" type="number" value="100" min="1" max="5000" style="width:120px"></div>
@@ -91,7 +141,7 @@ h3{font-size:15.5px;margin-bottom:10px}
       <button class="b-g" onclick="dlUnactivated()">⬇️ الأكواد غير المفعَّلة</button>
     </div>
     <div class="msg" id="kMsg"></div>
-    <div class="grid4" id="kStats"></div>
+    <div class="kpis" id="kStats"></div>
     <h3>آخر الأكواد المفعَّلة</h3>
     <div id="kList">…</div>
   </div>
@@ -99,14 +149,16 @@ h3{font-size:15.5px;margin-bottom:10px}
 
 <script>
 const API='https://senior-api.seniorbooksegy.workers.dev';
-const TABS=[['t','المدرّسون الجدد'],['r','المناديب'],['o','الطلبات'],['s','الإحصاءات'],['c','العمولات'],['i','المخزون'],['k','أكواد الطلاب']];
+const TABS=[['d','🏠 الرئيسية'],['o','الطلبات'],['i','المخزون'],['t','المدرّسون'],['r','المناديب'],['c','العمولات'],['k','أكواد الطلاب']];
 const BOOKS={sharh:'الشرح',exercises:'التمارين',skills:'المهارات',comprehension:'قطع الفهم',grammar:'القواعد',bundle:'المجموعة كاملة'};
 const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي'};
+const STC={new:'#E4572E',confirmed:'#F2A03D',shipped:'#3B82C4',delivered:'#1C7A46',cancelled:'#8A9499'};
 const BT={student:'طالب',teacher:'مدرّس',library:'مكتبة',guest:'زائر'};
-let BASE=localStorage.getItem('snr_api')||API, KEY=localStorage.getItem('snr_key')||'', ORDERS=[], COMMS=[];
+let BASE=localStorage.getItem('snr_api')||API, KEY=localStorage.getItem('snr_key')||'', ORDERS=[], COMMS=[], STATS=null, OFILTER='';
 document.getElementById('apiUrl').value=BASE;
 if(KEY)document.getElementById('adminKey').value=KEY;
 document.getElementById('tabBar').innerHTML=TABS.map(([k,l],i)=>`<button id="tb-${k}" class="${i===0?'on':''}" onclick="show('${k}')">${l}</button>`).join('');
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 async function api(path,opts={}){
   const r=await fetch(BASE+path,{...opts,headers:{'Content-Type':'application/json','x-admin-key':KEY,...(opts.headers||{})}});
@@ -124,13 +176,156 @@ async function connect(){
     localStorage.setItem('snr_api',BASE);localStorage.setItem('snr_key',KEY);
     document.getElementById('loginCard').style.display='none';
     document.getElementById('panel').style.display='block';
-    loadTeachers();loadReps();loadOrders();loadStats();loadComms();loadInv();loadCodes();
+    refreshAll();
   }catch(e){m.textContent='تعذّر الاتصال: '+e.message}
 }
+function refreshAll(){loadStats();loadOrders();loadInv();loadTeachers();loadReps();loadComms();loadCodes()}
 function show(k){TABS.forEach(([x])=>{document.getElementById('tab-'+x).style.display=x===k?'block':'none';document.getElementById('tb-'+x).classList.toggle('on',x===k)})}
-const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-/* ---- teachers ---- */
+/* ================= DASHBOARD ================= */
+async function loadStats(){
+  try{
+    const s=await api('/api/admin/stats');STATS=s;
+    const open=(s.byStatus||[]).filter(x=>['new','confirmed','shipped'].includes(x.status)).reduce((a,x)=>a+x.c,0);
+    const newC=((s.byStatus||[]).find(x=>x.status==='new')||{}).c||0;
+    document.getElementById('dKpis').innerHTML=
+      `<div class="kpi" style="--c:#E4572E"><div class="n">${s.today.c||0}</div><div class="l">طلبات اليوم</div><div class="s">${s.today.s||0} ج</div></div>
+       <div class="kpi" style="--c:#F2A03D"><div class="n">${s.week.c||0}</div><div class="l">آخر ٧ أيام</div><div class="s">${s.week.s||0} ج</div></div>
+       <div class="kpi" style="--c:#0E6E60"><div class="n">${s.month.c||0}</div><div class="l">آخر ٣٠ يوماً</div><div class="s">${s.month.s||0} ج</div></div>
+       <div class="kpi" style="--c:#3B82C4"><div class="n">${open}</div><div class="l">طلبات مفتوحة</div><div class="s">${newC} بانتظار التأكيد</div></div>
+       <div class="kpi" style="--c:#1C7A46"><div class="n">${s.ref.withCode||0}/${s.ref.total||0}</div><div class="l">طلبات بكود خصم</div></div>
+       <div class="kpi" style="--c:#7C5CBF"><div class="n">${s.plus.activated||0}/${s.plus.codes||0}</div><div class="l">أكواد Plus مفعَّلة</div><div class="s">${s.plus.reports||0} تقرير طالب</div></div>`;
+    const al=[];
+    if(newC)al.push(`<div class="alert">🔔 <span style="flex:1">${newC} طلب جديد بانتظار التأكيد</span><button class="b-o" onclick="show('o');filterStatus('new')">عرض</button></div>`);
+    if(s.pendingTeachers)al.push(`<div class="alert">🧑‍🏫 <span style="flex:1">${s.pendingTeachers} مدرّس بانتظار المراجعة</span><button class="b-o" onclick="show('t')">مراجعة</button></div>`);
+    (s.lowStock||[]).forEach(b=>al.push(`<div class="alert">📉 <span style="flex:1">مخزون ${BOOKS[b.book_id]||b.book_id} منخفض: ${b.stock} نسخة</span><button class="b-o" onclick="show('i')">المخزون</button></div>`));
+    document.getElementById('dAlerts').innerHTML=al.length?al.join(''):'<div class="ok-line">✅ لا يوجد ما يحتاج تدخلك الآن — كل شيء تحت السيطرة.</div>';
+    /* 14-day bars */
+    const days=[];for(let i=13;i>=0;i--){const d=new Date(Date.now()-i*86400000);days.push(d.toISOString().slice(0,10))}
+    const map={};(s.byDay||[]).forEach(r=>map[r.d]=r);
+    const mx=Math.max(1,...days.map(d=>(map[d]||{}).c||0));
+    document.getElementById('dDays').innerHTML=days.map(d=>{
+      const r=map[d]||{c:0,s:0};const dd=new Date(d);
+      return `<div class="cbar" title="${d}: ${r.c} طلب — ${r.s} ج"><b>${r.c||''}</b><i style="height:${Math.max(3,r.c/mx*100)}%"></i><span>${dd.getDate()}/${dd.getMonth()+1}</span></div>`}).join('');
+    /* books horizontal bars */
+    const bmx=Math.max(1,...(s.byBook||[]).map(b=>+b.qty));
+    document.getElementById('dBooks').innerHTML=(s.byBook||[]).map(b=>
+      `<div class="hbar"><span class="nm">${BOOKS[b.id]||b.id}</span><div class="tr"><i style="width:${b.qty/bmx*100}%"></i></div><b>${b.qty}</b></div>`).join('')||'<p class="msg">لا مبيعات بعد.</p>';
+    /* status donut */
+    const tot=(s.byStatus||[]).reduce((a,x)=>a+x.c,0);
+    if(tot){let acc=0;const segs=(s.byStatus||[]).map(x=>{const from=acc/tot*360;acc+=x.c;return `${STC[x.status]||'#ccc'} ${from}deg ${acc/tot*360}deg`});
+      document.getElementById('dDonut').style.background=`conic-gradient(${segs.join(',')})`;
+      document.getElementById('dLeg').innerHTML=(s.byStatus||[]).map(x=>`<div><i style="background:${STC[x.status]}"></i>${ST[x.status]}: <b>${x.c}</b></div>`).join('');
+    }else{document.getElementById('dDonut').style.background='#F1EDE6';document.getElementById('dLeg').innerHTML='<p class="msg">لا طلبات بعد.</p>'}
+    /* governorates */
+    const gmx=Math.max(1,...(s.byGov||[]).map(g=>+g.c));
+    document.getElementById('dGovs').innerHTML=(s.byGov||[]).map(g=>
+      `<div class="hbar"><span class="nm">${esc(g.g||'—')}</span><div class="tr"><i style="width:${g.c/gmx*100}%;background:linear-gradient(90deg,#12866F,#0E6E60)"></i></div><b>${g.c}</b></div>`).join('')||'<p class="msg">لا بيانات بعد.</p>';
+  }catch(e){document.getElementById('dAlerts').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+
+/* ================= ORDERS ================= */
+const WAMSGS={
+  new:o=>`أهلاً ${o.name}، استلمنا طلبك رقم ${o.id} من Senior وسنتواصل معك لتأكيده قريباً.`,
+  confirmed:o=>`أهلاً ${o.name}، تم تأكيد طلبك رقم ${o.id} من Senior وجارٍ تجهيزه للشحن. الإجمالي: ${o.total} جنيه.`,
+  shipped:o=>`أهلاً ${o.name}، تم شحن طلبك رقم ${o.id} من Senior وسيصلك خلال أيام قليلة. المبلغ المستحق عند الاستلام: ${o.total} جنيه.`,
+  delivered:o=>`أهلاً ${o.name}، نتمنى أن تكون الكتب قد وصلتك بحالة ممتازة. نتمنى لك عاماً دراسياً موفقاً مع Senior!`,
+  cancelled:o=>`أهلاً ${o.name}، تم إلغاء طلبك رقم ${o.id} من Senior. إن كان ذلك عن طريق الخطأ فتواصل معنا في أي وقت.`,
+};
+async function loadOrders(){
+  try{
+    const d=await api('/api/admin/orders');ORDERS=d.orders;
+    const govs=[...new Set(ORDERS.map(o=>o.governorate).filter(Boolean))];
+    document.getElementById('ofg').innerHTML='<option value="">الكل</option>'+govs.map(g=>`<option>${esc(g)}</option>`).join('');
+    renderChips();renderOrders();
+  }catch(e){document.getElementById('oList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+function renderChips(){
+  const counts={'':ORDERS.length};Object.keys(ST).forEach(k=>counts[k]=ORDERS.filter(o=>o.status===k).length);
+  document.getElementById('oChips').innerHTML=[['','الكل'],...Object.entries(ST)].map(([k,l])=>
+    `<button class="chip ${OFILTER===k?'on':''}" onclick="filterStatus('${k}')">${l} <b>${counts[k]||0}</b></button>`).join('');
+}
+function filterStatus(k){OFILTER=k;renderChips();renderOrders()}
+function filteredOrders(){
+  const q=(document.getElementById('oq').value||'').trim(),g=document.getElementById('ofg').value;
+  return ORDERS.filter(o=>(!q||o.name.includes(q)||o.mobile.includes(q))&&(!OFILTER||o.status===OFILTER)&&(!g||o.governorate===g));
+}
+function renderOrders(){
+  const el=document.getElementById('oList'),list=filteredOrders();
+  if(!list.length){el.innerHTML='<p class="msg">لا توجد طلبات مطابقة.</p>';return}
+  el.innerHTML=`<table><tr><th>#</th><th>المشتري</th><th>الكتب</th><th>الإجمالي</th><th>كود</th><th>الحالة</th><th></th></tr>`+
+    list.map(o=>`<tr>
+      <td>${o.id}<br><span style="color:#8A9499;font-size:11px">${esc((o.created_at||'').slice(0,10))}</span></td>
+      <td>${esc(o.name)}<br><span dir="ltr" style="font-size:12px">${esc(o.mobile)}</span><br><span class="tag">${BT[o.buyer_type]||o.buyer_type} · ${esc(o.governorate||'')}</span></td>
+      <td>${o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join('، ')}</td>
+      <td>${o.total} ج</td>
+      <td>${o.ref_code?'<span class="code">'+esc(o.ref_code)+'</span>':'—'}</td>
+      <td><select style="margin:0;width:auto;border-color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></td>
+      <td style="white-space:nowrap">
+        <button class="b-g iconb" onclick="invoice(${o.id})">🧾 فاتورة</button>
+        <button class="b-wa iconb" onclick="waCustomer(${o.id})">💬 واتساب</button>
+      </td></tr>`).join('')+'</table>';
+}
+async function setStatus(id,status){await api('/api/admin/order/status',{method:'POST',body:JSON.stringify({id,status})});const o=ORDERS.find(x=>x.id===id);if(o)o.status=status;renderChips();loadStats();loadInv()}
+function waCustomer(id){
+  const o=ORDERS.find(x=>x.id===id);if(!o)return;
+  window.open(`https://wa.me/2${o.mobile}?text=${encodeURIComponent((WAMSGS[o.status]||WAMSGS.new)(o))}`,'_blank');
+}
+function exportOrdersCSV(){
+  const rows=[['رقم','التاريخ','الاسم','الموبايل','المحافظة','العنوان','الصفة','الكتب','الإجمالي','كود الخصم','الدفع','الحالة']];
+  filteredOrders().forEach(o=>rows.push([o.id,(o.created_at||'').slice(0,16),o.name,o.mobile,o.governorate||'',o.address||'',BT[o.buyer_type]||o.buyer_type,
+    o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join(' + '),o.total,o.ref_code||'',o.pay_method||'',ST[o.status]||o.status]));
+  dlCSV(rows,'senior-orders');
+}
+/* invoice — بيانات البائع placeholders حتى تصل البيانات الرسمية */
+function invoice(id){
+  const o=ORDERS.find(x=>x.id===id);if(!o)return;
+  const rows=o.items.map(i=>`<tr><td>${BOOKS[i.id]||i.id}</td><td>${i.qty}</td><td>${i.price}</td><td>${i.qty*i.price}</td></tr>`).join('');
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>فاتورة ${o.id} — Senior</title>
+  <style>body{font-family:'Readex Pro',system-ui,sans-serif;padding:0;color:#16323C;max-width:640px;margin:0 auto}
+  .bar{background:#16323C;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px}
+  .bar button{font-family:inherit;background:#E4572E;color:#fff;border:none;border-radius:999px;padding:8px 18px;font-weight:600;cursor:pointer}
+  .page{padding:28px}
+  h2{color:#0E6E60}table{width:100%;border-collapse:collapse;margin:14px 0}td,th{border:1px solid #ccc;padding:8px;text-align:right;font-size:13.5px}
+  .tot{font-weight:700;font-size:16px}.ph{color:#999;font-size:12px}.hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #0E6E60;padding-bottom:12px;margin-bottom:14px}
+  @media print{.bar{display:none}}</style></head><body>
+  <div class="bar"><span>للتنزيل كملف PDF: اضغط الزر ثم اختر «حفظ بتنسيق PDF» من قائمة الوجهة</span><button onclick="window.print()">🖨 طباعة / حفظ PDF</button></div>
+  <div class="page">
+  <div class="hd"><div><h2>Senior Books</h2>
+    <div class="ph">[اسم النشاط القانوني — placeholder]<br>س.ت: —————— · ب.ض: ——————<br>القاهرة — الفجالة · 01010101445</div></div>
+    <div style="text-align:left"><b>فاتورة رقم ${o.id}</b><br><span class="ph">${(o.created_at||'').slice(0,10)}</span></div></div>
+  <p><b>العميل:</b> ${o.name} · <span dir="ltr">${o.mobile}</span><br><b>العنوان:</b> ${o.governorate||''} — ${o.address||''}</p>
+  <table><tr><th>الكتاب</th><th>الكمية</th><th>السعر</th><th>القيمة</th></tr>${rows}
+  <tr class="tot"><td colspan="3">الإجمالي${o.ref_code?' (قبل خصم الكود '+o.ref_code+')':''}</td><td>${o.total} ج</td></tr></table>
+  <p>طريقة الدفع: ${o.pay_method||'—'} · الحالة: ${ST[o.status]||o.status}</p>
+  <p class="ph">شكراً لثقتكم في سلسلة Senior — طريقك للتفوق في اللغة الإنجليزية.</p>
+  </div><script>window.print()<\/script></body></html>`);
+  w.document.close();
+}
+
+/* ================= INVENTORY ================= */
+async function loadInv(){
+  const el=document.getElementById('iList');
+  try{
+    const d=await api('/api/admin/inventory');
+    el.innerHTML='<table><tr><th>الكتاب</th><th>المخزون المتاح</th><th>في طلبات مفتوحة</th><th>نسخ مُسلَّمة</th><th>آخر تحديث</th><th></th></tr>'+
+      d.inventory.map(i=>`<tr><td><b>${BOOKS[i.book_id]||i.book_id}</b></td>
+      <td class="${i.stock<100?'low':''}"><input type="number" id="inv-${i.book_id}" value="${i.stock}" min="0" style="width:100px;margin:0"></td>
+      <td>${i.open?`<b style="color:#3B82C4">${i.open}</b> نسخة`:'—'}</td>
+      <td>${i.delivered?`<b style="color:#1C7A46">${i.delivered}</b> نسخة`:'—'}</td>
+      <td style="color:#8A9499;font-size:11.5px">${esc((i.updated_at||'').slice(0,16))}</td>
+      <td><button class="b-t iconb" onclick="saveInv('${i.book_id}')">حفظ</button></td></tr>`).join('')+'</table>'+
+      '<p class="msg">«المخزون المتاح» يُخصم تلقائياً عند كل طلب (المجموعة تخصم من كتبها الأربعة) ويعود عند الإلغاء. «في طلبات مفتوحة» = نسخ في طلبات جديدة/مؤكَّدة/مشحونة لم تُسلَّم بعد.</p>';
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+async function saveInv(id){
+  const v=+document.getElementById('inv-'+id).value;
+  await api('/api/admin/inventory/set',{method:'POST',body:JSON.stringify({book_id:id,stock:v})});
+  loadInv();loadStats();
+}
+
+/* ================= TEACHERS ================= */
 async function loadTeachers(){
   const el=document.getElementById('tList');
   try{
@@ -150,12 +345,12 @@ async function approve(id,mobile){
   if(d.code){
     const msg=encodeURIComponent(`أهلاً بك في برنامج مدرّسي Senior.\nتم اعتماد تسجيلك، وهذا كود الخصم الخاص بك: ${d.code}\nشاركه مع طلابك ليحصلوا على خصمهم عند الطلب من seniorbookegy.com`);
     if(confirm('تم الاعتماد. الكود: '+d.code+'\nفتح واتساب لإرساله للمدرّس؟'))window.open(`https://wa.me/2${mobile}?text=${msg}`,'_blank');
-    loadTeachers();
+    loadTeachers();loadStats();
   }
 }
-async function reject(id){if(confirm('رفض هذا الطلب؟')){await api('/api/admin/teacher/reject',{method:'POST',body:JSON.stringify({id})});loadTeachers()}}
+async function reject(id){if(confirm('رفض هذا الطلب؟')){await api('/api/admin/teacher/reject',{method:'POST',body:JSON.stringify({id})});loadTeachers();loadStats()}}
 
-/* ---- reps ---- */
+/* ================= REPS ================= */
 async function addRep(){
   const name=document.getElementById('repName').value.trim(),mobile=document.getElementById('repMob').value.trim();
   const m=document.getElementById('repMsg');
@@ -175,94 +370,7 @@ async function loadReps(){
   }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 
-/* ---- orders ---- */
-const WAMSGS={
-  new:o=>`أهلاً ${o.name}، استلمنا طلبك رقم ${o.id} من Senior وسنتواصل معك لتأكيده قريباً.`,
-  confirmed:o=>`أهلاً ${o.name}، تم تأكيد طلبك رقم ${o.id} من Senior وجارٍ تجهيزه للشحن. الإجمالي: ${o.total} جنيه.`,
-  shipped:o=>`أهلاً ${o.name}، تم شحن طلبك رقم ${o.id} من Senior وسيصلك خلال أيام قليلة. المبلغ المستحق عند الاستلام: ${o.total} جنيه.`,
-  delivered:o=>`أهلاً ${o.name}، نتمنى أن تكون الكتب قد وصلتك بحالة ممتازة. نتمنى لك عاماً دراسياً موفقاً مع Senior!`,
-  cancelled:o=>`أهلاً ${o.name}، تم إلغاء طلبك رقم ${o.id} من Senior. إن كان ذلك عن طريق الخطأ فتواصل معنا في أي وقت.`,
-};
-async function loadOrders(){
-  try{
-    const d=await api('/api/admin/orders');ORDERS=d.orders;
-    const fs=document.getElementById('ofs');fs.innerHTML='<option value="">الكل</option>'+Object.keys(ST).map(k=>`<option value="${k}">${ST[k]}</option>`).join('');
-    const govs=[...new Set(ORDERS.map(o=>o.governorate).filter(Boolean))];
-    document.getElementById('ofg').innerHTML='<option value="">الكل</option>'+govs.map(g=>`<option>${esc(g)}</option>`).join('');
-    renderOrders();
-  }catch(e){document.getElementById('oList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
-}
-function filteredOrders(){
-  const q=(document.getElementById('oq').value||'').trim(),s=document.getElementById('ofs').value,g=document.getElementById('ofg').value;
-  return ORDERS.filter(o=>(!q||o.name.includes(q)||o.mobile.includes(q))&&(!s||o.status===s)&&(!g||o.governorate===g));
-}
-function renderOrders(){
-  const el=document.getElementById('oList'),list=filteredOrders();
-  if(!list.length){el.innerHTML='<p class="msg">لا توجد طلبات مطابقة.</p>';return}
-  el.innerHTML=`<p class="msg" style="margin:0 0 8px">${list.length} طلب</p><table><tr><th>#</th><th>المشتري</th><th>الكتب</th><th>الإجمالي</th><th>كود</th><th>الحالة</th><th></th></tr>`+
-    list.map(o=>`<tr>
-      <td>${o.id}<br><span style="color:#8A9499;font-size:11px">${esc((o.created_at||'').slice(0,10))}</span></td>
-      <td>${esc(o.name)}<br><span dir="ltr" style="font-size:12px">${esc(o.mobile)}</span><br><span class="tag">${BT[o.buyer_type]||o.buyer_type} · ${esc(o.governorate||'')}</span></td>
-      <td>${o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join('، ')}</td>
-      <td>${o.total} ج</td>
-      <td>${o.ref_code?'<span class="code">'+esc(o.ref_code)+'</span>':'—'}</td>
-      <td><select style="margin:0;width:auto" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></td>
-      <td style="white-space:nowrap">
-        <button class="b-wa iconb" title="واتساب للعميل" onclick="waCustomer(${o.id})">💬</button>
-        <button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🖨</button>
-      </td></tr>`).join('')+'</table>';
-}
-async function setStatus(id,status){await api('/api/admin/order/status',{method:'POST',body:JSON.stringify({id,status})});const o=ORDERS.find(x=>x.id===id);if(o)o.status=status}
-function waCustomer(id){
-  const o=ORDERS.find(x=>x.id===id);if(!o)return;
-  window.open(`https://wa.me/2${o.mobile}?text=${encodeURIComponent((WAMSGS[o.status]||WAMSGS.new)(o))}`,'_blank');
-}
-function exportOrdersCSV(){
-  const rows=[['رقم','التاريخ','الاسم','الموبايل','المحافظة','العنوان','الصفة','الكتب','الإجمالي','كود الخصم','الدفع','الحالة']];
-  filteredOrders().forEach(o=>rows.push([o.id,(o.created_at||'').slice(0,16),o.name,o.mobile,o.governorate||'',o.address||'',BT[o.buyer_type]||o.buyer_type,
-    o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join(' + '),o.total,o.ref_code||'',o.pay_method||'',ST[o.status]||o.status]));
-  dlCSV(rows,'senior-orders');
-}
-/* ---- invoice (بيانات البائع placeholders حتى تصل البيانات الرسمية) ---- */
-function invoice(id){
-  const o=ORDERS.find(x=>x.id===id);if(!o)return;
-  const rows=o.items.map(i=>`<tr><td>${BOOKS[i.id]||i.id}</td><td>${i.qty}</td><td>${i.price}</td><td>${i.qty*i.price}</td></tr>`).join('');
-  const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>فاتورة ${o.id}</title>
-  <style>body{font-family:'Readex Pro',system-ui,sans-serif;padding:28px;color:#16323C;max-width:640px;margin:0 auto}
-  h2{color:#0E6E60}table{width:100%;border-collapse:collapse;margin:14px 0}td,th{border:1px solid #ccc;padding:8px;text-align:right;font-size:13.5px}
-  .tot{font-weight:700;font-size:16px}.ph{color:#999;font-size:12px}.hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #0E6E60;padding-bottom:12px;margin-bottom:14px}</style></head><body>
-  <div class="hd"><div><h2>Senior Books</h2>
-    <div class="ph">[اسم النشاط القانوني — placeholder]<br>س.ت: —————— · ب.ض: ——————<br>القاهرة — الفجالة · 01010101445</div></div>
-    <div style="text-align:left"><b>فاتورة رقم ${o.id}</b><br><span class="ph">${(o.created_at||'').slice(0,10)}</span></div></div>
-  <p><b>العميل:</b> ${o.name} · <span dir="ltr">${o.mobile}</span><br><b>العنوان:</b> ${o.governorate||''} — ${o.address||''}</p>
-  <table><tr><th>الكتاب</th><th>الكمية</th><th>السعر</th><th>القيمة</th></tr>${rows}
-  <tr class="tot"><td colspan="3">الإجمالي${o.ref_code?' (قبل خصم الكود '+o.ref_code+')':''}</td><td>${o.total} ج</td></tr></table>
-  <p>طريقة الدفع: ${o.pay_method||'—'} · الحالة: ${ST[o.status]||o.status}</p>
-  <p class="ph">شكراً لثقتكم في سلسلة Senior — طريقك للتفوق في اللغة الإنجليزية.</p>
-  <script>window.print()<\/script></body></html>`);
-  w.document.close();
-}
-
-/* ---- stats ---- */
-async function loadStats(){
-  const el=document.getElementById('sBox');
-  try{
-    const s=await api('/api/admin/stats');
-    el.innerHTML=`<div class="grid4">
-      <div class="stat"><div class="n">${s.today.c||0}</div><div class="l">طلبات اليوم (${s.today.s||0} ج)</div></div>
-      <div class="stat"><div class="n">${s.week.c||0}</div><div class="l">آخر ٧ أيام (${s.week.s||0} ج)</div></div>
-      <div class="stat"><div class="n">${s.month.c||0}</div><div class="l">آخر ٣٠ يوماً (${s.month.s||0} ج)</div></div>
-      <div class="stat"><div class="n">${s.ref.withCode||0}/${s.ref.total||0}</div><div class="l">طلبات بكود خصم</div></div>
-      <div class="stat"><div class="n">${s.plus.activated||0}/${s.plus.codes||0}</div><div class="l">أكواد Senior Plus مفعَّلة</div></div>
-      <div class="stat"><div class="n">${s.plus.reports||0}</div><div class="l">تقارير طلاب محفوظة</div></div></div>
-    <div class="row2"><div><h3>المبيعات حسب الكتاب</h3><table><tr><th>الكتاب</th><th>نسخ</th></tr>${(s.byBook||[]).map(b=>`<tr><td>${BOOKS[b.id]||b.id}</td><td>${b.qty}</td></tr>`).join('')||'<tr><td colspan="2">—</td></tr>'}</table></div>
-    <div><h3>أعلى المحافظات</h3><table><tr><th>المحافظة</th><th>طلبات</th></tr>${(s.byGov||[]).map(g=>`<tr><td>${esc(g.g||'—')}</td><td>${g.c}</td></tr>`).join('')||'<tr><td colspan="2">—</td></tr>'}</table></div></div>
-    <h3 style="margin-top:12px">حالات الطلبات</h3><table><tr>${(s.byStatus||[]).map(x=>`<td>${ST[x.status]||x.status}: <b>${x.c}</b></td>`).join('')||'<td>—</td>'}</tr></table>`;
-  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
-}
-
-/* ---- commissions ---- */
+/* ================= COMMISSIONS ================= */
 async function loadComms(){
   const el=document.getElementById('cList');
   try{
@@ -279,33 +387,14 @@ function exportCommCSV(){
   dlCSV(rows,'senior-commissions');
 }
 
-/* ---- inventory ---- */
-async function loadInv(){
-  const el=document.getElementById('iList');
-  try{
-    const d=await api('/api/admin/inventory');
-    el.innerHTML='<table><tr><th>الكتاب</th><th>المخزون</th><th>آخر تحديث</th><th></th></tr>'+
-      d.inventory.map(i=>`<tr><td>${BOOKS[i.book_id]||i.book_id}</td>
-      <td class="${i.stock<100?'low':''}"><input type="number" id="inv-${i.book_id}" value="${i.stock}" min="0" style="width:110px;margin:0"></td>
-      <td style="color:#8A9499;font-size:11.5px">${esc((i.updated_at||'').slice(0,16))}</td>
-      <td><button class="b-t iconb" onclick="saveInv('${i.book_id}')">حفظ</button></td></tr>`).join('')+'</table>'+
-      '<p class="msg">يُخصم المخزون تلقائياً مع كل طلب (المجموعة تخصم من كتبها الأربعة)، ويعود عند إلغاء الطلب.</p>';
-  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
-}
-async function saveInv(id){
-  const v=+document.getElementById('inv-'+id).value;
-  await api('/api/admin/inventory/set',{method:'POST',body:JSON.stringify({book_id:id,stock:v})});
-  loadInv();
-}
-
-/* ---- student codes ---- */
+/* ================= CODES ================= */
 async function loadCodes(){
   try{
     const d=await api('/api/admin/codes?activated=1');
     document.getElementById('kStats').innerHTML=
-      `<div class="stat"><div class="n">${d.total}</div><div class="l">إجمالي الأكواد</div></div>
-       <div class="stat"><div class="n">${d.activated}</div><div class="l">مفعَّلة</div></div>
-       <div class="stat"><div class="n">${d.total-d.activated}</div><div class="l">متبقية</div></div>`;
+      `<div class="kpi" style="--c:#0E6E60"><div class="n">${d.total}</div><div class="l">إجمالي الأكواد</div></div>
+       <div class="kpi" style="--c:#1C7A46"><div class="n">${d.activated}</div><div class="l">مفعَّلة</div></div>
+       <div class="kpi" style="--c:#F2A03D"><div class="n">${d.total-d.activated}</div><div class="l">متبقية</div></div>`;
     document.getElementById('kList').innerHTML=d.list.length?'<table><tr><th>الكود</th><th>الطالب</th><th>موبايل</th><th>تاريخ التفعيل</th></tr>'+
       d.list.slice(0,50).map(c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(c.student_name||'—')}</td><td dir="ltr">${esc(c.mobile||'—')}</td><td>${esc((c.activated_at||'').slice(0,16))}</td></tr>`).join('')+'</table>'
       :'<p class="msg">لا توجد أكواد مفعَّلة بعد.</p>';
@@ -324,7 +413,7 @@ async function dlUnactivated(){
   dlCSV([['code'],...d.list.map(c=>[c.code])],'senior-codes-unactivated');
 }
 
-/* ---- CSV helper (UTF-8 BOM for Excel Arabic) ---- */
+/* CSV helper (UTF-8 BOM for Excel Arabic) */
 function dlCSV(rows,name){
   const csv='﻿'+rows.map(r=>r.map(v=>`"${String(v==null?'':v).replace(/"/g,'""')}"`).join(',')).join('\r\n');
   const a=document.createElement('a');
