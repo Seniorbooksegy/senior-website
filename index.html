@@ -839,6 +839,7 @@ header.scr .brand img{height:26px}
       <div class="tcta">
         <a class="btn b-wa" id="twa" target="_blank" rel="noopener" data-ar="تواصل واتساب" data-en="WhatsApp us"></a>
         <a href="#contact" class="btn" style="background:#fff;color:var(--teal)" data-ar="نموذج الشراكة" data-en="Partnership form"></a>
+        <a href="affiliate.html" class="btn" style="background:rgba(255,255,255,.14);color:#fff;border:1.5px solid rgba(255,255,255,.4)" data-ar="📊 لوحة المدرّس الشريك" data-en="📊 Partner dashboard"></a>
       </div>
     </div>
   </div>
@@ -930,7 +931,8 @@ header.scr .brand img{height:26px}
       <a href="#shop" class="btn b-o b-sm" style="margin-top:10px" data-ar="اطلب الآن" data-en="Order now"></a>
     </div>
   </div>
-  <div class="wrap fbot"><span data-ar="© 2026 Senior — جميع الحقوق محفوظة · تأليف الأستاذ صلاح علي · توزيع مؤسسة الكتب الذهبية" data-en="© 2026 Senior — All rights reserved · By Mr. Salah Ali · Distributed by Golden Books"></span></div>
+  <div class="wrap fbot"><span data-ar="© 2026 Senior — جميع الحقوق محفوظة · تأليف الأستاذ صلاح علي · توزيع مؤسسة الكتب الذهبية" data-en="© 2026 Senior — All rights reserved · By Mr. Salah Ali · Distributed by Golden Books"></span>
+    <span style="display:block;margin-top:6px"><a href="policies.html#privacy" style="color:#8CA3A9;text-decoration:underline;text-underline-offset:3px" data-ar="سياسة الخصوصية" data-en="Privacy policy"></a> · <a href="policies.html#partnership" style="color:#8CA3A9;text-decoration:underline;text-underline-offset:3px" data-ar="سياسة الشراكة" data-en="Partnership policy"></a></span></div>
 </footer>
 
 <!-- CART -->
@@ -1020,6 +1022,7 @@ header.scr .brand img{height:26px}
       <div class="pt-cards">
         <div class="pt-card" onclick="ptShow('pt-texist')"><div class="em">🔑</div><div><h4 data-ar="لديّ كود مدرّس" data-en="I have a teacher code"></h4><p data-ar="فعّل كودك واستمتع بخصمك مباشرة." data-en="Activate your code and get your discount right away."></p></div></div>
         <div class="pt-card" onclick="ptShow('pt-tnew')"><div class="em">📝</div><div><h4 data-ar="مدرّس جديد — التسجيل" data-en="New teacher — register"></h4><p data-ar="سجّل بياناتك، وبعد مراجعة فريقنا يصلك كودك الخاص عبر واتساب." data-en="Submit your details; after our team's review, your code arrives on WhatsApp."></p></div></div>
+        <a class="pt-card" href="affiliate.html" style="text-decoration:none"><div class="em">📊</div><div><h4 data-ar="لوحة المدرّس الشريك" data-en="Partner teacher dashboard"></h4><p data-ar="تابع طلبات كودك وأرباحك، واحصل على رابطك الخاص لمشاركته مع طلابك." data-en="Track your code's orders and earnings, and get your personal link to share with your students."></p></div></a>
       </div>
     </div>
 
@@ -1054,7 +1057,7 @@ header.scr .brand img{height:26px}
           <div class="fld"><label data-ar="البريد الإلكتروني" data-en="Email"></label><input id="ptn-e" dir="ltr" type="email"></div>
         </div>
         <button class="btn b-o" style="width:100%" onclick="ptTeacherNew()" data-ar="إرسال طلب التسجيل" data-en="Submit registration"></button>
-        <p class="pt-note" data-ar="يراجع فريقنا الطلب، ثم يصلك كودك الخاص عبر واتساب خلال يومي عمل." data-en="Our team reviews the request, then your code arrives on WhatsApp within two working days."></p>
+        <p class="pt-note" data-ar="يراجع فريقنا الطلب، ثم يصلك كودك الخاص عبر واتساب خلال يومي عمل. بإرسال الطلب فإنك توافق على <a href='policies.html#partnership' target='_blank' style='color:var(--teal);font-weight:600'>سياسة الشراكة</a>." data-en="Our team reviews the request, then your code arrives on WhatsApp within two working days. By submitting you agree to the <a href='policies.html#partnership' target='_blank' style='color:var(--teal);font-weight:600'>partnership policy</a>."></p>
       </div>
     </div>
 
@@ -1846,6 +1849,22 @@ async function ptLib(){
 }
 ['pts-g','ptn-a','ptl-g'].forEach(id=>{const s=document.getElementById(id);if(s&&!s.options.length)GOVS.forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=g;s.appendChild(o)})});
 renderPtBanner();
+/* teacher affiliate link: ?ref=SNR-T-xxxx auto-applies the code for the student */
+(function(){
+  try{
+    const ref=new URLSearchParams(location.search).get('ref');
+    if(ref&&/^SNR-T-/i.test(ref.trim())){
+      const code=ref.trim().toUpperCase();
+      apiFetch('/api/code/check?code='+encodeURIComponent(code)).then(d=>{
+        if(d&&d.valid&&d.kind==='teacher'){
+          setBuyer({type:'student',name:'',mobile:'',gov:'',code,teacher:d.name||'',verified:true,auto:true});
+          toast(t('تم تفعيل كود المدرّس','Teacher code applied')+(d.name?' — '+d.name:''));
+          if(typeof track==='function')track('ev','ref',code);
+        }
+      });
+    }
+  }catch(e){}
+})();
 
 /* ===== MOTION: scroll reveal, counters, header shrink ===== */
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Senior — لوحة المدرّس الشريك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Readex Pro',system-ui,sans-serif;background:#FBF8F3;color:#16323C;line-height:1.7;padding:18px;max-width:760px;margin:0 auto}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.top img{height:34px}
+h1{font-size:19px}
+.sub{color:#5E7078;font-size:13px}
+.card{background:#fff;border:1px solid #EAE2D6;border-radius:16px;padding:18px;margin-bottom:14px}
+label{display:block;font-size:12.5px;font-weight:600;margin-bottom:4px}
+input{padding:10px 12px;border:1.5px solid #D8E3E0;border-radius:10px;font-family:inherit;font-size:14px;width:100%;margin-bottom:10px}
+button{font-family:inherit;font-weight:600;font-size:13.5px;border:none;border-radius:999px;padding:10px 20px;cursor:pointer}
+.b-t{background:#0E6E60;color:#fff}.b-o{background:#E4572E;color:#fff}.b-g{background:#fff;border:1.5px solid #D8E3E0;color:#0E6E60}
+.b-wa{background:#25D366;color:#fff}
+.msg{font-size:13px;color:#5E7078;margin-top:8px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:10px;margin-bottom:4px}
+.kpi{background:#fff;border:1px solid #EAE2D6;border-radius:14px;padding:12px;text-align:center}
+.kpi .n{font-size:21px;font-weight:700;color:#0E6E60;line-height:1.4}
+.kpi .l{font-size:11px;color:#5E7078}
+.kpi.hot .n{color:#E4572E}
+.code{font-weight:700;color:#0E6E60;direction:ltr;display:inline-block}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 6px;border-bottom:1px dashed #EAE2D6;text-align:right}
+th{color:#5E7078;font-weight:600}
+.share{background:linear-gradient(135deg,#DDF1ED,#fff);border:1.5px solid #D8E3E0}
+.linkbox{display:flex;gap:8px;align-items:center;background:#fff;border:1.5px dashed #0E6E60;border-radius:12px;padding:10px 14px;margin:10px 0;direction:ltr;font-size:13px;overflow-wrap:anywhere}
+.linkbox span{flex:1}
+h3{font-size:15px;margin-bottom:10px}
+textarea{width:100%;border:1.5px solid #D8E3E0;border-radius:12px;padding:12px;font-family:inherit;font-size:13.5px;line-height:1.9;margin-bottom:8px}
+.note{background:#FDF0DC;border:1px solid #F0DCB5;border-radius:10px;padding:9px 13px;font-size:12.5px;color:#7A5511;margin-bottom:12px}
+.hd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.out{background:none;border:none;color:#8A9499;font-size:12.5px;text-decoration:underline;cursor:pointer;padding:0}
+.tier{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tbadge{font-size:14px;font-weight:700;border-radius:999px;padding:7px 18px}
+.t-silver{background:#EEF1F4;color:#5E7078}.t-gold{background:#FDF0DC;color:#B07419}.t-platinum{background:#E8E4F5;color:#7C5CBF}
+.prog{flex:1;min-width:180px}
+.prog .bar{background:#F1EDE6;border-radius:999px;height:10px;overflow:hidden}
+.prog .bar i{display:block;height:100%;background:linear-gradient(90deg,#F2A03D,#E4572E);border-radius:999px}
+.prog span{font-size:11.5px;color:#5E7078}
+.wd{background:#E8F5EC;border:1.5px solid #CBE7D3}
+.wd .amt{font-size:22px;font-weight:700;color:#14532D}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.chip{background:#F1EDE6;color:#5E7078;border:none;border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:600;cursor:pointer}
+.chip.on{background:#0E6E60;color:#fff}
+.st{font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 9px}
+.s-new{background:#FDE9E0;color:#C0421C}.s-confirmed{background:#FDF0DC;color:#B07419}.s-shipped{background:#E3EEF7;color:#3B82C4}.s-delivered{background:#E8F5EC;color:#1C7A46}
+.steps{display:flex;gap:6px;margin-top:12px}
+.step{flex:1;text-align:center;background:#fff;border:1.5px solid #EAE2D6;border-radius:12px;padding:10px 6px;font-size:12px;font-weight:600;color:#8A9499;position:relative}
+.step small{display:block;font-weight:400;font-size:10.5px;margin-top:2px}
+.step.done{border-color:#1C7A46;color:#14532D;background:#E8F5EC}
+.step.cur{border-color:#F2A03D;color:#B07419;background:#FDF0DC}
+</style>
+</head>
+<body>
+<div class="top"><img src="senior-logo.png?v=2" alt="Senior"><div><h1>لوحة المدرّس الشريك</h1><p class="sub">تابع طلبات كودك وأرباحك في أي وقت</p></div></div>
+
+<div class="card" id="loginCard">
+  <h3>🔑 الدخول بكودك</h3>
+  <label>كود المدرّس</label><input id="aCode" dir="ltr" placeholder="SNR-T-0000">
+  <label>رقم الموبايل المسجَّل به</label><input id="aMob" dir="ltr" placeholder="01xxxxxxxxx">
+  <button class="b-t" onclick="login()">عرض لوحتي</button>
+  <div class="msg" id="loginMsg"></div>
+  <p class="msg">ليس لديك كود بعد؟ سجّل من <a href="index.html#shop" style="color:#0E6E60;font-weight:600">بوابة الشراء — مدرّس جديد</a> وسيصلك كودك بعد المراجعة.</p>
+  <p class="msg"><a href="policies.html#partnership" target="_blank" style="color:#0E6E60">📄 سياسة الشراكة</a> · <a href="policies.html#privacy" target="_blank" style="color:#0E6E60">🔒 سياسة الخصوصية</a></p>
+</div>
+
+<div id="panel" style="display:none">
+  <div class="hd"><h3 style="margin:0">أهلاً، <span id="aName"></span> 👋 <span class="code" id="aCodeChip"></span></h3>
+    <span><a href="policies.html#partnership" target="_blank" style="color:#0E6E60;font-weight:600;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;margin-inline-end:12px">📄 سياسة الشراكة</a>
+    <a href="policies.html#privacy" target="_blank" style="color:#0E6E60;font-weight:600;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;margin-inline-end:12px">🔒 الخصوصية</a>
+    <button class="out" onclick="logout()">تسجيل خروج</button></span></div>
+  <div class="note">⚠️ الأرقام المعروضة حالياً أرقام تجريبية للعرض — النسب النهائية تُعتمد قريباً.</div>
+
+  <div class="card share">
+    <h3>🔗 رابطك الخاص</h3>
+    <p style="font-size:13px;color:#33474E">شاركه مع طلابك — يفتح الموقع وخصمهم مفعَّل تلقائياً بكودك، وتُحتسب طلباتهم لك.</p>
+    <div class="linkbox"><span id="aLink"></span><button class="b-g" style="padding:6px 14px" onclick="copyLink()">نسخ</button></div>
+    <button class="b-wa" onclick="waShare()">💬 مشاركة عبر واتساب</button>
+  </div>
+
+  <div class="card">
+    <h3>🏅 درجتك في برنامج الشركاء</h3>
+    <div class="tier">
+      <span class="tbadge" id="tBadge"></span>
+      <div class="prog" id="tProg"></div>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="n" id="kDel">0</div><div class="l">طلبات مُسلَّمة</div></div>
+    <div class="kpi"><div class="n" id="kOpen">0</div><div class="l">قيد التنفيذ</div></div>
+    <div class="kpi"><div class="n" id="kPct">0%</div><div class="l">نسبتك</div></div>
+    <div class="kpi hot"><div class="n" id="kComm">0</div><div class="l">عمولة محقَّقة (ج)</div></div>
+    <div class="kpi"><div class="n" id="kExp">0</div><div class="l">متوقَّع بعد التسليم (ج)</div></div>
+    <div class="kpi"><div class="n" id="kPaid">0</div><div class="l">مدفوع (ج)</div></div>
+    <div class="kpi hot"><div class="n" id="kPend">0</div><div class="l">مستحق للسحب (ج)</div></div>
+  </div>
+  <p class="msg" style="margin:-4px 0 12px">تُحتسب العمولة على الطلبات <b>المُسلَّمة</b> فقط — طلباتك قيد التنفيذ تتحول إلى عمولة فور تسليمها.</p>
+
+  <div class="card wd">
+    <h3>💸 سحب أرباحك</h3>
+    <div id="wdBox">—</div>
+  </div>
+
+  <div class="card">
+    <h3>🧾 الطلبات التي جاءت عبرك</h3>
+    <div class="chips">
+      <button class="chip on" id="p7" onclick="setPeriod(7)">آخر أسبوع</button>
+      <button class="chip" id="p30" onclick="setPeriod(30)">آخر شهر</button>
+      <button class="chip" id="p0" onclick="setPeriod(0)">كل الفترات</button>
+    </div>
+    <div id="aOrders">—</div>
+  </div>
+
+  <div class="card"><h3>📅 الأداء الشهري</h3><div id="aMonthly">—</div></div>
+  <div class="card"><h3>💸 دفعات العمولة</h3><div id="aPays">—</div></div>
+
+  <div class="card">
+    <h3>📣 منشور جاهز لمجموعة طلابك</h3>
+    <textarea id="aPromo" rows="6" readonly></textarea>
+    <button class="b-t" onclick="copyPromo()">نسخ المنشور</button>
+  </div>
+</div>
+
+<script>
+const API='https://senior-api.seniorbooksegy.workers.dev';
+const SITE='https://seniorbookegy.com';
+let A=null;
+const saved=localStorage.getItem('snr_aff');
+if(saved){try{const s=JSON.parse(saved);document.getElementById('aCode').value=s.code;document.getElementById('aMob').value=s.mobile;login()}catch(e){}}
+async function login(){
+  const code=document.getElementById('aCode').value.trim().toUpperCase(),mobile=document.getElementById('aMob').value.trim();
+  const m=document.getElementById('loginMsg');
+  if(!code||!mobile){m.textContent='أدخل الكود ورقم الموبايل.';return}
+  m.textContent='جارٍ التحميل…';
+  try{
+    const r=await fetch(`${API}/api/affiliate/summary?code=${encodeURIComponent(code)}&mobile=${encodeURIComponent(mobile)}`);
+    const d=await r.json();
+    if(!d.ok){m.textContent=d.error==='mobile_mismatch'?'رقم الموبايل لا يطابق المسجَّل لهذا الكود.':'الكود غير موجود أو لم يُعتمد بعد.';return}
+    A=d;localStorage.setItem('snr_aff',JSON.stringify({code,mobile}));
+    render();
+  }catch(e){m.textContent='تعذّر الاتصال — حاول مرة أخرى.'}
+}
+function logout(){localStorage.removeItem('snr_aff');location.reload()}
+let PERIOD=7;
+const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم'};
+const BOOKS={sharh:'الشرح',exercises:'التمارين',skills:'المهارات',comprehension:'قطع الفهم',grammar:'القواعد',bundle:'المجموعة كاملة'};
+function setPeriod(p){PERIOD=p;['p7','p30','p0'].forEach(id=>document.getElementById(id).classList.remove('on'));document.getElementById('p'+p).classList.add('on');renderOrders()}
+function renderOrders(){
+  const el=document.getElementById('aOrders');
+  const cut=PERIOD?Date.now()-PERIOD*86400000:0;
+  const list=(A.orderList||[]).filter(o=>!cut||new Date(o.created_at.replace(' ','T')+'Z').getTime()>=cut);
+  if(!list.length){el.innerHTML='<p class="msg">لا توجد طلبات في هذه الفترة.</p>';return}
+  const totD=list.filter(o=>o.status==='delivered').reduce((s,o)=>s+o.total,0);
+  const totO=list.filter(o=>o.status!=='delivered').reduce((s,o)=>s+o.total,0);
+  el.innerHTML=`<p class="msg" style="margin:0 0 8px"><b>${list.length}</b> طلب — عمولة محقَّقة <b>${Math.round(totD*A.pct/100)} ج</b>${totO?` — متوقَّع بعد التسليم <b>${Math.round(totO*A.pct/100)} ج</b>`:''}</p>
+  <table><tr><th>#</th><th>الطالب</th><th>الكتب</th><th>الإجمالي</th><th>الحالة</th><th>التاريخ</th></tr>`+
+  list.map(o=>`<tr><td>${o.id}</td><td>${o.name}<br><span style="color:#8A9499;font-size:11.5px">${o.governorate||''}</span></td>
+    <td>${o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join('، ')}</td><td>${o.total} ج</td>
+    <td><span class="st s-${o.status}">${ST[o.status]||o.status}</span></td>
+    <td style="color:#8A9499;font-size:11.5px">${(o.created_at||'').slice(0,10)}</td></tr>`).join('')+'</table>';
+}
+function renderWd(){
+  const el=document.getElementById('wdBox');
+  if(A.openReq){
+    const r=A.openReq;
+    const st2=r.status==='processing';
+    el.innerHTML=`<p style="font-size:13.5px">طلب سحب بمبلغ <span class="amt">${r.amount} ج</span> — تتبُّع التحويل:</p>
+      <div class="steps">
+        <div class="step done">✓ استُلم طلبك<small>${(r.created_at||'').slice(0,10)}</small></div>
+        <div class="step ${st2?'done':'cur'}">${st2?'✓ ':''}قيد التحويل<small>${st2?(r.processing_at||'').slice(0,10):'بانتظار الفريق'}</small></div>
+        <div class="step">تم التحويل<small>يصلك رقم العملية هنا</small></div>
+      </div>`;
+  }else if(A.pending>0){
+    el.innerHTML=`<p style="font-size:13.5px;margin-bottom:10px">المستحق لك حالياً: <span class="amt">${A.pending} ج</span></p>
+      <button class="b-o" onclick="requestWithdraw()">طلب تحويل المستحق الآن</button>
+      <p class="msg" style="margin-top:8px">يُحوَّل عبر فودافون كاش أو إنستاباي على رقمك المسجَّل. يمكنك طلب سحب مرة واحدة حتى يكتمل التحويل.</p>`;
+  }else{
+    el.innerHTML='<p class="msg">لا يوجد مستحق للسحب حالياً — استمر في مشاركة رابطك مع طلابك.</p>';
+  }
+}
+async function requestWithdraw(){
+  const s=JSON.parse(localStorage.getItem('snr_aff'));
+  const r=await fetch(API+'/api/affiliate/withdraw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:s.code,mobile:s.mobile})}).then(x=>x.json());
+  if(r.ok){alert('تم تسجيل طلب السحب بمبلغ '+r.amount+' ج — سيحوّله الفريق قريباً.');login()}
+  else alert(r.error==='already_requested'?'لديك طلب سحب قيد التنفيذ بالفعل.':'لا يوجد مستحق للسحب.');
+}
+function render(){
+  document.getElementById('loginCard').style.display='none';
+  document.getElementById('panel').style.display='block';
+  document.getElementById('aName').textContent=A.name;
+  document.getElementById('aCodeChip').textContent=A.code;
+  document.getElementById('aLink').textContent=`${SITE}/?ref=${A.code}`;
+  document.getElementById('kDel').textContent=A.delivered;
+  document.getElementById('kOpen').textContent=A.openOrders;
+  document.getElementById('kPct').textContent=A.pct+'%';
+  document.getElementById('kComm').textContent=A.commission;
+  document.getElementById('kExp').textContent=A.expected;
+  document.getElementById('kPaid').textContent=A.paid;
+  document.getElementById('kPend').textContent=A.pending;
+  /* tier badge + progress */
+  const tb=document.getElementById('tBadge');
+  tb.textContent=(A.tier.k==='silver'?'🥈 الشريك الفضّي':A.tier.k==='gold'?'🥇 الشريك الذهبي':'💎 الشريك البلاتيني')+' — '+A.tier.pct+'%';
+  tb.className='tbadge t-'+A.tier.k;
+  const pr=document.getElementById('tProg');
+  if(A.tier.next){
+    const nextMin=A.orders+A.tier.next.needed;
+    const pctBar=Math.min(100,Math.round(A.orders/nextMin*100));
+    pr.innerHTML=`<div class="bar"><i style="width:${pctBar}%"></i></div><span>بقي <b>${A.tier.next.needed}</b> طلباً للترقية إلى ${A.tier.next.ar==='ذهبي'?'🥇 الذهبي':'💎 البلاتيني'} (${A.tier.next.pct}%)</span>`;
+  }else{
+    pr.innerHTML='<span>وصلت لأعلى درجة — نسبة '+A.tier.pct+'% على كل الطلبات 🎉</span>';
+  }
+  renderWd();renderOrders();
+  document.getElementById('aMonthly').innerHTML=A.monthly.length
+    ?'<table><tr><th>الشهر</th><th>طلبات</th><th>مبيعات</th><th>منها مُسلَّم</th><th>عمولتك</th></tr>'+A.monthly.map(r=>`<tr><td>${r.m}</td><td>${r.c}</td><td>${r.s} ج</td><td>${r.sd} ج</td><td><b>${Math.round(r.sd*A.pct/100)} ج</b></td></tr>`).join('')+'</table>'
+    :'<p class="msg">لا طلبات بعد — شارك رابطك مع طلابك اليوم.</p>';
+  document.getElementById('aPays').innerHTML=A.payouts.length
+    ?'<table><tr><th>الشهر</th><th>المبلغ</th><th>الحالة</th><th>المرجع</th><th>التاريخ</th></tr>'+A.payouts.map(p=>`<tr><td>${p.month||'—'}</td><td><b>${p.amount} ج</b></td><td>${p.status==='paid'?'<span class="st s-delivered">تم التحويل</span>':'<span class="st s-confirmed">قيد التنفيذ</span>'}</td><td>${p.ref||'—'}</td><td style="color:#8A9499;font-size:12px">${(p.paid_at||p.created_at||'').slice(0,10)}</td></tr>`).join('')+'</table>'
+    :'<p class="msg">لم تُصرف دفعات بعد — اطلب سحب مستحقك متى تجاوز صفراً.</p>';
+  document.getElementById('aPromo').value=
+`لطلابي الأعزاء 📚
+سلسلة Senior في اللغة الإنجليزية — شرح وتدريبات وقطع فهم بإجابات نموذجية كاملة.
+اطلبوا من هذا الرابط وخصمكم الخاص مفعَّل تلقائياً:
+${SITE}/?ref=${A.code}
+أو أدخلوا كودي عند الطلب: ${A.code}
+بالتوفيق للجميع 🌟`;
+}
+function copyLink(){navigator.clipboard.writeText(`${SITE}/?ref=${A.code}`);alert('تم نسخ الرابط')}
+function copyPromo(){navigator.clipboard.writeText(document.getElementById('aPromo').value);alert('تم نسخ المنشور')}
+function waShare(){window.open('https://wa.me/?text='+encodeURIComponent(document.getElementById('aPromo').value),'_blank')}
+</script>
+</body>
+</html>

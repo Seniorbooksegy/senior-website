@@ -139,9 +139,11 @@ h3{font-size:15px;margin-bottom:10px}
 
   <!-- commissions -->
   <div class="card" id="tab-c" style="display:none">
-    <div class="note">⚠️ نسب العمولات الحالية مؤقتة (مدرّس 10% · مندوب 5%) حتى تصلنا الأرقام النهائية.</div>
+    <div class="note">⚠️ تُحتسب العمولة على الطلبات <b>المُسلَّمة فقط</b>. الدرجات والنسب الحالية تجريبية: 🥈 فضّي 10% (حتى ١٠٠ طلب مُسلَّم) · 🥇 ذهبي 12% (١٠٠–٥٠٠) · 💎 بلاتيني 15% (+٥٠٠) · مندوب 5%.</div>
+    <div id="wReqs"></div>
     <button class="b-g" onclick="exportCommCSV()">⬇️ تصدير CSV</button>
     <div id="cList" style="margin-top:12px">…</div>
+    <div id="pDetail" style="margin-top:14px"></div>
   </div>
 
   <!-- codes -->
@@ -209,6 +211,7 @@ async function loadStats(){
     const al=[];
     if(newC)al.push(`<div class="alert">🔔 <span style="flex:1">${newC} طلب جديد بانتظار التأكيد</span><button class="b-o" onclick="show('o');filterStatus('new')">عرض</button></div>`);
     if(s.pendingTeachers)al.push(`<div class="alert">🧑‍🏫 <span style="flex:1">${s.pendingTeachers} مدرّس بانتظار المراجعة</span><button class="b-o" onclick="show('t')">مراجعة</button></div>`);
+    if(s.openWithdrawals&&s.openWithdrawals.c)al.push(`<div class="alert">💸 <span style="flex:1">${s.openWithdrawals.c} طلب سحب عمولة بإجمالي ${s.openWithdrawals.s} ج</span><button class="b-o" onclick="show('c')">تحويل</button></div>`);
     (s.lowStock||[]).forEach(b=>al.push(`<div class="alert">📉 <span style="flex:1">مخزون ${BOOKS[b.book_id]||b.book_id} منخفض: ${b.stock} نسخة</span><button class="b-o" onclick="show('i')">المخزون</button></div>`));
     document.getElementById('dAlerts').innerHTML=al.length?al.join(''):'<div class="ok-line">✅ لا يوجد ما يحتاج تدخلك الآن — كل شيء تحت السيطرة.</div>';
     /* 14-day bars */
@@ -429,16 +432,80 @@ async function loadComms(){
   const el=document.getElementById('cList');
   try{
     const d=await api('/api/admin/commissions');COMMS=d.commissions;
-    el.innerHTML=COMMS.length?'<table><tr><th>الكود</th><th>الاسم</th><th>الصفة</th><th>طلبات</th><th>مبيعات</th><th>النسبة</th><th>العمولة</th></tr>'+
-      COMMS.map(c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(c.name)}</td><td>${c.kind==='teacher'?'مدرّس':c.kind==='rep'?'مندوب':'—'}</td>
-      <td>${c.orders}</td><td>${c.revenue} ج</td><td>${c.pct}%</td><td><b>${c.commission} ج</b></td></tr>`).join('')+'</table>'
+    el.innerHTML=COMMS.length?'<table><tr><th>الكود</th><th>الاسم</th><th>الدرجة</th><th>طلبات</th><th>مُسلَّم</th><th>مبيعات مُسلَّمة</th><th>النسبة</th><th>العمولة</th><th>مدفوع</th><th>مستحق</th><th></th></tr>'+
+      COMMS.map(c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(c.name)}</td>
+      <td>${c.kind==='rep'?'مندوب':c.tier==='فضّي'?'🥈 فضّي':c.tier==='ذهبي'?'🥇 ذهبي':c.tier==='بلاتيني'?'💎 بلاتيني':'—'}</td>
+      <td>${c.orders}</td><td>${c.delivered}</td><td>${c.revenue} ج</td><td>${c.pct}%</td><td><b>${c.commission} ج</b></td>
+      <td style="color:#1C7A46">${c.paid} ج</td><td style="color:#C0421C"><b>${c.pending} ج</b>${c.requested?`<br><span class="tag">قيد السحب: ${c.requested} ج</span>`:''}</td>
+      <td style="white-space:nowrap"><button class="b-g iconb" onclick="showPartner('${esc(c.code)}')">👤 التفاصيل</button>
+      ${c.pending>0&&!c.requested?`<button class="b-t iconb" onclick="payOut('${esc(c.code)}',${c.pending})">💸 دفعة</button>`:''}</td></tr>`).join('')+'</table>'
       :'<p class="msg">لا توجد طلبات بأكواد بعد.</p>';
+    loadWithdrawals();
   }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 function exportCommCSV(){
-  const rows=[['الكود','الاسم','الصفة','طلبات','مبيعات','النسبة %','العمولة']];
-  COMMS.forEach(c=>rows.push([c.code,c.name,c.kind==='teacher'?'مدرّس':'مندوب',c.orders,c.revenue,c.pct,c.commission]));
+  const rows=[['الكود','الاسم','الصفة','طلبات','مبيعات','النسبة %','العمولة','مدفوع','مستحق']];
+  COMMS.forEach(c=>rows.push([c.code,c.name,c.kind==='teacher'?'مدرّس':'مندوب',c.orders,c.revenue,c.pct,c.commission,c.paid,c.pending]));
   dlCSV(rows,'senior-commissions');
+}
+async function loadWithdrawals(){
+  const el=document.getElementById('wReqs');
+  try{
+    const d=await api('/api/admin/withdrawals');
+    el.innerHTML=(d.withdrawals||[]).length?'<h3>💸 طلبات سحب بانتظار التحويل</h3>'+d.withdrawals.map(w=>
+      `<div class="alert">💰 <span style="flex:1"><b>${esc(w.name)}</b> (<span class="code">${esc(w.code)}</span>) يطلب سحب <b>${w.amount} ج</b> — <span dir="ltr">${esc(w.mobile)}</span> · ${esc((w.created_at||'').slice(0,10))} ${w.status==='processing'?'<span class="tag">قيد التحويل منذ '+esc((w.processing_at||'').slice(0,10))+'</span>':''}</span>
+       ${w.status==='requested'?`<button class="b-g" onclick="advWithdrawal(${w.id})">بدء التحويل</button>`:''}
+       <button class="b-t" onclick="payWithdrawal(${w.id})">تم التحويل ✓</button></div>`).join('')+'<div style="height:8px"></div>':'';
+  }catch(e){el.innerHTML=''}
+}
+async function advWithdrawal(id){
+  await api('/api/admin/withdrawal/advance',{method:'POST',body:JSON.stringify({id})});
+  loadComms();
+}
+async function payWithdrawal(id){
+  const ref=prompt('مرجع التحويل (رقم عملية فودافون كاش / إنستاباي):')||'';
+  await api('/api/admin/withdrawal/pay',{method:'POST',body:JSON.stringify({id,ref})});
+  loadComms();loadStats();
+}
+const STAF={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي'};
+async function showPartner(code){
+  const el=document.getElementById('pDetail');
+  el.innerHTML='<p class="msg">جارٍ التحميل…</p>';
+  try{
+    const d=await api('/api/admin/affiliate?code='+encodeURIComponent(code));
+    const i=d.info,n=d.numbers;
+    el.innerHTML=`<div class="card" style="border-color:#0E6E60;margin-bottom:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <h3 style="margin:0">👤 ${esc(i.name)} <span class="code">${esc(code)}</span> ${d.kind==='teacher'?(n.tier.k==='silver'?'🥈':n.tier.k==='gold'?'🥇':'💎')+' '+esc(n.tier.ar):'(مندوب)'}</h3>
+        <button class="b-g iconb" onclick="document.getElementById('pDetail').innerHTML=''">إغلاق ×</button></div>
+      <p class="msg" style="margin:6px 0 10px">📱 <span dir="ltr">${esc(i.mobile||'')}</span>${i.email?' · ✉️ '+esc(i.email):''}${i.area?' · 📍 '+esc(i.area):''}${i.seniority?' · خبرة: '+esc(i.seniority):''}${i.approved_at?' · اعتُمد: '+esc(i.approved_at.slice(0,10)):''}</p>
+      <div class="kpis">
+        <div class="kpi" style="--c:#0E6E60"><div class="n">${n.delivered}/${n.orders}</div><div class="l">مُسلَّم / إجمالي الطلبات</div></div>
+        <div class="kpi" style="--c:#F2A03D"><div class="n">${n.revenue}</div><div class="l">مبيعات مُسلَّمة (ج)</div></div>
+        <div class="kpi" style="--c:#E4572E"><div class="n">${n.commission}</div><div class="l">عمولة ${n.tier?n.tier.pct+'%':''} (ج)</div></div>
+        <div class="kpi" style="--c:#3B82C4"><div class="n">${n.expected}</div><div class="l">متوقَّع بعد التسليم (ج)</div></div>
+        <div class="kpi" style="--c:#1C7A46"><div class="n">${n.paid}</div><div class="l">مدفوع (ج)</div></div>
+        <div class="kpi" style="--c:#C0421C"><div class="n">${n.pending}</div><div class="l">مستحق (ج)</div></div></div>
+      <h3>الطلبات عبر هذا الكود</h3>
+      ${d.orderList.length?'<table><tr><th>#</th><th>العميل</th><th>الكتب</th><th>الإجمالي</th><th>الحالة</th><th>التاريخ</th></tr>'+
+        d.orderList.map(o=>`<tr><td>${o.id}</td><td>${esc(o.name)}<br><span dir="ltr" style="font-size:11.5px">${esc(o.mobile)}</span></td>
+        <td>${o.items.map(x=>(BOOKS[x.id]||x.id)+'×'+x.qty).join('، ')}</td><td>${o.total} ج</td><td>${STAF[o.status]||o.status}</td>
+        <td style="color:#8A9499;font-size:11.5px">${esc((o.created_at||'').slice(0,10))}</td></tr>`).join('')+'</table>':'<p class="msg">لا طلبات.</p>'}
+      <h3 style="margin-top:12px">الدفعات</h3>
+      ${d.payouts.length?'<table><tr><th>الشهر</th><th>المبلغ</th><th>الحالة</th><th>المرجع</th></tr>'+
+        d.payouts.map(p=>`<tr><td>${esc(p.month||'—')}</td><td>${p.amount} ج</td><td>${p.status==='paid'?'✅ تم':'⏳ قيد التنفيذ'}</td><td>${esc(p.ref||'—')}</td></tr>`).join('')+'</table>':'<p class="msg">لا دفعات.</p>'}
+    </div>`;
+    el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+async function payOut(code,pending){
+  const amt=prompt(`تسجيل دفعة للكود ${code}\nالمستحق حالياً: ${pending} ج\nأدخل المبلغ المدفوع:`,pending);
+  if(amt===null)return;
+  const a=Math.round(+amt||0);
+  if(a<=0){alert('مبلغ غير صحيح.');return}
+  const ref=prompt('مرجع الدفع (رقم عملية فودافون كاش / إنستاباي) — اختياري:')||'';
+  await api('/api/admin/payout',{method:'POST',body:JSON.stringify({code,amount:a,ref})});
+  loadComms();
 }
 
 /* ================= CODES ================= */
