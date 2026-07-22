@@ -74,6 +74,24 @@ h3{font-size:15px;margin-bottom:10px}
 .tl .ev.as::before{background:#3B82C4}
 .tl .ev small{color:#8A9499;display:block;font-size:11px}
 .trk{font-size:11px;color:#5E7078;direction:ltr;display:inline-block;font-weight:700}
+.ord-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.lensb{background:#fff;border:1.5px solid #D8E3E0;border-radius:999px;width:40px;height:40px;padding:0;font-size:16px;cursor:pointer;flex-shrink:0}
+.lensb.on{background:#16323C;color:#fff;border-color:#16323C}
+.searchpanel{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;background:#F6F1E9;border:1px solid #EAE2D6;border-radius:12px;padding:10px}
+.searchpanel input{flex:1;min-width:200px;margin:0}
+.searchpanel select{width:auto;min-width:150px;margin:0}
+.bname{color:#0E6E60;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;background:none;border:none;font-family:inherit;font-size:12.5px;padding:0;text-align:right}
+.bname:hover{color:#E4572E}
+.items{display:inline-grid;gap:4px}
+.items .it{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;font-size:12px;border-bottom:1px dotted #EAE2D6;padding-bottom:3px}
+.items .it:last-child{border-bottom:none;padding-bottom:0}
+.items .it .bk{font-weight:600;color:#16323C}
+.items .it .qt{color:#5E7078;direction:ltr}
+.items .it .pr{color:#16323C;white-space:nowrap}
+.modalov{position:fixed;inset:0;background:rgba(10,20,24,.5);display:none;z-index:400;padding:16px;overflow:auto}
+.modalov.on{display:block}
+.modalbox{background:#FBF8F3;max-width:740px;margin:16px auto;border-radius:18px;padding:20px;border:1px solid #EAE2D6}
+.modalbox table th{font-size:11.5px}
 @media(max-width:720px){.row2,.row3,.grid2{grid-template-columns:1fr}body{padding:12px}.hbar .nm{width:80px}}
 </style>
 </head>
@@ -112,14 +130,20 @@ h3{font-size:15px;margin-bottom:10px}
 
   <!-- orders -->
   <div class="card" id="tab-o" style="display:none">
-    <div class="chips" id="oTypeChips"></div>
-    <div class="chips" id="oChips"></div>
-    <div class="filters">
-      <div><label>بحث (اسم / موبايل / رقم تتبع)</label><input id="oq" oninput="renderOrders()"></div>
-      <div><label>المحافظة</label><select id="ofg" onchange="renderOrders()"><option value="">الكل</option></select></div>
-      <button class="b-g" onclick="exportOrdersCSV()">⬇️ تصدير Excel (CSV)</button>
+    <div class="ord-bar" style="margin-bottom:10px">
+      <div class="chips" id="oTypeChips" style="margin:0"></div>
+      <button class="lensb" id="lensBtn" onclick="toggleSearch()" title="بحث بالاسم أو الموبايل أو الكود">🔍</button>
     </div>
-    <div class="note">🧾 <b>الفواتير:</b> زر 🧾 يفتح الفاتورة — للتنزيل اختر «حفظ بتنسيق PDF». <b>📝 الملاحظات:</b> لكل طلب خطّ زمني كامل (ملاحظات + تغييرات الحالة + الإسناد).</div>
+    <div class="chips" id="oChips"></div>
+    <div class="searchpanel" id="searchPanel" style="display:none">
+      <input id="oq" placeholder="ابحث بالاسم أو الموبايل أو رقم التتبع أو الكود…" oninput="renderOrders()">
+      <select id="ofg" onchange="renderOrders()"><option value="">كل المحافظات</option></select>
+      <button class="b-g" onclick="clearSearch()">مسح</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <div class="note" style="margin:0;flex:1;min-width:220px">👤 اضغط اسم المشتري لعرض ملفه الكامل · 📝 لكل طلب خطّ زمني · 🧾 فاتورة · 💬 واتساب</div>
+      <button class="b-g" onclick="exportOrdersCSV()">⬇️ Excel</button>
+    </div>
     <div id="oList">…</div>
     <div id="oNotes"></div>
   </div>
@@ -236,6 +260,9 @@ h3{font-size:15px;margin-bottom:10px}
     <div id="gList">…</div>
   </div>
 </div>
+
+<!-- buyer profile popup -->
+<div class="modalov" id="buyerModal" onclick="if(event.target===this)closeBuyer()"><div class="modalbox" id="buyerBox"></div></div>
 
 <script>
 const API='https://senior-api.seniorbooksegy.workers.dev';
@@ -420,23 +447,100 @@ function assignSelect(o){
   const opts=['<option value="">— غير مُسند —</option>',...TEAM.filter(m=>m.active).map(m=>`<option value="${m.id}" ${o.assigned_to===m.id?'selected':''}>${esc(m.name)}</option>`)];
   return `<select style="margin:0;width:auto;max-width:150px;font-size:11.5px" onchange="assignOrder(${o.id},this.value)">${opts.join('')}</select>`;
 }
+function toggleSearch(){const p=document.getElementById('searchPanel'),b=document.getElementById('lensBtn');const open=p.style.display==='none';p.style.display=open?'flex':'none';b.classList.toggle('on',open);if(open)document.getElementById('oq').focus()}
+function clearSearch(){document.getElementById('oq').value='';document.getElementById('ofg').value='';renderOrders()}
+function itemsHtml(o){
+  return '<div class="items">'+o.items.map(i=>`<div class="it"><span class="bk">${BOOKS[i.id]||i.id}</span><span class="qt">×${i.qty}</span><span class="pr">${i.price} ج</span></div>`).join('')+'</div>';
+}
 function renderOrders(){
   const el=document.getElementById('oList'),list=filteredOrders();
   if(!list.length){el.innerHTML='<p class="msg">لا توجد طلبات مطابقة.</p>';return}
-  el.innerHTML=`<table><tr><th>رقم التتبع</th><th>المشتري</th><th>الكتب</th><th>الإجمالي</th><th>كود</th><th>المسؤول</th><th>الحالة</th><th></th></tr>`+
+  el.innerHTML=`<table><tr><th>رقم التتبع<br><span style="font-weight:400;color:#8A9499">تاريخ الطلب</span></th><th>المشتري</th><th>نوع الكتاب · العدد · السعر</th><th>الإجمالي</th><th>الكود</th><th>المسؤول</th><th>الحالة<br><span style="font-weight:400;color:#8A9499">تاريخ التسليم</span></th><th></th></tr>`+
     list.map(o=>`<tr>
-      <td><span class="trk">${esc(o.order_no||('#'+o.id))}</span><br><span style="color:#8A9499;font-size:11px">${esc((o.created_at||'').slice(0,10))}</span></td>
-      <td>${esc(o.name)}<br><span dir="ltr" style="font-size:12px">${esc(o.mobile)}</span><br><span class="tag">${BT[o.buyer_type]||o.buyer_type} · ${esc(o.governorate||'')}${o.city?' — '+esc(o.city):''}</span>${o.school?'<br><span style="color:#8A9499;font-size:11px">🏫 '+esc(o.school)+'</span>':''}${o.utm?'<br><span style="color:#7C5CBF;font-size:10.5px">📣 '+esc(o.utm)+'</span>':''}</td>
-      <td>${o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join('، ')}</td>
-      <td>${o.total} ج</td>
+      <td><span class="trk">${esc(o.order_no||('#'+o.id))}</span><br><span style="color:#8A9499;font-size:11px">🗓️ ${esc((o.created_at||'').slice(0,10))}</span></td>
+      <td><button class="bname" onclick="buyerClick(${o.id})">${esc(o.name)}</button><br><span dir="ltr" style="font-size:11.5px">${esc(o.mobile)}</span><br><span class="tag">${BT[o.buyer_type]||o.buyer_type} · ${esc(o.governorate||'')}${o.city?' — '+esc(o.city):''}</span>${o.school?'<br><span style="color:#8A9499;font-size:11px">🏫 '+esc(o.school)+'</span>':''}${o.utm?'<br><span style="color:#7C5CBF;font-size:10.5px">📣 '+esc(o.utm)+'</span>':''}</td>
+      <td>${itemsHtml(o)}</td>
+      <td><b>${o.total} ج</b></td>
       <td>${o.ref_code?'<span class="code">'+esc(o.ref_code)+'</span>':'—'}</td>
       <td>${assignSelect(o)}</td>
-      <td><select style="margin:0;width:auto;border-color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></td>
+      <td><select style="margin:0;width:auto;border-color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select>${o.delivered_at?'<br><span style="color:#1C7A46;font-size:11px">✅ '+esc(o.delivered_at.slice(0,10))+'</span>':'<br><span style="color:#B9C2C6;font-size:11px">—</span>'}</td>
       <td style="white-space:nowrap">
         <button class="b-g iconb" title="الخط الزمني والملاحظات" onclick="openNotes(${o.id})">📝</button>
         <button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>
         <button class="b-wa iconb" title="واتساب العميل" onclick="waCustomer(${o.id})">💬</button>
       </td></tr>`).join('')+'</table>';
+}
+
+/* ---- buyer profile popup (student / teacher / library) ---- */
+function buyerClick(id){const o=ORDERS.find(x=>x.id===id);if(!o)return;
+  if(o.buyer_type==='teacher'&&o.ref_code)showBuyerCode(o.ref_code);
+  else showBuyerMobile(o.mobile);
+}
+function closeBuyer(){document.getElementById('buyerModal').classList.remove('on')}
+function openBuyerModal(html){document.getElementById('buyerBox').innerHTML=html;document.getElementById('buyerModal').classList.add('on')}
+function ordersMini(list,withCustomer){
+  if(!list||!list.length)return '<p class="msg">لا طلبات بعد.</p>';
+  return '<table><tr><th>رقم التتبع</th>'+(withCustomer?'<th>العميل</th>':'')+'<th>الكتب</th><th>الإجمالي</th><th>الحالة</th><th>تاريخ الطلب</th><th>تاريخ التسليم</th></tr>'+
+    list.map(o=>`<tr><td><span class="trk">${esc(o.order_no||('#'+o.id))}</span></td>
+    ${withCustomer?`<td>${esc(o.name)}<br><span dir="ltr" style="font-size:11px">${esc(o.mobile||'')}</span></td>`:''}
+    <td>${o.items.map(i=>(BOOKS[i.id]||i.id)+'×'+i.qty).join('، ')}</td><td>${o.total} ج</td>
+    <td>${ST[o.status]||o.status}</td><td style="color:#8A9499;font-size:11.5px">${esc((o.created_at||'').slice(0,10))}</td>
+    <td style="color:#1C7A46;font-size:11.5px">${o.delivered_at?esc(o.delivered_at.slice(0,10)):'—'}</td></tr>`).join('')+'</table>';
+}
+async function showBuyerMobile(mob){
+  openBuyerModal('<p class="msg">جارٍ التحميل…</p>');
+  try{
+    const d=await api('/api/admin/customer?mobile='+encodeURIComponent(mob));
+    const p=d.profile||{},lib=d.library;
+    const refLabel=d.kind==='library'?'كود المندوب':'كود المدرّس المُحيل';
+    openBuyerModal(`
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <h3 style="margin:0">👤 ${esc(p.name||'—')} <span class="tag">${BT[d.kind]||d.kind}</span></h3>
+        <button class="b-g iconb" onclick="closeBuyer()">إغلاق ×</button></div>
+      <p class="msg" style="margin:8px 0">📱 <span dir="ltr">${esc(mob)}</span> · 🗓️ أول ظهور على الموقع: <b>${esc((d.firstSeen||'').slice(0,10))||'—'}</b></p>
+      <div class="kpis">
+        <div class="kpi" style="--c:#0E6E60"><div class="n">${d.ordersCount||0}</div><div class="l">عدد الطلبات</div></div>
+        ${d.plus?`<div class="kpi" style="--c:#7C5CBF"><div class="n" style="font-size:15px" dir="ltr">${esc(d.plus.code)}</div><div class="l">كود Senior Plus · فُعّل ${esc((d.plus.activated_at||'').slice(0,10))}</div></div>`:'<div class="kpi" style="--c:#B9C2C6"><div class="n" style="font-size:15px">—</div><div class="l">لا كود Senior Plus مفعَّل</div></div>'}
+        ${d.refCode?`<div class="kpi" style="--c:#F2A03D"><div class="n" style="font-size:15px" dir="ltr">${esc(d.refCode)}</div><div class="l">${refLabel}${d.refName?' · '+esc(d.refName):''}</div></div>`:`<div class="kpi" style="--c:#B9C2C6"><div class="n" style="font-size:15px">—</div><div class="l">${d.kind==='library'?'بدون كود مندوب':'بدون كود مدرّس'}</div></div>`}
+      </div>
+      <h3>📋 البيانات المسجَّلة</h3>
+      <table>
+        <tr><th>المحافظة</th><td>${esc(p.governorate||'—')}</td><th>المدينة/المركز</th><td>${esc(p.city||'—')}</td></tr>
+        <tr><th>المدرسة</th><td>${esc(p.school||'—')}</td><th>المسار</th><td>${esc(p.track||'—')}</td></tr>
+        <tr><th>العنوان</th><td colspan="3">${esc(p.address||'—')}</td></tr>
+        ${lib?`<tr><th>اسم المكتبة</th><td>${esc(lib.name)}</td><th>كود المندوب</th><td>${lib.rep_code?'<span class="code">'+esc(lib.rep_code)+'</span>':'—'}</td></tr>`:''}
+      </table>
+      <h3 style="margin-top:12px">🧾 طلباته</h3>
+      ${ordersMini(d.orders)}
+    `);
+  }catch(e){openBuyerModal('<p class="msg">خطأ: '+esc(e.message)+'</p><button class="b-g iconb" onclick="closeBuyer()">إغلاق</button>')}
+}
+async function showBuyerCode(code){
+  openBuyerModal('<p class="msg">جارٍ التحميل…</p>');
+  try{
+    const d=await api('/api/admin/customer?code='+encodeURIComponent(code));
+    if(d.kind==='teacher'){
+      const i=d.info,tk=d.tier?(d.tier.k==='silver'?'🥈':d.tier.k==='gold'?'🥇':'💎')+' '+d.tier.ar:'—';
+      openBuyerModal(`
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+          <h3 style="margin:0">🧑‍🏫 ${esc(i.name)} <span class="code">${esc(code)}</span> <span class="tag role-kam">${tk}</span></h3>
+          <button class="b-g iconb" onclick="closeBuyer()">إغلاق ×</button></div>
+        <p class="msg" style="margin:8px 0">📱 <span dir="ltr">${esc(i.mobile||'')}</span>${i.email?' · ✉️ '+esc(i.email):''}${i.area?' · 📍 '+esc(i.area):''} · 🗓️ سجّل: <b>${esc((d.firstSeen||'').slice(0,10))}</b>${i.approved_at?' · اعتُمد: '+esc(i.approved_at.slice(0,10)):''}</p>
+        <div class="kpis">
+          <div class="kpi" style="--c:#1C7A46"><div class="n">${d.delivered||0}</div><div class="l">طلبات مُسلَّمة عبر كوده</div></div>
+          <div class="kpi" style="--c:#F2A03D"><div class="n">${d.referredCount||0}</div><div class="l">إجمالي الطلبات عبر كوده</div></div>
+          <div class="kpi" style="--c:#3B82C4"><div class="n" style="font-size:16px">${tk}</div><div class="l">درجته في البرنامج</div></div>
+          <div class="kpi" style="--c:#7C5CBF"><div class="n" style="font-size:15px">${esc(i.expected_students||i.seniority||'—')}</div><div class="l">طلاب متوقَّعون</div></div>
+        </div>
+        <h3>🎓 الطلبة الذين جاؤوا عبر كوده</h3>
+        ${ordersMini(d.referred,true)}
+      `);
+    }else if(d.kind==='rep'){
+      openBuyerModal(`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h3 style="margin:0">🚗 ${esc(d.info.name)} <span class="code">${esc(code)}</span></h3><button class="b-g iconb" onclick="closeBuyer()">إغلاق ×</button></div>
+      <p class="msg">مندوب مبيعات خارجي · <span dir="ltr">${esc(d.info.mobile||'—')}</span> · 🗓️ ${esc((d.firstSeen||'').slice(0,10))}</p>
+      <h3>الطلبات عبر كوده</h3>${ordersMini(d.referred,true)}`);
+    }else{openBuyerModal('<p class="msg">لا بيانات.</p><button class="b-g iconb" onclick="closeBuyer()">إغلاق</button>')}
+  }catch(e){openBuyerModal('<p class="msg">خطأ: '+esc(e.message)+'</p><button class="b-g iconb" onclick="closeBuyer()">إغلاق</button>')}
 }
 async function assignOrder(id,teamId){
   try{
@@ -482,8 +586,8 @@ function waCustomer(id){
   window.open(`https://wa.me/2${o.mobile}?text=${encodeURIComponent((WAMSGS[o.status]||WAMSGS.new)(o))}`,'_blank');
 }
 function exportOrdersCSV(){
-  const rows=[['رقم التتبع','التاريخ','الاسم','الموبايل','المحافظة','المدينة/المركز','المدرسة','العنوان','الصفة','الكتب','الإجمالي','كود الخصم','الدفع','الحالة','المسؤول','الحملة']];
-  filteredOrders().forEach(o=>rows.push([o.order_no||o.id,(o.created_at||'').slice(0,16),o.name,o.mobile,o.governorate||'',o.city||'',o.school||'',o.address||'',BT[o.buyer_type]||o.buyer_type,
+  const rows=[['رقم التتبع','تاريخ الطلب','تاريخ التسليم','الاسم','الموبايل','المحافظة','المدينة/المركز','المدرسة','العنوان','الصفة','الكتب','الإجمالي','كود الخصم','الدفع','الحالة','المسؤول','الحملة']];
+  filteredOrders().forEach(o=>rows.push([o.order_no||o.id,(o.created_at||'').slice(0,16),(o.delivered_at||'').slice(0,16),o.name,o.mobile,o.governorate||'',o.city||'',o.school||'',o.address||'',BT[o.buyer_type]||o.buyer_type,
     o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join(' + '),o.total,o.ref_code||'',o.pay_method||'',ST[o.status]||o.status,o.assigned_name||'',o.utm||'']));
   dlCSV(rows,'senior-orders');
 }
