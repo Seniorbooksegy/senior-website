@@ -60,13 +60,14 @@ textarea{width:100%;border:1.5px solid #D8E3E0;border-radius:12px;padding:12px;f
 </style>
 </head>
 <body>
-<div class="top"><img src="senior-logo.png?v=2" alt="Senior"><div><h1>لوحة المدرّس الشريك</h1><p class="sub">تابع طلبات كودك وأرباحك في أي وقت</p></div></div>
+<div class="top"><img src="senior-logo.png?v=2" alt="Senior"><div><h1>لوحة المدرّس الشريك</h1><p class="sub">تابع طلبات كودك ومكافآتك في أي وقت</p></div></div>
 
 <div class="card" id="loginCard">
   <h3>🔑 الدخول بكودك</h3>
   <label>كود المدرّس</label><input id="aCode" dir="ltr" placeholder="SNR-T-0000">
   <label>رقم الموبايل المسجَّل به</label><input id="aMob" dir="ltr" placeholder="01xxxxxxxxx">
   <button class="b-t" onclick="login()">عرض لوحتي</button>
+  <button class="b-g" style="margin-inline-start:8px" onclick="demoLogin()">👀 شاهد لوحة تجريبية</button>
   <div class="msg" id="loginMsg"></div>
   <p class="msg">ليس لديك كود بعد؟ سجّل من <a href="index.html#shop" style="color:#0E6E60;font-weight:600">بوابة الشراء — مدرّس جديد</a> وسيصلك كودك بعد المراجعة.</p>
   <p class="msg"><a href="policies.html#partnership" target="_blank" style="color:#0E6E60">📄 سياسة الشراكة</a> · <a href="policies.html#privacy" target="_blank" style="color:#0E6E60">🔒 سياسة الخصوصية</a></p>
@@ -106,7 +107,7 @@ textarea{width:100%;border:1.5px solid #D8E3E0;border-radius:12px;padding:12px;f
   <p class="msg" style="margin:-4px 0 12px">تُحتسب العمولة على الطلبات <b>المُسلَّمة</b> فقط — طلباتك قيد التنفيذ تتحول إلى عمولة فور تسليمها.</p>
 
   <div class="card wd">
-    <h3>💸 سحب أرباحك</h3>
+    <h3>💸 سحب مكافآتك</h3>
     <div id="wdBox">—</div>
   </div>
 
@@ -150,6 +151,11 @@ async function login(){
   }catch(e){m.textContent='تعذّر الاتصال — حاول مرة أخرى.'}
 }
 function logout(){localStorage.removeItem('snr_aff');location.reload()}
+function demoLogin(){
+  document.getElementById('aCode').value='SNR-T-1671';
+  document.getElementById('aMob').value='01077777777';
+  login();
+}
 let PERIOD=7;
 const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم'};
 const BOOKS={sharh:'الشرح',exercises:'التمارين',skills:'المهارات',comprehension:'قطع الفهم',grammar:'القواعد',bundle:'المجموعة كاملة'};

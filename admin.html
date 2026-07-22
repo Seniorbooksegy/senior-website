@@ -14,7 +14,7 @@ h1{font-size:21px;margin-bottom:2px}
 .sub{color:#5E7078;font-size:13px;margin-bottom:16px}
 .card{background:#fff;border:1px solid #EAE2D6;border-radius:16px;padding:18px;margin-bottom:14px}
 label{display:block;font-size:12.5px;font-weight:600;margin-bottom:4px}
-input,select{padding:9px 12px;border:1.5px solid #D8E3E0;border-radius:10px;font-family:inherit;font-size:13.5px;width:100%;margin-bottom:10px}
+input,select,textarea{padding:9px 12px;border:1.5px solid #D8E3E0;border-radius:10px;font-family:inherit;font-size:13.5px;width:100%;margin-bottom:10px}
 button{font-family:inherit;font-weight:600;font-size:13px;border:none;border-radius:999px;padding:8px 16px;cursor:pointer}
 .b-t{background:#0E6E60;color:#fff}.b-o{background:#E4572E;color:#fff}.b-g{background:#fff;border:1.5px solid #D8E3E0;color:#0E6E60}
 .b-wa{background:#25D366;color:#fff}
@@ -26,6 +26,7 @@ th{color:#5E7078;font-weight:600;white-space:nowrap}
 .code{font-weight:700;color:#0E6E60;direction:ltr;display:inline-block}
 .msg{font-size:13px;color:#5E7078;margin-top:8px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end}
 .filters input,.filters select{width:auto;min-width:150px;margin-bottom:0}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:14px}
@@ -43,10 +44,10 @@ th{color:#5E7078;font-weight:600;white-space:nowrap}
 .cbar span{font-size:9.5px;color:#8A9499;white-space:nowrap}
 .cbar b{font-size:10.5px}
 .hbar{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12.5px}
-.hbar .nm{width:110px;flex-shrink:0}
+.hbar .nm{width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hbar .tr{flex:1;background:#F1EDE6;border-radius:999px;height:14px;overflow:hidden}
 .hbar .tr i{display:block;height:100%;background:linear-gradient(90deg,#F2A03D,#E4572E);border-radius:999px}
-.hbar b{width:44px;text-align:left;flex-shrink:0}
+.hbar b{min-width:44px;text-align:left;flex-shrink:0}
 .donutwrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .donut{width:120px;height:120px;border-radius:50%;position:relative;flex-shrink:0}
 .donut::after{content:'';position:absolute;inset:26px;background:#fff;border-radius:50%}
@@ -60,30 +61,45 @@ th{color:#5E7078;font-weight:600;white-space:nowrap}
 .chip b{color:#E4572E}.chip.on b{color:#F2A03D}
 .low{color:#C0421C;font-weight:700}
 .tag{font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 9px;background:#F1EDE6;color:#5E7078}
+.tag.role-gm{background:#16323C;color:#fff}.tag.role-kam{background:#0E6E60;color:#fff}.tag.role-sales{background:#F2A03D;color:#0A3B33}
 .iconb{padding:6px 12px;font-size:12px}
 h3{font-size:15px;margin-bottom:10px}
 .note{background:#FDF0DC;border:1px solid #F0DCB5;border-radius:10px;padding:9px 13px;font-size:12.5px;color:#7A5511;margin-bottom:12px}
-@media(max-width:720px){.row2,.grid2{grid-template-columns:1fr}body{padding:12px}.hbar .nm{width:80px}}
+.who{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.who .id{font-size:13px;color:#5E7078}
+.tl{border-inline-start:2px solid #EAE2D6;padding-inline-start:14px;margin:10px 0}
+.tl .ev{position:relative;margin-bottom:10px;font-size:12.5px}
+.tl .ev::before{content:'';position:absolute;inset-inline-start:-20px;top:6px;width:9px;height:9px;border-radius:50%;background:#0E6E60}
+.tl .ev.st::before{background:#F2A03D}
+.tl .ev.as::before{background:#3B82C4}
+.tl .ev small{color:#8A9499;display:block;font-size:11px}
+.trk{font-size:11px;color:#5E7078;direction:ltr;display:inline-block;font-weight:700}
+@media(max-width:720px){.row2,.row3,.grid2{grid-template-columns:1fr}body{padding:12px}.hbar .nm{width:80px}}
 </style>
 </head>
 <body>
 <h1>Senior — لوحة الفريق</h1>
-<p class="sub">الرئيسية · الطلبات · المخزون · المدرّسون · المناديب · العمولات · أكواد الطلاب</p>
+<p class="sub" id="subTitle">منصّة إدارة العمليات — طلبات · مخزون · فريق · مالية</p>
 
 <div class="card" id="loginCard">
   <div class="row2">
     <div><label>رابط الخادم (API)</label><input id="apiUrl" placeholder="https://senior-api.xxx.workers.dev" dir="ltr"></div>
-    <div><label>مفتاح الفريق</label><input id="adminKey" type="password" dir="ltr"></div>
+    <div><label>مفتاحك الشخصي</label><input id="adminKey" type="password" dir="ltr"></div>
   </div>
   <button class="b-t" onclick="connect()">دخول</button>
   <div class="msg" id="loginMsg"></div>
+  <p class="msg">لكل عضو في الفريق مفتاح شخصي بصلاحياته — يستلمه من المدير العام.</p>
 </div>
 
 <div id="panel" style="display:none">
+  <div class="who card" style="padding:10px 16px">
+    <div class="id">👤 <b id="whoName"></b> — <span id="whoRole" class="tag"></span></div>
+    <div><button class="b-g iconb" onclick="refreshAll()">↻ تحديث</button> <button class="b-g iconb" onclick="logout()">خروج</button></div>
+  </div>
   <div class="tabs" id="tabBar"></div>
 
   <!-- dashboard -->
-  <div id="tab-d">
+  <div id="tab-d" style="display:none">
     <div id="dAlerts"></div>
     <div class="kpis" id="dKpis"></div>
     <div class="card"><h3>📈 الطلبات — آخر ١٤ يوماً</h3><div class="chart" id="dDays"></div></div>
@@ -92,42 +108,74 @@ h3{font-size:15px;margin-bottom:10px}
       <div class="card"><h3>🧾 حالة الطلبات</h3><div class="donutwrap"><div class="donut" id="dDonut"></div><div class="leg" id="dLeg"></div></div></div>
     </div>
     <div class="card"><h3>🗺️ أعلى المحافظات</h3><div id="dGovs"></div></div>
-
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
-        <h3 style="margin:0">🌐 تحليلات الموقع</h3>
-        <div class="chips" style="margin:0">
-          <button class="chip on" id="an7" onclick="loadAnalytics(7)">٧ أيام</button>
-          <button class="chip" id="an30" onclick="loadAnalytics(30)">٣٠ يوماً</button>
-        </div>
-      </div>
-      <div id="anBox">…</div>
-    </div>
   </div>
 
   <!-- orders -->
   <div class="card" id="tab-o" style="display:none">
+    <div class="chips" id="oTypeChips"></div>
     <div class="chips" id="oChips"></div>
     <div class="filters">
-      <div><label>بحث (اسم / موبايل)</label><input id="oq" oninput="renderOrders()"></div>
+      <div><label>بحث (اسم / موبايل / رقم تتبع)</label><input id="oq" oninput="renderOrders()"></div>
       <div><label>المحافظة</label><select id="ofg" onchange="renderOrders()"><option value="">الكل</option></select></div>
       <button class="b-g" onclick="exportOrdersCSV()">⬇️ تصدير Excel (CSV)</button>
-      <button class="b-g" onclick="refreshAll()">↻ تحديث</button>
     </div>
-    <div class="note">🧾 <b>الفواتير:</b> زر «فاتورة» بجوار كل طلب يفتح الفاتورة — للتنزيل اختر «حفظ بتنسيق PDF» من نافذة الطباعة.</div>
+    <div class="note">🧾 <b>الفواتير:</b> زر 🧾 يفتح الفاتورة — للتنزيل اختر «حفظ بتنسيق PDF». <b>📝 الملاحظات:</b> لكل طلب خطّ زمني كامل (ملاحظات + تغييرات الحالة + الإسناد).</div>
     <div id="oList">…</div>
+    <div id="oNotes"></div>
   </div>
 
   <!-- inventory -->
   <div class="card" id="tab-i" style="display:none">
+    <div class="chips" id="iChips"></div>
+    <div id="iRestockForm"></div>
     <div id="iList">…</div>
   </div>
 
-  <!-- teachers -->
-  <div class="card" id="tab-t" style="display:none"><div id="tList">…</div></div>
+  <!-- teachers (approved) -->
+  <div class="card" id="tab-t" style="display:none">
+    <h3>🧑‍🏫 المدرّسون المعتمدون</h3>
+    <div id="tList">…</div>
+  </div>
 
-  <!-- reps -->
-  <div class="card" id="tab-r" style="display:none">
+  <!-- join requests -->
+  <div class="card" id="tab-j" style="display:none">
+    <h3>📥 صندوق طلبات الانضمام (مدرّسون جدد)</h3>
+    <div class="note">اعتمد الطلب ليتولّد كود المدرّس، أو أسنده لمدير كبار العملاء للمتابعة أولاً.</div>
+    <div id="jList">…</div>
+  </div>
+
+  <!-- students -->
+  <div id="tab-s" style="display:none">
+    <div class="kpis" id="kStats"></div>
+    <div class="card">
+      <h3>🎟️ أكواد Senior Plus</h3>
+      <div class="filters">
+        <div><label>عدد الأكواد الجديدة</label><input id="kCount" type="number" value="100" min="1" max="5000" style="width:120px"></div>
+        <button class="b-t" id="kGenBtn" onclick="genCodes()">إنشاء وتنزيل CSV</button>
+        <button class="b-g" onclick="dlUnactivated()">⬇️ الأكواد غير المفعَّلة</button>
+      </div>
+      <div class="msg" id="kMsg"></div>
+      <h3 style="margin-top:10px">آخر الأكواد المفعَّلة</h3>
+      <div id="kList">…</div>
+    </div>
+    <div class="grid2">
+      <div class="card"><h3>🏫 أعلى المدارس (من الطلبات)</h3><div id="sSchools">…</div></div>
+      <div class="card"><h3>🛒 الطلاب المشترون</h3><div id="sBuyers" style="max-height:420px;overflow:auto">…</div></div>
+    </div>
+  </div>
+
+  <!-- libraries -->
+  <div class="card" id="tab-l" style="display:none">
+    <h3>🏪 المكتبات</h3>
+    <div class="row3">
+      <div><label>اسم المكتبة</label><input id="lbName"></div>
+      <div><label>موبايل</label><input id="lbMob" dir="ltr"></div>
+      <div><label>المنطقة</label><input id="lbArea"></div>
+    </div>
+    <button class="b-t" onclick="addLibrary()">إضافة مكتبة</button>
+    <div class="msg" id="lbMsg"></div>
+    <div id="lList" style="margin-top:14px">…</div>
+    <h3 style="margin-top:18px">🚗 مناديب المبيعات الخارجيون (أكواد المكتبات)</h3>
     <div class="row2">
       <div><label>اسم المندوب</label><input id="repName"></div>
       <div><label>موبايل</label><input id="repMob" dir="ltr"></div>
@@ -137,45 +185,78 @@ h3{font-size:15px;margin-bottom:10px}
     <div id="rList" style="margin-top:14px">…</div>
   </div>
 
-  <!-- commissions -->
-  <div class="card" id="tab-c" style="display:none">
-    <div class="note">⚠️ تُحتسب العمولة على الطلبات <b>المُسلَّمة فقط</b>. الدرجات والنسب الحالية تجريبية: 🥈 فضّي 10% (حتى ١٠٠ طلب مُسلَّم) · 🥇 ذهبي 12% (١٠٠–٥٠٠) · 💎 بلاتيني 15% (+٥٠٠) · مندوب 5%.</div>
-    <div id="wReqs"></div>
-    <button class="b-g" onclick="exportCommCSV()">⬇️ تصدير CSV</button>
-    <div id="cList" style="margin-top:12px">…</div>
-    <div id="pDetail" style="margin-top:14px"></div>
+  <!-- analytics -->
+  <div class="card" id="tab-a" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+      <h3 style="margin:0">🌐 تحليلات الموقع</h3>
+      <div class="chips" style="margin:0">
+        <button class="chip on" id="an7" onclick="loadAnalytics(7)">٧ أيام</button>
+        <button class="chip" id="an30" onclick="loadAnalytics(30)">٣٠ يوماً</button>
+      </div>
+    </div>
+    <div id="anBox">…</div>
   </div>
 
-  <!-- codes -->
-  <div class="card" id="tab-k" style="display:none">
-    <div class="filters">
-      <div><label>عدد الأكواد الجديدة</label><input id="kCount" type="number" value="100" min="1" max="5000" style="width:120px"></div>
-      <button class="b-t" onclick="genCodes()">إنشاء وتنزيل CSV</button>
-      <button class="b-g" onclick="dlUnactivated()">⬇️ الأكواد غير المفعَّلة</button>
+  <!-- finance -->
+  <div id="tab-f" style="display:none">
+    <div class="kpis" id="fKpis"></div>
+    <div class="grid2">
+      <div class="card"><h3>📅 الإيراد شهرياً</h3><div id="fMonthly">…</div></div>
+      <div class="card"><h3>💳 حسب طريقة الدفع والصفة</h3><div id="fSplits">…</div></div>
     </div>
-    <div class="msg" id="kMsg"></div>
-    <div class="kpis" id="kStats"></div>
-    <h3>آخر الأكواد المفعَّلة</h3>
-    <div id="kList">…</div>
+    <div class="card">
+      <h3>🤝 عمولات الشركاء</h3>
+      <div class="note">⚠️ تُحتسب العمولة على الطلبات <b>المُسلَّمة فقط</b>. الدرجات والنسب الحالية تجريبية: 🥈 فضّي 10% (حتى ١٠٠ طلب مُسلَّم) · 🥇 ذهبي 12% (١٠٠–٥٠٠) · 💎 بلاتيني 15% (+٥٠٠) · مندوب 5%.</div>
+      <div id="wReqs"></div>
+      <button class="b-g" onclick="exportCommCSV()">⬇️ تصدير CSV</button>
+      <div id="cList" style="margin-top:12px">…</div>
+      <div id="pDetail" style="margin-top:14px"></div>
+    </div>
+  </div>
+
+  <!-- team -->
+  <div class="card" id="tab-m" style="display:none">
+    <h3>👥 فريق العمل</h3>
+    <div class="note">الأسماء الحالية placeholders — عدّلها بأسماء فريقك الحقيقية (✏️). كل عضو يدخل اللوحة بمفتاحه الشخصي، وصلاحياته حسب دوره:
+    <b>المدير العام</b> كل شيء · <b>مدير كبار العملاء</b> العمليات والاعتمادات دون المالية والفريق · <b>مبيعات</b> طلباته المُسندة فقط.</div>
+    <div class="row3">
+      <div><label>الاسم</label><input id="tmName"></div>
+      <div><label>موبايل</label><input id="tmMob" dir="ltr"></div>
+      <div><label>الدور</label><select id="tmRole"><option value="sales">مبيعات</option><option value="kam">مدير كبار العملاء</option><option value="gm">مدير عام</option></select></div>
+    </div>
+    <button class="b-t" onclick="addMember()">إضافة عضو</button>
+    <div class="msg" id="tmMsg"></div>
+    <div id="mList" style="margin-top:14px">…</div>
+  </div>
+
+  <!-- audit log -->
+  <div class="card" id="tab-g" style="display:none">
+    <h3>📜 سجل النشاط</h3>
+    <p class="msg" style="margin:0 0 10px">كل إجراء في اللوحة يُسجَّل هنا باسم صاحبه — وقاعدة البيانات نفسها تحتفظ بنسخ استرجاع لآخر ٣٠ يوماً (D1 Time Travel).</p>
+    <div id="gList">…</div>
   </div>
 </div>
 
 <script>
 const API='https://senior-api.seniorbooksegy.workers.dev';
-const TABS=[['d','🏠 الرئيسية'],['o','الطلبات'],['i','المخزون'],['t','المدرّسون'],['r','المناديب'],['c','العمولات'],['k','أكواد الطلاب']];
+const TABS={d:'🏠 الرئيسية',o:'الطلبات',i:'المخزون',t:'المدرّسون',s:'الطلاب',l:'المكتبات',a:'التحليلات',f:'المالية',m:'الفريق',j:'طلبات الانضمام',g:'السجل'};
+const ROLE_TABS={gm:['d','o','j','i','t','s','l','a','f','m','g'],kam:['d','o','j','i','t','s','l','a'],sales:['o']};
 const BOOKS={sharh:'الشرح',exercises:'التمارين',skills:'المهارات',comprehension:'قطع الفهم',grammar:'القواعد',bundle:'المجموعة كاملة'};
 const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي'};
 const STC={new:'#E4572E',confirmed:'#F2A03D',shipped:'#3B82C4',delivered:'#1C7A46',cancelled:'#8A9499'};
 const BT={student:'طالب',teacher:'مدرّس',library:'مكتبة',guest:'زائر'};
-let BASE=localStorage.getItem('snr_api')||API, KEY=localStorage.getItem('snr_key')||'', ORDERS=[], COMMS=[], STATS=null, OFILTER='';
+const ROLE_AR={gm:'المدير العام',kam:'مدير كبار العملاء',sales:'مبيعات'};
+let BASE=localStorage.getItem('snr_api')||API, KEY=localStorage.getItem('snr_key')||'';
+let ME=null, TEAM=[], ORDERS=[], COMMS=[], STATS=null, OFILTER='', OTYPE='', IVIEW='stock';
 document.getElementById('apiUrl').value=BASE;
 if(KEY)document.getElementById('adminKey').value=KEY;
-document.getElementById('tabBar').innerHTML=TABS.map(([k,l],i)=>`<button id="tb-${k}" class="${i===0?'on':''}" onclick="show('${k}')">${l}</button>`).join('');
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const isGM=()=>ME&&ME.role==='gm';
 
 async function api(path,opts={}){
   const r=await fetch(BASE+path,{...opts,headers:{'Content-Type':'application/json','x-admin-key':KEY,...(opts.headers||{})}});
-  if(r.status===401)throw new Error('مفتاح الفريق غير صحيح');
+  if(r.status===401)throw new Error('المفتاح غير صحيح أو الحساب معطَّل');
+  if(r.status===403)throw new Error('هذا الإجراء خارج صلاحياتك');
   return r.json();
 }
 async function connect(){
@@ -185,15 +266,35 @@ async function connect(){
   if(!BASE||!KEY){m.textContent='أدخل الرابط والمفتاح.';return}
   m.textContent='جارٍ الاتصال…';
   try{
-    await api('/api/admin/teachers?status=pending');
+    const me=await api('/api/admin/me');
+    if(!me.ok)throw new Error('تعذّر التحقق من المفتاح');
+    ME=me;
     localStorage.setItem('snr_api',BASE);localStorage.setItem('snr_key',KEY);
     document.getElementById('loginCard').style.display='none';
     document.getElementById('panel').style.display='block';
+    document.getElementById('whoName').textContent=ME.name;
+    const wr=document.getElementById('whoRole');wr.textContent=ME.roleAr;wr.className='tag role-'+ME.role;
+    const tabs=ROLE_TABS[ME.role]||['o'];
+    document.getElementById('tabBar').innerHTML=tabs.map((k,i)=>`<button id="tb-${k}" class="${i===0?'on':''}" onclick="show('${k}')">${k==='o'&&ME.role==='sales'?'📋 طلباتي':TABS[k]}</button>`).join('');
+    show(tabs[0]);
     refreshAll();
   }catch(e){m.textContent='تعذّر الاتصال: '+e.message}
 }
-function refreshAll(){loadStats();loadAnalytics(7);loadOrders();loadInv();loadTeachers();loadReps();loadComms();loadCodes()}
-function show(k){TABS.forEach(([x])=>{document.getElementById('tab-'+x).style.display=x===k?'block':'none';document.getElementById('tb-'+x).classList.toggle('on',x===k)})}
+function logout(){localStorage.removeItem('snr_key');location.reload()}
+async function refreshAll(){
+  /* the team roster feeds the assignment dropdowns — load it before rendering orders */
+  if(ME.role!=='sales'){try{await loadTeamList()}catch(e){}}
+  loadOrders();
+  if(ME.role!=='sales'){loadStats();loadInv();loadTeachersApproved();loadJoin();loadStudents();loadLibraries();loadReps();loadAnalytics(7)}
+  if(ME.role==='gm'){loadFinance();loadComms();loadAudit()}
+}
+function show(k){
+  Object.keys(TABS).forEach(x=>{
+    const el=document.getElementById('tab-'+x),tb=document.getElementById('tb-'+x);
+    if(el)el.style.display=x===k?'block':'none';
+    if(tb)tb.classList.toggle('on',x===k);
+  });
+}
 
 /* ================= DASHBOARD ================= */
 async function loadStats(){
@@ -210,28 +311,25 @@ async function loadStats(){
        <div class="kpi" style="--c:#7C5CBF"><div class="n">${s.plus.activated||0}/${s.plus.codes||0}</div><div class="l">أكواد Plus مفعَّلة</div><div class="s">${s.plus.reports||0} تقرير طالب</div></div>`;
     const al=[];
     if(newC)al.push(`<div class="alert">🔔 <span style="flex:1">${newC} طلب جديد بانتظار التأكيد</span><button class="b-o" onclick="show('o');filterStatus('new')">عرض</button></div>`);
-    if(s.pendingTeachers)al.push(`<div class="alert">🧑‍🏫 <span style="flex:1">${s.pendingTeachers} مدرّس بانتظار المراجعة</span><button class="b-o" onclick="show('t')">مراجعة</button></div>`);
-    if(s.openWithdrawals&&s.openWithdrawals.c)al.push(`<div class="alert">💸 <span style="flex:1">${s.openWithdrawals.c} طلب سحب عمولة بإجمالي ${s.openWithdrawals.s} ج</span><button class="b-o" onclick="show('c')">تحويل</button></div>`);
+    if(isGM()&&s.unassigned)al.push(`<div class="alert">🧭 <span style="flex:1">${s.unassigned} طلب مفتوح غير مُسند لأحد أعضاء الفريق</span><button class="b-o" onclick="show('o')">إسناد</button></div>`);
+    if(s.pendingTeachers)al.push(`<div class="alert">🧑‍🏫 <span style="flex:1">${s.pendingTeachers} مدرّس بانتظار المراجعة</span><button class="b-o" onclick="show('j')">مراجعة</button></div>`);
+    if(isGM()&&s.openWithdrawals&&s.openWithdrawals.c)al.push(`<div class="alert">💸 <span style="flex:1">${s.openWithdrawals.c} طلب سحب عمولة بإجمالي ${s.openWithdrawals.s} ج</span><button class="b-o" onclick="show('f')">تحويل</button></div>`);
     (s.lowStock||[]).forEach(b=>al.push(`<div class="alert">📉 <span style="flex:1">مخزون ${BOOKS[b.book_id]||b.book_id} منخفض: ${b.stock} نسخة</span><button class="b-o" onclick="show('i')">المخزون</button></div>`));
     document.getElementById('dAlerts').innerHTML=al.length?al.join(''):'<div class="ok-line">✅ لا يوجد ما يحتاج تدخلك الآن — كل شيء تحت السيطرة.</div>';
-    /* 14-day bars */
     const days=[];for(let i=13;i>=0;i--){const d=new Date(Date.now()-i*86400000);days.push(d.toISOString().slice(0,10))}
     const map={};(s.byDay||[]).forEach(r=>map[r.d]=r);
     const mx=Math.max(1,...days.map(d=>(map[d]||{}).c||0));
     document.getElementById('dDays').innerHTML=days.map(d=>{
       const r=map[d]||{c:0,s:0};const dd=new Date(d);
       return `<div class="cbar" title="${d}: ${r.c} طلب — ${r.s} ج"><b>${r.c||''}</b><i style="height:${Math.max(3,r.c/mx*100)}%"></i><span>${dd.getDate()}/${dd.getMonth()+1}</span></div>`}).join('');
-    /* books horizontal bars */
     const bmx=Math.max(1,...(s.byBook||[]).map(b=>+b.qty));
     document.getElementById('dBooks').innerHTML=(s.byBook||[]).map(b=>
       `<div class="hbar"><span class="nm">${BOOKS[b.id]||b.id}</span><div class="tr"><i style="width:${b.qty/bmx*100}%"></i></div><b>${b.qty}</b></div>`).join('')||'<p class="msg">لا مبيعات بعد.</p>';
-    /* status donut */
     const tot=(s.byStatus||[]).reduce((a,x)=>a+x.c,0);
     if(tot){let acc=0;const segs=(s.byStatus||[]).map(x=>{const from=acc/tot*360;acc+=x.c;return `${STC[x.status]||'#ccc'} ${from}deg ${acc/tot*360}deg`});
       document.getElementById('dDonut').style.background=`conic-gradient(${segs.join(',')})`;
       document.getElementById('dLeg').innerHTML=(s.byStatus||[]).map(x=>`<div><i style="background:${STC[x.status]}"></i>${ST[x.status]}: <b>${x.c}</b></div>`).join('');
     }else{document.getElementById('dDonut').style.background='#F1EDE6';document.getElementById('dLeg').innerHTML='<p class="msg">لا طلبات بعد.</p>'}
-    /* governorates */
     const gmx=Math.max(1,...(s.byGov||[]).map(g=>+g.c));
     document.getElementById('dGovs').innerHTML=(s.byGov||[]).map(g=>
       `<div class="hbar"><span class="nm">${esc(g.g||'—')}</span><div class="tr"><i style="width:${g.c/gmx*100}%;background:linear-gradient(90deg,#12866F,#0E6E60)"></i></div><b>${g.c}</b></div>`).join('')||'<p class="msg">لا بيانات بعد.</p>';
@@ -256,14 +354,12 @@ async function loadAnalytics(days){
       <div class="kpi" style="--c:#E4572E"><div class="n">${a.views}</div><div class="l">زيارة للصفحة</div></div>
       <div class="kpi" style="--c:#F2A03D"><div class="n">${fmtDur(a.avgSec)}</div><div class="l">متوسط مدة الزيارة</div></div>
       <div class="kpi" style="--c:#3B82C4"><div class="n">${mobPct}%</div><div class="l">من الموبايل</div></div></div>`;
-    /* visitors per day */
     const dayList=[];for(let i=days-1;i>=0;i--){dayList.push(new Date(Date.now()-i*86400000).toISOString().slice(0,10))}
     const dmap={};(a.byDay||[]).forEach(r=>dmap[r.d]=r);
     const dmx=Math.max(1,...dayList.map(d=>(dmap[d]||{}).v||0));
     html+=`<h3>الزوّار يومياً</h3><div class="chart">`+dayList.map(d=>{
       const r=dmap[d]||{v:0,pv:0};const dd=new Date(d);
       return `<div class="cbar" title="${d}: ${r.v} زائر، ${r.pv} زيارة"><b>${r.v||''}</b><i style="height:${Math.max(3,(r.v||0)/dmx*100)}%;background:linear-gradient(180deg,#4a9fd8,#3B82C4)"></i><span>${dd.getDate()}/${dd.getMonth()+1}</span></div>`}).join('')+'</div>';
-    /* sections + funnel */
     const smx=Math.max(1,...(a.sections||[]).map(s=>+s.c));
     const fun=[['visit','زار الموقع'],['cart','أضاف للسلة'],['checkout','فتح إتمام الطلب'],['order','أرسل طلباً']];
     const fmx=Math.max(1,a.funnel.visit||0);
@@ -272,22 +368,26 @@ async function loadAnalytics(days){
       <div><h3>مسار الشراء (زائر فريد)</h3>${fun.map(([k,l])=>{const v=a.funnel[k]||0;const pct=a.funnel.visit?Math.round(v/a.funnel.visit*100):0;
         return `<div class="hbar"><span class="nm">${l}</span><div class="tr"><i style="width:${Math.max(2,v/fmx*100)}%;background:linear-gradient(90deg,#12866F,#0E6E60)"></i></div><b>${v} <span style="color:#8A9499;font-weight:400">(${pct}%)</span></b></div>`}).join('')}
       <p class="msg" style="margin-top:6px">أيضاً: فتح بوابة الشراء ${a.funnel.portal||0} · جرّب Senior Plus ${a.funnel.plus||0} · تصفّح عينة ${a.funnel.sample||0}</p></div></div>`;
-    /* locations + sources */
     html+=`<div class="grid2" style="margin-top:12px">
       <div><h3>الموقع الجغرافي</h3>${(a.countries||[]).map(c=>`<div class="hbar"><span class="nm">${CTRY[c.country]||c.country}</span><div class="tr"><i style="width:${c.c/Math.max(1,(a.countries[0]||{}).c)*100}%"></i></div><b>${c.c}</b></div>`).join('')||'<p class="msg">—</p>'}
       ${(a.cities||[]).length?'<p class="msg">أعلى المدن: '+a.cities.map(c=>`${c.city} (${c.c})`).join(' · ')+'</p>':''}</div>
       <div><h3>مصادر الزيارات</h3>${(a.refs||[]).map(r=>`<div class="hbar"><span class="nm">${r.r==='direct'?'مباشر':esc(r.r)}</span><div class="tr"><i style="width:${r.c/Math.max(1,(a.refs[0]||{}).c)*100}%;background:linear-gradient(90deg,#9b7bd4,#7C5CBF)"></i></div><b>${r.c}</b></div>`).join('')||'<p class="msg">—</p>'}</div></div>`;
+    /* UTM campaign attribution */
+    const um=Math.max(1,...(a.utms||[]).map(u=>+u.c));
+    html+=`<div class="grid2" style="margin-top:12px">
+      <div><h3>📣 حملات UTM — زوّار</h3>${(a.utms||[]).map(u=>`<div class="hbar"><span class="nm" title="${esc(u.utm)}">${esc(u.utm)}</span><div class="tr"><i style="width:${u.c/um*100}%"></i></div><b>${u.c}</b></div>`).join('')||'<p class="msg">لا زيارات من حملات بعد — أضف ?utm_source=…&amp;utm_campaign=… لروابط إعلاناتك.</p>'}</div>
+      <div><h3>📣 حملات UTM — طلبات</h3>${(a.utmOrders||[]).map(u=>`<div class="hbar"><span class="nm" title="${esc(u.utm)}">${esc(u.utm)}</span><div class="tr"><i style="width:${u.c/Math.max(1,(a.utmOrders[0]||{}).c)*100}%;background:linear-gradient(90deg,#12866F,#0E6E60)"></i></div><b>${u.c} (${u.s} ج)</b></div>`).join('')||'<p class="msg">لا طلبات من حملات بعد.</p>'}</div></div>`;
     el.innerHTML=html;
   }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 
 /* ================= ORDERS ================= */
 const WAMSGS={
-  new:o=>`أهلاً ${o.name}، استلمنا طلبك رقم ${o.id} من Senior وسنتواصل معك لتأكيده قريباً.`,
-  confirmed:o=>`أهلاً ${o.name}، تم تأكيد طلبك رقم ${o.id} من Senior وجارٍ تجهيزه للشحن. الإجمالي: ${o.total} جنيه.`,
-  shipped:o=>`أهلاً ${o.name}، تم شحن طلبك رقم ${o.id} من Senior وسيصلك خلال أيام قليلة. المبلغ المستحق عند الاستلام: ${o.total} جنيه.`,
+  new:o=>`أهلاً ${o.name}، استلمنا طلبك رقم ${o.order_no||o.id} من Senior وسنتواصل معك لتأكيده قريباً.`,
+  confirmed:o=>`أهلاً ${o.name}، تم تأكيد طلبك رقم ${o.order_no||o.id} من Senior وجارٍ تجهيزه للشحن. الإجمالي: ${o.total} جنيه.`,
+  shipped:o=>`أهلاً ${o.name}، تم شحن طلبك رقم ${o.order_no||o.id} من Senior وسيصلك خلال أيام قليلة. المبلغ المستحق عند الاستلام: ${o.total} جنيه.`,
   delivered:o=>`أهلاً ${o.name}، نتمنى أن تكون الكتب قد وصلتك بحالة ممتازة. نتمنى لك عاماً دراسياً موفقاً مع Senior!`,
-  cancelled:o=>`أهلاً ${o.name}، تم إلغاء طلبك رقم ${o.id} من Senior. إن كان ذلك عن طريق الخطأ فتواصل معنا في أي وقت.`,
+  cancelled:o=>`أهلاً ${o.name}، تم إلغاء طلبك رقم ${o.order_no||o.id} من Senior. إن كان ذلك عن طريق الخطأ فتواصل معنا في أي وقت.`,
 };
 async function loadOrders(){
   try{
@@ -301,37 +401,90 @@ function renderChips(){
   const counts={'':ORDERS.length};Object.keys(ST).forEach(k=>counts[k]=ORDERS.filter(o=>o.status===k).length);
   document.getElementById('oChips').innerHTML=[['','الكل'],...Object.entries(ST)].map(([k,l])=>
     `<button class="chip ${OFILTER===k?'on':''}" onclick="filterStatus('${k}')">${l} <b>${counts[k]||0}</b></button>`).join('');
+  const tc={'':ORDERS.length,student:ORDERS.filter(o=>['student','guest'].includes(o.buyer_type)).length,
+    teacher:ORDERS.filter(o=>o.buyer_type==='teacher').length,library:ORDERS.filter(o=>o.buyer_type==='library').length};
+  document.getElementById('oTypeChips').innerHTML=[['','📦 كل الأنواع'],['student','🎓 طلاب وزوّار'],['teacher','🧑‍🏫 مدرّسون'],['library','🏪 مكتبات']].map(([k,l])=>
+    `<button class="chip ${OTYPE===k?'on':''}" onclick="filterType('${k}')">${l} <b>${tc[k]||0}</b></button>`).join('');
 }
 function filterStatus(k){OFILTER=k;renderChips();renderOrders()}
+function filterType(k){OTYPE=k;renderChips();renderOrders()}
 function filteredOrders(){
   const q=(document.getElementById('oq').value||'').trim(),g=document.getElementById('ofg').value;
-  return ORDERS.filter(o=>(!q||o.name.includes(q)||o.mobile.includes(q))&&(!OFILTER||o.status===OFILTER)&&(!g||o.governorate===g));
+  return ORDERS.filter(o=>(!q||o.name.includes(q)||o.mobile.includes(q)||(o.order_no||'').includes(q))
+    &&(!OFILTER||o.status===OFILTER)
+    &&(!OTYPE||(OTYPE==='student'?['student','guest'].includes(o.buyer_type):o.buyer_type===OTYPE))
+    &&(!g||o.governorate===g));
+}
+function assignSelect(o){
+  if(!isGM()){return o.assigned_name?`<span class="tag">👤 ${esc(o.assigned_name)}</span>`:'<span class="tag">غير مُسند</span>'}
+  const opts=['<option value="">— غير مُسند —</option>',...TEAM.filter(m=>m.active).map(m=>`<option value="${m.id}" ${o.assigned_to===m.id?'selected':''}>${esc(m.name)}</option>`)];
+  return `<select style="margin:0;width:auto;max-width:150px;font-size:11.5px" onchange="assignOrder(${o.id},this.value)">${opts.join('')}</select>`;
 }
 function renderOrders(){
   const el=document.getElementById('oList'),list=filteredOrders();
   if(!list.length){el.innerHTML='<p class="msg">لا توجد طلبات مطابقة.</p>';return}
-  el.innerHTML=`<table><tr><th>#</th><th>المشتري</th><th>الكتب</th><th>الإجمالي</th><th>كود</th><th>الحالة</th><th></th></tr>`+
+  el.innerHTML=`<table><tr><th>رقم التتبع</th><th>المشتري</th><th>الكتب</th><th>الإجمالي</th><th>كود</th><th>المسؤول</th><th>الحالة</th><th></th></tr>`+
     list.map(o=>`<tr>
-      <td>${o.id}<br><span style="color:#8A9499;font-size:11px">${esc((o.created_at||'').slice(0,10))}</span></td>
-      <td>${esc(o.name)}<br><span dir="ltr" style="font-size:12px">${esc(o.mobile)}</span><br><span class="tag">${BT[o.buyer_type]||o.buyer_type} · ${esc(o.governorate||'')}${o.city?' — '+esc(o.city):''}</span>${o.school?'<br><span style="color:#8A9499;font-size:11px">🏫 '+esc(o.school)+'</span>':''}</td>
+      <td><span class="trk">${esc(o.order_no||('#'+o.id))}</span><br><span style="color:#8A9499;font-size:11px">${esc((o.created_at||'').slice(0,10))}</span></td>
+      <td>${esc(o.name)}<br><span dir="ltr" style="font-size:12px">${esc(o.mobile)}</span><br><span class="tag">${BT[o.buyer_type]||o.buyer_type} · ${esc(o.governorate||'')}${o.city?' — '+esc(o.city):''}</span>${o.school?'<br><span style="color:#8A9499;font-size:11px">🏫 '+esc(o.school)+'</span>':''}${o.utm?'<br><span style="color:#7C5CBF;font-size:10.5px">📣 '+esc(o.utm)+'</span>':''}</td>
       <td>${o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join('، ')}</td>
       <td>${o.total} ج</td>
       <td>${o.ref_code?'<span class="code">'+esc(o.ref_code)+'</span>':'—'}</td>
+      <td>${assignSelect(o)}</td>
       <td><select style="margin:0;width:auto;border-color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></td>
       <td style="white-space:nowrap">
-        <button class="b-g iconb" onclick="invoice(${o.id})">🧾 فاتورة</button>
-        <button class="b-wa iconb" onclick="waCustomer(${o.id})">💬 واتساب</button>
+        <button class="b-g iconb" title="الخط الزمني والملاحظات" onclick="openNotes(${o.id})">📝</button>
+        <button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>
+        <button class="b-wa iconb" title="واتساب العميل" onclick="waCustomer(${o.id})">💬</button>
       </td></tr>`).join('')+'</table>';
 }
-async function setStatus(id,status){await api('/api/admin/order/status',{method:'POST',body:JSON.stringify({id,status})});const o=ORDERS.find(x=>x.id===id);if(o)o.status=status;renderChips();loadStats();loadInv()}
+async function assignOrder(id,teamId){
+  try{
+    await api('/api/admin/order/assign',{method:'POST',body:JSON.stringify({id,teamId:teamId?+teamId:null})});
+    const o=ORDERS.find(x=>x.id===id);
+    if(o){o.assigned_to=teamId?+teamId:null;const m=TEAM.find(t=>t.id===+teamId);o.assigned_name=m?m.name:null}
+    loadStats();
+  }catch(e){alert(e.message)}
+}
+async function setStatus(id,status){
+  try{await api('/api/admin/order/status',{method:'POST',body:JSON.stringify({id,status})});
+    const o=ORDERS.find(x=>x.id===id);if(o)o.status=status;renderChips();
+    if(ME.role!=='sales'){loadStats();loadInv()}
+  }catch(e){alert(e.message);loadOrders()}
+}
+const NKIND={note:'',status:'st',assign:'as'};
+async function openNotes(id){
+  const o=ORDERS.find(x=>x.id===id);if(!o)return;
+  const el=document.getElementById('oNotes');
+  el.innerHTML='<p class="msg">جارٍ التحميل…</p>';
+  try{
+    const d=await api('/api/admin/order/notes?id='+id);
+    el.innerHTML=`<div class="card" style="border-color:#0E6E60;margin-top:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <h3 style="margin:0">📝 الخط الزمني — <span class="trk">${esc(o.order_no||('#'+o.id))}</span> · ${esc(o.name)}</h3>
+        <button class="b-g iconb" onclick="document.getElementById('oNotes').innerHTML=''">إغلاق ×</button></div>
+      <div class="tl" style="margin-top:12px">${(d.notes||[]).map(n=>
+        `<div class="ev ${NKIND[n.kind]||''}"><b>${esc(n.text)}</b><small>${esc(n.author)} · ${esc((n.created_at||'').slice(0,16))}</small></div>`).join('')||'<p class="msg">لا أحداث بعد — الطلب وصل من الموقع ولم يُعالَج.</p>'}</div>
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <input id="nText" placeholder="أضف ملاحظة… (اتصال، موعد تسليم، ملاحظات العميل)" style="margin:0" onkeydown="if(event.key==='Enter')addNote(${id})">
+        <button class="b-t" onclick="addNote(${id})">إضافة</button></div>
+    </div>`;
+    el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+async function addNote(id){
+  const v=document.getElementById('nText').value.trim();if(!v)return;
+  try{await api('/api/admin/order/note',{method:'POST',body:JSON.stringify({id,text:v})});openNotes(id)}
+  catch(e){alert(e.message)}
+}
 function waCustomer(id){
   const o=ORDERS.find(x=>x.id===id);if(!o)return;
   window.open(`https://wa.me/2${o.mobile}?text=${encodeURIComponent((WAMSGS[o.status]||WAMSGS.new)(o))}`,'_blank');
 }
 function exportOrdersCSV(){
-  const rows=[['رقم','التاريخ','الاسم','الموبايل','المحافظة','المدينة/المركز','المدرسة','العنوان','الصفة','الكتب','الإجمالي','كود الخصم','الدفع','الحالة']];
-  filteredOrders().forEach(o=>rows.push([o.id,(o.created_at||'').slice(0,16),o.name,o.mobile,o.governorate||'',o.city||'',o.school||'',o.address||'',BT[o.buyer_type]||o.buyer_type,
-    o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join(' + '),o.total,o.ref_code||'',o.pay_method||'',ST[o.status]||o.status]));
+  const rows=[['رقم التتبع','التاريخ','الاسم','الموبايل','المحافظة','المدينة/المركز','المدرسة','العنوان','الصفة','الكتب','الإجمالي','كود الخصم','الدفع','الحالة','المسؤول','الحملة']];
+  filteredOrders().forEach(o=>rows.push([o.order_no||o.id,(o.created_at||'').slice(0,16),o.name,o.mobile,o.governorate||'',o.city||'',o.school||'',o.address||'',BT[o.buyer_type]||o.buyer_type,
+    o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join(' + '),o.total,o.ref_code||'',o.pay_method||'',ST[o.status]||o.status,o.assigned_name||'',o.utm||'']));
   dlCSV(rows,'senior-orders');
 }
 /* invoice — بيانات البائع placeholders حتى تصل البيانات الرسمية */
@@ -339,7 +492,7 @@ function invoice(id){
   const o=ORDERS.find(x=>x.id===id);if(!o)return;
   const rows=o.items.map(i=>`<tr><td>${BOOKS[i.id]||i.id}</td><td>${i.qty}</td><td>${i.price}</td><td>${i.qty*i.price}</td></tr>`).join('');
   const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>فاتورة ${o.id} — Senior</title>
+  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>فاتورة ${o.order_no||o.id} — Senior</title>
   <style>body{font-family:'Readex Pro',system-ui,sans-serif;padding:0;color:#16323C;max-width:640px;margin:0 auto}
   .bar{background:#16323C;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px}
   .bar button{font-family:inherit;background:#E4572E;color:#fff;border:none;border-radius:999px;padding:8px 18px;font-weight:600;cursor:pointer}
@@ -351,7 +504,7 @@ function invoice(id){
   <div class="page">
   <div class="hd"><div><h2>Senior Books</h2>
     <div class="ph">[اسم النشاط القانوني — placeholder]<br>س.ت: —————— · ب.ض: ——————<br>القاهرة — الفجالة · 01010101445</div></div>
-    <div style="text-align:left"><b>فاتورة رقم ${o.id}</b><br><span class="ph">${(o.created_at||'').slice(0,10)}</span></div></div>
+    <div style="text-align:left"><b>فاتورة ${o.order_no||('رقم '+o.id)}</b><br><span class="ph">${(o.created_at||'').slice(0,10)}</span></div></div>
   <p><b>العميل:</b> ${o.name} · <span dir="ltr">${o.mobile}</span><br><b>العنوان:</b> ${o.governorate||''}${o.city?' — '+o.city:''} — ${o.address||''}</p>
   <table><tr><th>الكتاب</th><th>الكمية</th><th>السعر</th><th>القيمة</th></tr>${rows}
   <tr class="tot"><td colspan="3">الإجمالي${o.ref_code?' (قبل خصم الكود '+o.ref_code+')':''}</td><td>${o.total} ج</td></tr></table>
@@ -361,53 +514,173 @@ function invoice(id){
   w.document.close();
 }
 
-/* ================= INVENTORY ================= */
+/* ================= INVENTORY (4 views + restock log) ================= */
+let INV=[];
+function renderIChips(){
+  const views=[['stock','📦 المخزون المتاح'],['open','🚚 في طلبات مفتوحة'],['done','✅ نسخ مُسلَّمة'],['log','📜 سجل التوريد']];
+  document.getElementById('iChips').innerHTML=views.map(([k,l])=>
+    `<button class="chip ${IVIEW===k?'on':''}" onclick="IVIEW='${k}';renderInv()">${l}</button>`).join('');
+}
 async function loadInv(){
-  const el=document.getElementById('iList');
-  try{
-    const d=await api('/api/admin/inventory');
-    el.innerHTML='<table><tr><th>الكتاب</th><th>المخزون المتاح</th><th>في طلبات مفتوحة</th><th>نسخ مُسلَّمة</th><th>آخر تحديث</th><th></th></tr>'+
-      d.inventory.map(i=>`<tr><td><b>${BOOKS[i.book_id]||i.book_id}</b></td>
-      <td class="${i.stock<100?'low':''}"><input type="number" id="inv-${i.book_id}" value="${i.stock}" min="0" style="width:100px;margin:0"></td>
-      <td>${i.open?`<b style="color:#3B82C4">${i.open}</b> نسخة`:'—'}</td>
-      <td>${i.delivered?`<b style="color:#1C7A46">${i.delivered}</b> نسخة`:'—'}</td>
-      <td style="color:#8A9499;font-size:11.5px">${esc((i.updated_at||'').slice(0,16))}</td>
-      <td><button class="b-t iconb" onclick="saveInv('${i.book_id}')">حفظ</button></td></tr>`).join('')+'</table>'+
-      '<p class="msg">«المخزون المتاح» يُخصم تلقائياً عند كل طلب (المجموعة تخصم من كتبها الأربعة) ويعود عند الإلغاء. «في طلبات مفتوحة» = نسخ في طلبات جديدة/مؤكَّدة/مشحونة لم تُسلَّم بعد.</p>';
-  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+  try{const d=await api('/api/admin/inventory');INV=d.inventory;renderInv()}
+  catch(e){document.getElementById('iList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+async function renderInv(){
+  renderIChips();
+  const el=document.getElementById('iList'),form=document.getElementById('iRestockForm');
+  form.innerHTML=(isGM()&&IVIEW!=='log')?`<div class="filters">
+      <div><label>الكتاب</label><select id="rsBook" style="min-width:130px">${INV.map(i=>`<option value="${i.book_id}">${BOOKS[i.book_id]||i.book_id}</option>`).join('')}</select></div>
+      <div><label>الكمية (+ توريد / − تصحيح)</label><input id="rsQty" type="number" value="500" style="width:110px"></div>
+      <div><label>ملاحظة</label><input id="rsNote" placeholder="دفعة مطبعة يوليو…" style="min-width:180px"></div>
+      <button class="b-t" onclick="doRestock()">➕ تسجيل توريد</button>
+    </div>`:'';
+  if(IVIEW==='log'){
+    try{
+      const d=await api('/api/admin/restocks');
+      el.innerHTML=(d.restocks||[]).length?'<table><tr><th>التاريخ</th><th>الكتاب</th><th>الكمية</th><th>ملاحظة</th><th>بواسطة</th></tr>'+
+        d.restocks.map(r=>`<tr><td style="color:#8A9499;font-size:11.5px">${esc((r.created_at||'').slice(0,16))}</td><td><b>${BOOKS[r.book_id]||r.book_id}</b></td>
+        <td style="color:${r.delta>0?'#1C7A46':'#C0421C'};font-weight:700" dir="ltr">${r.delta>0?'+':''}${r.delta}</td>
+        <td>${esc(r.note||'—')}</td><td>${esc(r.author||'—')}</td></tr>`).join('')+'</table>'
+        :'<p class="msg">لا يوجد توريد مسجَّل بعد.</p>';
+    }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+    return;
+  }
+  if(IVIEW==='open'||IVIEW==='done'){
+    const key=IVIEW==='open'?'open':'delivered';
+    const mx=Math.max(1,...INV.map(i=>+i[key]||0));
+    el.innerHTML=INV.map(i=>`<div class="hbar"><span class="nm">${BOOKS[i.book_id]||i.book_id}</span>
+      <div class="tr"><i style="width:${(+i[key]||0)/mx*100}%;background:linear-gradient(90deg,${IVIEW==='open'?'#4a9fd8,#3B82C4':'#2ea36a,#1C7A46'})"></i></div>
+      <b>${i[key]||0}</b></div>`).join('')+
+      `<p class="msg">${IVIEW==='open'?'نسخ داخل طلبات جديدة/مؤكَّدة/مشحونة لم تُسلَّم بعد (المجموعة تُحسب على كتبها الأربعة).':'نسخ وصلت لأصحابها في طلبات مُسلَّمة.'}</p>`;
+    return;
+  }
+  el.innerHTML='<table><tr><th>الكتاب</th><th>المتاح</th><th>في طلبات مفتوحة</th><th>مُسلَّم</th><th>آخر تحديث</th>'+(isGM()?'<th></th>':'')+'</tr>'+
+    INV.map(i=>`<tr><td><b>${BOOKS[i.book_id]||i.book_id}</b></td>
+    <td class="${i.stock<100?'low':''}">${isGM()?`<input type="number" id="inv-${i.book_id}" value="${i.stock}" min="0" style="width:100px;margin:0">`:`<b>${i.stock}</b>`}</td>
+    <td>${i.open?`<b style="color:#3B82C4">${i.open}</b>`:'—'}</td>
+    <td>${i.delivered?`<b style="color:#1C7A46">${i.delivered}</b>`:'—'}</td>
+    <td style="color:#8A9499;font-size:11.5px">${esc((i.updated_at||'').slice(0,16))}</td>
+    ${isGM()?`<td><button class="b-g iconb" onclick="saveInv('${i.book_id}')">حفظ تصحيح</button></td>`:''}</tr>`).join('')+'</table>'+
+    '<p class="msg">«المتاح» يُخصم تلقائياً مع كل طلب ويعود عند الإلغاء. استخدم «تسجيل توريد» لدفعات المطبعة (تُسجَّل في سجل التوريد)، و«حفظ تصحيح» للجرد اليدوي.</p>';
+}
+async function doRestock(){
+  const b=document.getElementById('rsBook').value,q=Math.round(+document.getElementById('rsQty').value||0),n=document.getElementById('rsNote').value.trim();
+  if(!q){alert('أدخل كمية.');return}
+  try{await api('/api/admin/inventory/restock',{method:'POST',body:JSON.stringify({book_id:b,delta:q,note:n})});loadInv();loadStats()}
+  catch(e){alert(e.message)}
 }
 async function saveInv(id){
   const v=+document.getElementById('inv-'+id).value;
-  await api('/api/admin/inventory/set',{method:'POST',body:JSON.stringify({book_id:id,stock:v})});
-  loadInv();loadStats();
+  try{await api('/api/admin/inventory/set',{method:'POST',body:JSON.stringify({book_id:id,stock:v})});loadInv();loadStats()}
+  catch(e){alert(e.message)}
 }
 
-/* ================= TEACHERS ================= */
-async function loadTeachers(){
+/* ================= TEACHERS (approved) ================= */
+async function loadTeachersApproved(){
   const el=document.getElementById('tList');
   try{
+    const d=await api('/api/admin/teachers?status=approved');
+    el.innerHTML=d.teachers.length?'<table><tr><th>الاسم</th><th>الكود</th><th>موبايل</th><th>المنطقة</th><th>طلاب متوقَّعون</th><th>اعتُمد</th></tr>'+
+      d.teachers.map(t=>`<tr><td>${esc(t.first_name)} ${esc(t.last_name)}<br><span style="color:#8A9499;font-size:11.5px">${esc(t.email||'')}</span></td>
+      <td><span class="code">${esc(t.code||'—')}</span></td><td dir="ltr">${esc(t.mobile)}</td><td>${esc(t.area||'—')}</td>
+      <td>${esc(t.expected_students||t.seniority||'—')}</td>
+      <td style="color:#8A9499;font-size:11.5px">${esc((t.created_at||'').slice(0,10))}</td></tr>`).join('')+'</table>'
+      :'<p class="msg">لا مدرّسين معتمدين بعد.</p>';
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+
+/* ================= JOIN REQUESTS (approval inbox) ================= */
+async function loadJoin(){
+  const el=document.getElementById('jList');
+  try{
     const d=await api('/api/admin/teachers?status=pending');
-    if(!d.teachers.length){el.innerHTML='<p class="msg">لا توجد طلبات قيد المراجعة.</p>';return}
-    el.innerHTML='<table><tr><th>الاسم</th><th>المنطقة</th><th>الخبرة</th><th>موبايل</th><th></th></tr>'+
+    if(!d.teachers.length){el.innerHTML='<p class="msg">لا توجد طلبات قيد المراجعة. 🎉</p>';return}
+    const kams=TEAM.filter(m=>m.active&&m.role==='kam');
+    el.innerHTML='<table><tr><th>الاسم</th><th>المنطقة</th><th>طلاب متوقَّعون</th><th>موبايل</th><th>متابعة</th><th></th></tr>'+
       d.teachers.map(t=>`<tr>
         <td>${esc(t.first_name)} ${esc(t.last_name)}<br><span style="color:#8A9499;font-size:12px">${esc(t.email||'')}</span></td>
-        <td>${esc(t.area||'—')}</td><td>${esc(t.seniority||'—')}</td>
+        <td>${esc(t.area||'—')}</td><td>${esc(t.expected_students||t.seniority||'—')}</td>
         <td dir="ltr">${esc(t.mobile)}</td>
+        <td>${isGM()
+          ?`<select style="margin:0;width:auto;font-size:11.5px" onchange="assignTeacher(${t.id},this.value)"><option value="">— بلا متابعة —</option>${kams.map(m=>`<option value="${m.id}" ${t.assigned_to===m.id?'selected':''}>${esc(m.name)}</option>`).join('')}</select>`
+          :(t.assigned_name?`<span class="tag">👤 ${esc(t.assigned_name)}</span>`:'—')}</td>
         <td style="white-space:nowrap"><button class="b-t iconb" onclick="approve(${t.id},'${esc(t.mobile)}')">اعتماد</button>
         <button class="b-g iconb" onclick="reject(${t.id})">رفض</button></td></tr>`).join('')+'</table>';
   }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+async function assignTeacher(id,teamId){
+  try{await api('/api/admin/teacher/assign',{method:'POST',body:JSON.stringify({id,teamId:teamId?+teamId:null})})}
+  catch(e){alert(e.message)}
 }
 async function approve(id,mobile){
   const d=await api('/api/admin/teacher/approve',{method:'POST',body:JSON.stringify({id})});
   if(d.code){
     const msg=encodeURIComponent(`أهلاً بك في برنامج مدرّسي Senior.\nتم اعتماد تسجيلك، وهذا كود الخصم الخاص بك: ${d.code}\nشاركه مع طلابك ليحصلوا على خصمهم عند الطلب من seniorbookegy.com`);
     if(confirm('تم الاعتماد. الكود: '+d.code+'\nفتح واتساب لإرساله للمدرّس؟'))window.open(`https://wa.me/2${mobile}?text=${msg}`,'_blank');
-    loadTeachers();loadStats();
+    loadJoin();loadTeachersApproved();loadStats();
   }
 }
-async function reject(id){if(confirm('رفض هذا الطلب؟')){await api('/api/admin/teacher/reject',{method:'POST',body:JSON.stringify({id})});loadTeachers();loadStats()}}
+async function reject(id){if(confirm('رفض هذا الطلب؟')){await api('/api/admin/teacher/reject',{method:'POST',body:JSON.stringify({id})});loadJoin();loadStats()}}
 
-/* ================= REPS ================= */
+/* ================= STUDENTS ================= */
+async function loadStudents(){
+  try{
+    const d=await api('/api/admin/students');
+    document.getElementById('kStats').innerHTML=
+      `<div class="kpi" style="--c:#0E6E60"><div class="n">${d.codes.total||0}</div><div class="l">أكواد Plus</div></div>
+       <div class="kpi" style="--c:#1C7A46"><div class="n">${d.codes.activated||0}</div><div class="l">مفعَّلة</div></div>
+       <div class="kpi" style="--c:#F2A03D"><div class="n">${(d.codes.total||0)-(d.codes.activated||0)}</div><div class="l">متبقية</div></div>
+       <div class="kpi" style="--c:#7C5CBF"><div class="n">${d.reports||0}</div><div class="l">تقرير أسبوعي</div></div>
+       <div class="kpi" style="--c:#3B82C4"><div class="n">${(d.buyers||[]).length}</div><div class="l">طالب/زائر مشترٍ</div></div>`;
+    document.getElementById('kGenBtn').style.display=isGM()?'':'none';
+    document.getElementById('kList').innerHTML=(d.recent||[]).length?'<table><tr><th>الكود</th><th>الطالب</th><th>موبايل</th><th>التفعيل</th></tr>'+
+      d.recent.map(c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(c.student_name||'—')}</td><td dir="ltr">${esc(c.mobile||'—')}</td><td>${esc((c.activated_at||'').slice(0,16))}</td></tr>`).join('')+'</table>'
+      :'<p class="msg">لا توجد أكواد مفعَّلة بعد — بانتظار قرار المطبعة.</p>';
+    const smx=Math.max(1,...(d.bySchool||[]).map(s=>+s.c));
+    document.getElementById('sSchools').innerHTML=(d.bySchool||[]).map(s=>
+      `<div class="hbar"><span class="nm" title="${esc(s.school)}">${esc(s.school)}</span><div class="tr"><i style="width:${s.c/smx*100}%"></i></div><b>${s.c}</b></div>`).join('')||'<p class="msg">لا بيانات مدارس بعد — الحقل اختياري في الطلب.</p>';
+    document.getElementById('sBuyers').innerHTML=(d.buyers||[]).length?'<table><tr><th>الاسم</th><th>موبايل</th><th>المحافظة</th><th>طلبات</th><th>إنفاق</th></tr>'+
+      d.buyers.map(b=>`<tr><td>${esc(b.name)}${b.school?'<br><span style="color:#8A9499;font-size:10.5px">🏫 '+esc(b.school)+'</span>':''}</td><td dir="ltr" style="font-size:11.5px">${esc(b.mobile)}</td><td>${esc(b.governorate||'—')}</td><td>${b.c}</td><td>${b.s} ج</td></tr>`).join('')+'</table>'
+      :'<p class="msg">لا مشترين بعد.</p>';
+  }catch(e){document.getElementById('kList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+async function genCodes(){
+  const n=+document.getElementById('kCount').value||0,m=document.getElementById('kMsg');
+  if(n<1){m.textContent='أدخل عدداً صحيحاً.';return}
+  m.textContent='جارٍ الإنشاء…';
+  const d=await api('/api/admin/codes/generate',{method:'POST',body:JSON.stringify({count:n})});
+  if(d.ok){dlCSV([['code'],...d.codes.map(c=>[c])],'senior-student-codes-'+d.count);m.textContent=`تم إنشاء ${d.count} كوداً وتنزيلها.`;loadStudents()}
+  else m.textContent='خطأ.';
+}
+async function dlUnactivated(){
+  const d=await api('/api/admin/codes?activated=0');
+  dlCSV([['code'],...d.list.map(c=>[c.code])],'senior-codes-unactivated');
+}
+
+/* ================= LIBRARIES + REPS ================= */
+async function loadLibraries(){
+  const el=document.getElementById('lList');
+  try{
+    const d=await api('/api/admin/libraries');
+    el.innerHTML=(d.libraries||[]).length?'<table><tr><th>المكتبة</th><th>موبايل</th><th>المنطقة</th><th>كود المندوب</th><th>طلبات</th><th>مشتريات</th><th>آخر طلب</th></tr>'+
+      d.libraries.map(l=>`<tr><td><b>${esc(l.name)}</b>${l.contact?'<br><span style="color:#8A9499;font-size:11px">'+esc(l.contact)+'</span>':''}</td>
+      <td dir="ltr">${esc(l.mobile)}</td><td>${esc(l.area||'—')}</td>
+      <td>${l.rep_code?'<span class="code">'+esc(l.rep_code)+'</span>':'—'}</td>
+      <td>${l.orders}</td><td>${l.revenue} ج</td>
+      <td style="color:#8A9499;font-size:11.5px">${esc((l.last||'').slice(0,10))||'—'}</td></tr>`).join('')+'</table>'
+      :'<p class="msg">لا مكتبات مسجَّلة بعد — تُسجَّل تلقائياً مع أول طلب مكتبة.</p>';
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+async function addLibrary(){
+  const n=document.getElementById('lbName').value.trim(),p=document.getElementById('lbMob').value.trim(),a=document.getElementById('lbArea').value.trim();
+  const m=document.getElementById('lbMsg');
+  if(!n||!p){m.textContent='أدخل الاسم والموبايل.';return}
+  try{
+    await api('/api/admin/library/add',{method:'POST',body:JSON.stringify({name:n,mobile:p,area:a})});
+    m.textContent='تمت الإضافة.';document.getElementById('lbName').value='';document.getElementById('lbMob').value='';document.getElementById('lbArea').value='';
+    loadLibraries();
+  }catch(e){m.textContent='خطأ: '+e.message}
+}
 async function addRep(){
   const name=document.getElementById('repName').value.trim(),mobile=document.getElementById('repMob').value.trim();
   const m=document.getElementById('repMsg');
@@ -427,7 +700,29 @@ async function loadReps(){
   }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 
-/* ================= COMMISSIONS ================= */
+/* ================= FINANCE (GM) ================= */
+async function loadFinance(){
+  try{
+    const f=await api('/api/admin/finance');
+    document.getElementById('fKpis').innerHTML=
+      `<div class="kpi" style="--c:#1C7A46"><div class="n">${f.delivered.s||0}</div><div class="l">إيراد مُحصَّل (مُسلَّم) ج</div><div class="s">${f.delivered.c||0} طلب</div></div>
+       <div class="kpi" style="--c:#3B82C4"><div class="n">${f.open.s||0}</div><div class="l">إيراد متوقَّع (مفتوح) ج</div><div class="s">${f.open.c||0} طلب</div></div>
+       <div class="kpi" style="--c:#C0421C"><div class="n">${f.payoutsPaid}</div><div class="l">عمولات مدفوعة ج</div></div>
+       <div class="kpi" style="--c:#F2A03D"><div class="n">${f.payoutsOpen}</div><div class="l">عمولات قيد السحب ج</div></div>
+       <div class="kpi" style="--c:#0E6E60"><div class="n">${(f.delivered.s||0)-f.payoutsPaid}</div><div class="l">صافي بعد العمولات ج</div></div>
+       <div class="kpi" style="--c:#8A9499"><div class="n">${f.cancelled}</div><div class="l">طلبات ملغاة</div></div>`;
+    document.getElementById('fMonthly').innerHTML=(f.monthly||[]).length?'<table><tr><th>الشهر</th><th>طلبات</th><th>إجمالي</th><th>مُحصَّل</th></tr>'+
+      f.monthly.map(m=>`<tr><td>${esc(m.m)}</td><td>${m.c}</td><td>${m.s} ج</td><td style="color:#1C7A46"><b>${m.sd} ج</b></td></tr>`).join('')+'</table>':'<p class="msg">—</p>';
+    const pmx=Math.max(1,...(f.byPay||[]).map(p=>+p.s));
+    const PAYN={cod:'عند الاستلام',instapay:'InstaPay',wallet:'محفظة',fawry:'فوري'};
+    document.getElementById('fSplits').innerHTML=
+      (f.byPay||[]).map(p=>`<div class="hbar"><span class="nm">${PAYN[p.pay_method]||esc(p.pay_method||'—')}</span><div class="tr"><i style="width:${p.s/pmx*100}%"></i></div><b>${p.s} ج</b></div>`).join('')+
+      '<div style="height:10px"></div>'+
+      (f.byType||[]).map(p=>`<div class="hbar"><span class="nm">${BT[p.buyer_type]||p.buyer_type}</span><div class="tr"><i style="width:${p.s/Math.max(1,(f.byType[0]||{}).s)*100}%;background:linear-gradient(90deg,#12866F,#0E6E60)"></i></div><b>${p.s} ج</b></div>`).join('');
+  }catch(e){document.getElementById('fKpis').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+
+/* ================= COMMISSIONS (inside finance) ================= */
 async function loadComms(){
   const el=document.getElementById('cList');
   try{
@@ -467,7 +762,6 @@ async function payWithdrawal(id){
   await api('/api/admin/withdrawal/pay',{method:'POST',body:JSON.stringify({id,ref})});
   loadComms();loadStats();
 }
-const STAF={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي'};
 async function showPartner(code){
   const el=document.getElementById('pDetail');
   el.innerHTML='<p class="msg">جارٍ التحميل…</p>';
@@ -478,7 +772,7 @@ async function showPartner(code){
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <h3 style="margin:0">👤 ${esc(i.name)} <span class="code">${esc(code)}</span> ${d.kind==='teacher'?(n.tier.k==='silver'?'🥈':n.tier.k==='gold'?'🥇':'💎')+' '+esc(n.tier.ar):'(مندوب)'}</h3>
         <button class="b-g iconb" onclick="document.getElementById('pDetail').innerHTML=''">إغلاق ×</button></div>
-      <p class="msg" style="margin:6px 0 10px">📱 <span dir="ltr">${esc(i.mobile||'')}</span>${i.email?' · ✉️ '+esc(i.email):''}${i.area?' · 📍 '+esc(i.area):''}${i.seniority?' · خبرة: '+esc(i.seniority):''}${i.approved_at?' · اعتُمد: '+esc(i.approved_at.slice(0,10)):''}</p>
+      <p class="msg" style="margin:6px 0 10px">📱 <span dir="ltr">${esc(i.mobile||'')}</span>${i.email?' · ✉️ '+esc(i.email):''}${i.area?' · 📍 '+esc(i.area):''}${i.approved_at?' · اعتُمد: '+esc(i.approved_at.slice(0,10)):''}</p>
       <div class="kpis">
         <div class="kpi" style="--c:#0E6E60"><div class="n">${n.delivered}/${n.orders}</div><div class="l">مُسلَّم / إجمالي الطلبات</div></div>
         <div class="kpi" style="--c:#F2A03D"><div class="n">${n.revenue}</div><div class="l">مبيعات مُسلَّمة (ج)</div></div>
@@ -489,7 +783,7 @@ async function showPartner(code){
       <h3>الطلبات عبر هذا الكود</h3>
       ${d.orderList.length?'<table><tr><th>#</th><th>العميل</th><th>الكتب</th><th>الإجمالي</th><th>الحالة</th><th>التاريخ</th></tr>'+
         d.orderList.map(o=>`<tr><td>${o.id}</td><td>${esc(o.name)}<br><span dir="ltr" style="font-size:11.5px">${esc(o.mobile)}</span></td>
-        <td>${o.items.map(x=>(BOOKS[x.id]||x.id)+'×'+x.qty).join('، ')}</td><td>${o.total} ج</td><td>${STAF[o.status]||o.status}</td>
+        <td>${o.items.map(x=>(BOOKS[x.id]||x.id)+'×'+x.qty).join('، ')}</td><td>${o.total} ج</td><td>${ST[o.status]||o.status}</td>
         <td style="color:#8A9499;font-size:11.5px">${esc((o.created_at||'').slice(0,10))}</td></tr>`).join('')+'</table>':'<p class="msg">لا طلبات.</p>'}
       <h3 style="margin-top:12px">الدفعات</h3>
       ${d.payouts.length?'<table><tr><th>الشهر</th><th>المبلغ</th><th>الحالة</th><th>المرجع</th></tr>'+
@@ -508,30 +802,61 @@ async function payOut(code,pending){
   loadComms();
 }
 
-/* ================= CODES ================= */
-async function loadCodes(){
+/* ================= TEAM (GM) ================= */
+async function loadTeamList(){
   try{
-    const d=await api('/api/admin/codes?activated=1');
-    document.getElementById('kStats').innerHTML=
-      `<div class="kpi" style="--c:#0E6E60"><div class="n">${d.total}</div><div class="l">إجمالي الأكواد</div></div>
-       <div class="kpi" style="--c:#1C7A46"><div class="n">${d.activated}</div><div class="l">مفعَّلة</div></div>
-       <div class="kpi" style="--c:#F2A03D"><div class="n">${d.total-d.activated}</div><div class="l">متبقية</div></div>`;
-    document.getElementById('kList').innerHTML=d.list.length?'<table><tr><th>الكود</th><th>الطالب</th><th>موبايل</th><th>تاريخ التفعيل</th></tr>'+
-      d.list.slice(0,50).map(c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(c.student_name||'—')}</td><td dir="ltr">${esc(c.mobile||'—')}</td><td>${esc((c.activated_at||'').slice(0,16))}</td></tr>`).join('')+'</table>'
-      :'<p class="msg">لا توجد أكواد مفعَّلة بعد.</p>';
-  }catch(e){document.getElementById('kList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+    const d=await api('/api/admin/team');TEAM=d.team||[];
+    if(!isGM())return;
+    document.getElementById('mList').innerHTML=TEAM.length?'<table><tr><th>الاسم</th><th>الدور</th><th>موبايل</th><th>المفتاح الشخصي</th><th>الحالة</th><th></th></tr>'+
+      TEAM.map(m=>`<tr><td><b>${esc(m.name)}</b></td>
+      <td><span class="tag role-${m.role}">${ROLE_AR[m.role]||m.role}</span></td>
+      <td dir="ltr">${esc(m.mobile||'—')}</td>
+      <td><span class="code" style="font-size:11px">${esc(m.akey||'')}</span> <button class="b-g iconb" onclick="cpKey('${esc(m.akey||'')}')">📋</button></td>
+      <td>${m.active?'✅ نشط':'⛔ معطَّل'}</td>
+      <td style="white-space:nowrap">
+        <button class="b-g iconb" onclick="renameMember(${m.id},'${esc(m.name).replace(/'/g,"\\'")}')">✏️</button>
+        <button class="b-g iconb" onclick="rekeyMember(${m.id})">🔑 مفتاح جديد</button>
+        <button class="b-g iconb" onclick="toggleMember(${m.id},${m.active?0:1})">${m.active?'تعطيل':'تفعيل'}</button>
+      </td></tr>`).join('')+'</table>'
+      :'<p class="msg">لا أعضاء بعد.</p>';
+  }catch(e){if(isGM())document.getElementById('mList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
-async function genCodes(){
-  const n=+document.getElementById('kCount').value||0,m=document.getElementById('kMsg');
-  if(n<1){m.textContent='أدخل عدداً صحيحاً.';return}
-  m.textContent='جارٍ الإنشاء…';
-  const d=await api('/api/admin/codes/generate',{method:'POST',body:JSON.stringify({count:n})});
-  if(d.ok){dlCSV([['code'],...d.codes.map(c=>[c])],'senior-student-codes-'+d.count);m.textContent=`تم إنشاء ${d.count} كوداً وتنزيلها.`;loadCodes()}
-  else m.textContent='خطأ.';
+function cpKey(k){navigator.clipboard&&navigator.clipboard.writeText(k);alert('نُسخ المفتاح — أرسله للعضو على واتساب مع رابط اللوحة seniorbookegy.com/admin.html')}
+async function addMember(){
+  const n=document.getElementById('tmName').value.trim(),p=document.getElementById('tmMob').value.trim(),r=document.getElementById('tmRole').value;
+  const m=document.getElementById('tmMsg');
+  if(!n){m.textContent='أدخل الاسم.';return}
+  try{
+    const d=await api('/api/admin/team/add',{method:'POST',body:JSON.stringify({name:n,mobile:p,role:r})});
+    m.textContent='تمت الإضافة — المفتاح: '+d.akey;
+    document.getElementById('tmName').value='';document.getElementById('tmMob').value='';
+    loadTeamList();
+  }catch(e){m.textContent='خطأ: '+e.message}
 }
-async function dlUnactivated(){
-  const d=await api('/api/admin/codes?activated=0');
-  dlCSV([['code'],...d.list.map(c=>[c.code])],'senior-codes-unactivated');
+async function renameMember(id,cur){
+  const n=prompt('الاسم الجديد:',cur);if(!n)return;
+  try{await api('/api/admin/team/update',{method:'POST',body:JSON.stringify({id,name:n})});loadTeamList()}catch(e){alert(e.message)}
+}
+async function rekeyMember(id){
+  if(!confirm('توليد مفتاح جديد؟ المفتاح القديم سيتوقف فوراً.'))return;
+  try{const d=await api('/api/admin/team/update',{method:'POST',body:JSON.stringify({id,rekey:true})});alert('المفتاح الجديد: '+d.akey);loadTeamList()}catch(e){alert(e.message)}
+}
+async function toggleMember(id,active){
+  try{await api('/api/admin/team/update',{method:'POST',body:JSON.stringify({id,active:!!active})});loadTeamList()}catch(e){alert(e.message)}
+}
+
+/* ================= AUDIT (GM) ================= */
+const ACT_AR={order_status:'حالة طلب',order_assign:'إسناد طلب',teacher_approve:'اعتماد مدرّس',teacher_reject:'رفض مدرّس',teacher_assign:'إسناد متابعة',rep_add:'كود مندوب',restock:'توريد مخزون',inventory_set:'تصحيح مخزون',team_add:'إضافة عضو',team_update:'تعديل عضو',payout:'دفعة عمولة',withdrawal_advance:'بدء تحويل',withdrawal_pay:'إتمام تحويل',library_add:'إضافة مكتبة'};
+async function loadAudit(){
+  const el=document.getElementById('gList');
+  try{
+    const d=await api('/api/admin/audit');
+    el.innerHTML=(d.audit||[]).length?'<table><tr><th>الوقت</th><th>العضو</th><th>الإجراء</th><th>التفاصيل</th></tr>'+
+      d.audit.map(a=>`<tr><td style="color:#8A9499;font-size:11.5px;white-space:nowrap">${esc((a.created_at||'').slice(0,16))}</td>
+      <td>${esc(a.actor)} <span class="tag role-${a.role}">${ROLE_AR[a.role]||a.role||''}</span></td>
+      <td><b>${ACT_AR[a.action]||esc(a.action)}</b></td><td>${esc(a.detail||'')}</td></tr>`).join('')+'</table>'
+      :'<p class="msg">لا نشاط مسجَّل بعد.</p>';
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 
 /* CSV helper (UTF-8 BOM for Excel Arabic) */

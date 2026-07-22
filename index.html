@@ -1070,8 +1070,8 @@ header.scr .brand img{height:26px}
         </div>
         <div class="two">
           <div class="fld"><label data-ar="المنطقة / المحافظة" data-en="Area / governorate"></label><select id="ptn-a"></select></div>
-          <div class="fld"><label data-ar="سنوات الخبرة" data-en="Years of experience"></label>
-            <select id="ptn-s"><option data-ar="أقل من ٥ سنوات" data-en="Under 5 years"></option><option data-ar="٥ – ١٠ سنوات" data-en="5–10 years"></option><option data-ar="١٠ – ١٥ سنة" data-en="10–15 years"></option><option data-ar="أكثر من ١٥ سنة" data-en="Over 15 years"></option></select></div>
+          <div class="fld"><label data-ar="عدد طلابك المتوقع هذا العام" data-en="Expected students this year"></label>
+            <select id="ptn-s"><option data-ar="أقل من ٥٠ طالباً" data-en="Under 50 students"></option><option data-ar="٥٠ – ٢٠٠ طالب" data-en="50–200 students"></option><option data-ar="٢٠٠ – ٥٠٠ طالب" data-en="200–500 students"></option><option data-ar="أكثر من ٥٠٠ طالب" data-en="Over 500 students"></option></select></div>
         </div>
         <div class="two">
           <div class="fld"><label data-ar="رقم الموبايل" data-en="Mobile"></label><input id="ptn-p" data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
@@ -1475,11 +1475,16 @@ function openCheckout(){if(!count()){toast(t('السلّة فارغة','Cart is 
 function renderCoSum(){
   const el=document.getElementById('coSum');if(!el)return;
   const sub=total(),d=discAmt();
-  el.innerHTML=d>0
-    ?`<div class="csr"><span>${t('السعر الأصلي','Original price')}</span><b>${sub} ${t('ج','EGP')}</b></div>
-      <div class="csr disc"><span>${t('خصم كود المدرّس','Teacher-code discount')} (${discountPct()}%)</span><b>−${d} ${t('ج','EGP')}</b></div>
-      <div class="csr due"><span>${t('الإجمالي المستحق','Total due')}</span><b>${payTotal()} ${t('ج','EGP')}</b></div>`
-    :`<div class="csr due"><span>${t('الإجمالي','Total')}</span><b>${sub} ${t('ج','EGP')}</b></div>`;
+  if(d<=0){el.innerHTML=`<div class="csr due"><span>${t('الإجمالي','Total')}</span><b>${sub} ${t('ج','EGP')}</b></div>`;return}
+  /* stacked breakdown: online base discount for everyone + code/type discount on top */
+  const oAmt=Math.round(sub*ONLINE_PCT/100),cp=codePct(),cAmt=d-oAmt;
+  const cLabel=BUYER&&BUYER.type==='library'?t('خصم المكتبة (حسب الكمية)','Bookshop bulk discount')
+    :BUYER&&BUYER.type==='teacher'?t('خصم المدرّس','Teacher discount')
+    :t('خصم كود المدرّس','Teacher-code discount');
+  el.innerHTML=`<div class="csr"><span>${t('السعر الأصلي','Original price')}</span><b>${sub} ${t('ج','EGP')}</b></div>
+      <div class="csr disc"><span>${t('خصم الطلب من الموقع','Online-order discount')} (${ONLINE_PCT}%)</span><b>−${oAmt} ${t('ج','EGP')}</b></div>
+      ${cp>0?`<div class="csr disc"><span>${cLabel} (${cp}%)</span><b>−${cAmt} ${t('ج','EGP')}</b></div>`:''}
+      <div class="csr due"><span>${t('الإجمالي المستحق','Total due')}</span><b>${payTotal()} ${t('ج','EGP')}</b></div>`;
 }
 function setCodeSt(state,msg){const s=document.getElementById('coCodeSt');if(!s)return;s.className='codeSt'+(state?' '+state:'');s.textContent=msg||''}
 let coCodeT;
@@ -1519,7 +1524,8 @@ async function submitOrder(){
   const r=await apiFetch('/api/order',{method:'POST',body:JSON.stringify({
     buyerType:BUYER?BUYER.type:'guest',name:n,mobile:p,governorate:info.g,city,school:(BUYER&&BUYER.school)||'',address:a,track:info.tr,
     items:Object.keys(cart).map(k=>{const pr=PRODUCTS.find(v=>v.id===k);return{id:k,qty:cart[k],price:pr?pr.price:0}}),
-    refCode:codeIn||(BUYER&&BUYER.code)||null,payMethod:METHOD})});
+    refCode:codeIn||(BUYER&&BUYER.code)||null,payMethod:METHOD,
+    utm:(typeof UTM!=='undefined'&&UTM)||''})});
   if(r&&r.ok){
     closeModal('mCheck');cart={};save();renderCart();
     toast(t('✅ تم استلام طلبك رقم '+r.orderId+' — سنتواصل معك لتأكيده قريباً','✅ Order #'+r.orderId+' received — we will contact you to confirm it soon'));
@@ -1875,9 +1881,22 @@ function renderPtBanner(){
       </div>`;
   }
 }
-/* TEMPORARY discount percentages until Mr. Salah confirms the real numbers */
+/* TEMPORARY discount percentages until Mr. Salah confirms the real numbers.
+   Stacked model: online base discount (everyone who orders from the site) + code/type discount on top. */
+const ONLINE_PCT=5; /* PLACEHOLDER — خصم الموقع الأساسي */
 const DISCOUNTS={student:5,teacher:15,library:25};
-function discountPct(){return BUYER&&BUYER.code?(DISCOUNTS[BUYER.type]||0):0}
+/* PLACEHOLDER library quantity tiers: [minimum books, pct] — replaces the base library pct for bulk orders */
+const LIB_TIERS=[[300,30],[100,28]];
+function codePct(){
+  if(!(BUYER&&BUYER.code))return 0;
+  if(BUYER.type==='library'){
+    const q=count();
+    for(const [min,p] of LIB_TIERS)if(q>=min)return p;
+    return DISCOUNTS.library;
+  }
+  return DISCOUNTS[BUYER.type]||0;
+}
+function discountPct(){return Math.min(90,ONLINE_PCT+codePct())}
 function discAmt(){return Math.round(total()*discountPct()/100)}
 function payTotal(){return total()-discAmt()}
 const mobOK=v=>/^01[0-9]{9}$/.test((v||'').replace(/\D/g,''));
@@ -1909,14 +1928,14 @@ async function ptTeacherNew(){
         a=document.getElementById('ptn-a').value,s=document.getElementById('ptn-s').selectedOptions[0].textContent,
         p=document.getElementById('ptn-p').value.trim(),e=document.getElementById('ptn-e').value.trim();
   if(!f||!l||!mobOK(p)){toast(t('أكمل الاسم بشقّيه ورقم موبايل صحيحاً','Complete both names and a valid mobile number'));return}
-  const d=await apiFetch('/api/teacher/register',{method:'POST',body:JSON.stringify({first:f,last:l,area:a,seniority:s,mobile:p,email:e})});
+  const d=await apiFetch('/api/teacher/register',{method:'POST',body:JSON.stringify({first:f,last:l,area:a,expected:s,mobile:p,email:e})});
   const done=document.getElementById('ptDoneMsg');
   if(d&&d.ok){
     done.textContent=d.duplicate
       ?t('يوجد طلب مسجَّل بهذا الرقم من قبل، وهو قيد المراجعة. يصلك الكود فور اعتماده.','A request with this number already exists and is under review. Your code arrives once approved.')
       :t('استلم فريقنا بياناتك. بعد المراجعة يصلك كودك الخاص عبر واتساب خلال يومي عمل.','Our team received your details. After review, your code arrives on WhatsApp within two working days.');
   }else{
-    const msg=encodeURIComponent(`${t('طلب تسجيل مدرّس جديد — Senior','New teacher registration — Senior')}\n${t('الاسم','Name')}: ${f} ${l}\n${t('المنطقة','Area')}: ${a}\n${t('سنوات الخبرة','Experience')}: ${s}\n${t('الموبايل','Mobile')}: ${p}\n${t('البريد الإلكتروني','Email')}: ${e||'—'}`);
+    const msg=encodeURIComponent(`${t('طلب تسجيل مدرّس جديد — Senior','New teacher registration — Senior')}\n${t('الاسم','Name')}: ${f} ${l}\n${t('المنطقة','Area')}: ${a}\n${t('عدد الطلاب المتوقع','Expected students')}: ${s}\n${t('الموبايل','Mobile')}: ${p}\n${t('البريد الإلكتروني','Email')}: ${e||'—'}`);
     window.open(`https://wa.me/${WA}?text=${msg}`,'_blank');
     done.textContent=t('تم تجهيز طلبك على واتساب — أرسله ليراجعه فريقنا، ثم يصلك كودك الخاص.','Your request is ready on WhatsApp — send it for our team to review, then your code arrives.');
   }
@@ -1982,9 +2001,16 @@ addEventListener('scroll',()=>hdrEl.classList.toggle('scr',scrollY>14),{passive:
 
 /* ===== SITE ANALYTICS (first-party, cookie-free) ===== */
 const SID=(()=>{try{let s=sessionStorage.getItem('snr_sid');if(!s){s=Math.random().toString(36).slice(2,12);sessionStorage.setItem('snr_sid',s)}return s}catch(e){return 'anon'}})();
+/* UTM attribution: captured once per session from ad links (?utm_source=…&utm_medium=…&utm_campaign=…) */
+const UTM=(()=>{try{
+  const q=new URLSearchParams(location.search);
+  const parts=[q.get('utm_source'),q.get('utm_medium'),q.get('utm_campaign')].map(x=>(x||'').trim()).filter(Boolean);
+  if(parts.length){const u=parts.join('/').slice(0,120);sessionStorage.setItem('snr_utm',u);return u}
+  return sessionStorage.getItem('snr_utm')||'';
+}catch(e){return ''}})();
 function track(t,name,extra){
   if(!API)return;
-  try{navigator.sendBeacon(API+'/api/hit',new Blob([JSON.stringify({t,name:name||'',extra:extra||'',sid:SID,dev:innerWidth<700?'mobile':'desktop',ref:document.referrer||''})],{type:'text/plain'}))}catch(e){}
+  try{navigator.sendBeacon(API+'/api/hit',new Blob([JSON.stringify({t,name:name||'',extra:extra||'',sid:SID,dev:innerWidth<700?'mobile':'desktop',ref:document.referrer||'',utm:UTM})],{type:'text/plain'}))}catch(e){}
 }
 track('pv','home');
 let T0=Date.now();
