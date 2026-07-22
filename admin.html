@@ -313,7 +313,7 @@ function renderOrders(){
   el.innerHTML=`<table><tr><th>#</th><th>المشتري</th><th>الكتب</th><th>الإجمالي</th><th>كود</th><th>الحالة</th><th></th></tr>`+
     list.map(o=>`<tr>
       <td>${o.id}<br><span style="color:#8A9499;font-size:11px">${esc((o.created_at||'').slice(0,10))}</span></td>
-      <td>${esc(o.name)}<br><span dir="ltr" style="font-size:12px">${esc(o.mobile)}</span><br><span class="tag">${BT[o.buyer_type]||o.buyer_type} · ${esc(o.governorate||'')}</span></td>
+      <td>${esc(o.name)}<br><span dir="ltr" style="font-size:12px">${esc(o.mobile)}</span><br><span class="tag">${BT[o.buyer_type]||o.buyer_type} · ${esc(o.governorate||'')}${o.city?' — '+esc(o.city):''}</span>${o.school?'<br><span style="color:#8A9499;font-size:11px">🏫 '+esc(o.school)+'</span>':''}</td>
       <td>${o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join('، ')}</td>
       <td>${o.total} ج</td>
       <td>${o.ref_code?'<span class="code">'+esc(o.ref_code)+'</span>':'—'}</td>
@@ -329,8 +329,8 @@ function waCustomer(id){
   window.open(`https://wa.me/2${o.mobile}?text=${encodeURIComponent((WAMSGS[o.status]||WAMSGS.new)(o))}`,'_blank');
 }
 function exportOrdersCSV(){
-  const rows=[['رقم','التاريخ','الاسم','الموبايل','المحافظة','العنوان','الصفة','الكتب','الإجمالي','كود الخصم','الدفع','الحالة']];
-  filteredOrders().forEach(o=>rows.push([o.id,(o.created_at||'').slice(0,16),o.name,o.mobile,o.governorate||'',o.address||'',BT[o.buyer_type]||o.buyer_type,
+  const rows=[['رقم','التاريخ','الاسم','الموبايل','المحافظة','المدينة/المركز','المدرسة','العنوان','الصفة','الكتب','الإجمالي','كود الخصم','الدفع','الحالة']];
+  filteredOrders().forEach(o=>rows.push([o.id,(o.created_at||'').slice(0,16),o.name,o.mobile,o.governorate||'',o.city||'',o.school||'',o.address||'',BT[o.buyer_type]||o.buyer_type,
     o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join(' + '),o.total,o.ref_code||'',o.pay_method||'',ST[o.status]||o.status]));
   dlCSV(rows,'senior-orders');
 }
@@ -352,7 +352,7 @@ function invoice(id){
   <div class="hd"><div><h2>Senior Books</h2>
     <div class="ph">[اسم النشاط القانوني — placeholder]<br>س.ت: —————— · ب.ض: ——————<br>القاهرة — الفجالة · 01010101445</div></div>
     <div style="text-align:left"><b>فاتورة رقم ${o.id}</b><br><span class="ph">${(o.created_at||'').slice(0,10)}</span></div></div>
-  <p><b>العميل:</b> ${o.name} · <span dir="ltr">${o.mobile}</span><br><b>العنوان:</b> ${o.governorate||''} — ${o.address||''}</p>
+  <p><b>العميل:</b> ${o.name} · <span dir="ltr">${o.mobile}</span><br><b>العنوان:</b> ${o.governorate||''}${o.city?' — '+o.city:''} — ${o.address||''}</p>
   <table><tr><th>الكتاب</th><th>الكمية</th><th>السعر</th><th>القيمة</th></tr>${rows}
   <tr class="tot"><td colspan="3">الإجمالي${o.ref_code?' (قبل خصم الكود '+o.ref_code+')':''}</td><td>${o.total} ج</td></tr></table>
   <p>طريقة الدفع: ${o.pay_method||'—'} · الحالة: ${ST[o.status]||o.status}</p>

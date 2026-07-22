@@ -127,10 +127,21 @@ nav.links a:hover{color:var(--teal)}
 .price .n{font-size:22px;font-weight:700;color:var(--orange)}
 .price .c{font-size:13px;color:var(--muted-2);font-weight:500}
 .price .old{font-size:14px;color:var(--muted-3);text-decoration:line-through}
+.price .dtag{background:#E8F5EC;color:#1C7A46;font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 8px;margin-inline-start:4px}
 .acts{display:flex;gap:8px;margin-top:6px}
 .acts .btn{flex:1}
 .smp{font-size:12.5px;font-weight:600;color:var(--teal);text-decoration:underline;text-underline-offset:3px;width:max-content}
 .smp:hover{color:var(--teal-d)}
+.cosum{background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:6px 16px}
+.cosum .csr{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;font-size:14px;border-bottom:1px dashed var(--line)}
+.cosum .csr:last-child{border:none}
+.cosum .csr.disc{color:#1C7A46;font-weight:600}
+.cosum .csr.due{font-weight:700}
+.cosum .csr.due b{color:var(--orange);font-size:19px}
+.codeSt{font-size:12px;margin-top:5px;font-weight:600;display:none}
+.codeSt.ok{display:block;color:#1C7A46}
+.codeSt.bad{display:block;color:#C0421C}
+.codeSt.wait{display:block;color:var(--muted-2)}
 .ship-note{text-align:center;margin-top:26px;color:var(--muted);font-size:14px}
 .ship-note b{color:var(--teal)}
 
@@ -959,16 +970,19 @@ header.scr .brand img{height:26px}
       </div>
       <div class="two">
         <div class="fld"><label data-ar="المحافظة" data-en="Governorate"></label><select id="co-g"></select></div>
-        <div class="fld"><label data-ar="المسار" data-en="Track"></label><select id="co-t"><option data-ar="ثالثة ثانوي — عام" data-en="Grade 3 — General"></option><option data-ar="ثالثة ثانوي — أزهر" data-en="Grade 3 — Azhar"></option><option data-ar="أخرى" data-en="Other"></option></select></div>
+        <div class="fld"><label data-ar="المدينة / المركز" data-en="City / Markaz"></label><input id="co-city" required data-ar-ph="مثال: المنصورة" data-en-ph="e.g. Mansoura"></div>
       </div>
-      <div class="fld"><label data-ar="العنوان بالتفصيل" data-en="Full address"></label><textarea id="co-a" rows="2" required data-ar-ph="المدينة، الشارع، رقم العمارة، علامة مميّزة" data-en-ph="City, street, building no., landmark"></textarea></div>
+      <div class="two">
+        <div class="fld"><label data-ar="المسار" data-en="Track"></label><select id="co-t"><option data-ar="ثالثة ثانوي — عام" data-en="Grade 3 — General"></option><option data-ar="ثالثة ثانوي — أزهر" data-en="Grade 3 — Azhar"></option><option data-ar="أخرى" data-en="Other"></option></select></div>
+        <div class="fld"><label data-ar="كود المدرّس (اختياري)" data-en="Teacher code (optional)"></label><input id="co-code" dir="ltr" data-ar-ph="SNR-T-0000" data-en-ph="SNR-T-0000" oninput="coCodeInput()"><div id="coCodeSt" class="codeSt"></div></div>
+      </div>
+      <div class="fld"><label data-ar="العنوان بالتفصيل" data-en="Full address"></label><textarea id="co-a" rows="2" required data-ar-ph="الشارع، رقم العمارة، علامة مميّزة" data-en-ph="Street, building no., landmark"></textarea></div>
       <h4 style="font-size:15px;font-weight:700;margin:16px 0 10px" data-ar="اختر وسيلة الدفع" data-en="Choose payment method"></h4>
       <div id="pays"></div>
       <div id="payPanel"></div>
-      <div class="tot" style="margin-top:14px"><span data-ar="الإجمالي" data-en="Total"></span><span><span class="v" id="cotot">0</span> <span data-ar="ج" data-en="EGP">ج</span></span></div>
-      <div class="note" id="coBuyer" style="display:none"></div>
-      <button class="btn b-wa" style="width:100%;margin-top:8px" onclick="submitOrder()" data-ar="إرسال الطلب عبر واتساب" data-en="Send order via WhatsApp"></button>
-      <div class="note" data-ar="سنتواصل معك لتأكيد الطلب قبل الشحن." data-en="We'll contact you to confirm the order before shipping."></div>
+      <div class="cosum" id="coSum" style="margin-top:14px"></div>
+      <button class="btn b-o" style="width:100%;margin-top:8px" onclick="submitOrder()" data-ar="🛒 إرسال الطلب" data-en="🛒 Send the order"></button>
+      <div class="note" data-ar="يصلنا طلبك فور الإرسال، وسنتواصل معك لتأكيده قبل الشحن." data-en="Your order reaches us instantly; we'll contact you to confirm before shipping."></div>
     </div>
   </div>
 </div>
@@ -1011,7 +1025,14 @@ header.scr .brand img{height:26px}
           <div class="fld"><label data-ar="رقم الموبايل" data-en="Mobile"></label><input id="pts-p" data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
           <div class="fld"><label data-ar="المحافظة" data-en="Governorate"></label><select id="pts-g"></select></div>
         </div>
-        <div class="fld"><label data-ar="كود المدرّس (اختياري)" data-en="Teacher code (optional)"></label><input id="pts-c" dir="ltr" data-ar-ph="SNR-T-0000" data-en-ph="SNR-T-0000"></div>
+        <div class="two">
+          <div class="fld"><label data-ar="المدينة / المركز" data-en="City / Markaz"></label><input id="pts-city" data-ar-ph="مثال: المنصورة" data-en-ph="e.g. Mansoura"></div>
+          <div class="fld"><label data-ar="اسم المدرسة" data-en="School name"></label><input id="pts-school" data-ar-ph="مثال: مدرسة المنصورة الثانوية" data-en-ph="e.g. Mansoura Secondary School"></div>
+        </div>
+        <div class="two">
+          <div class="fld"><label data-ar="المسار" data-en="Track"></label><select id="pts-t"><option data-ar="ثالثة ثانوي — عام" data-en="Grade 3 — General"></option><option data-ar="ثالثة ثانوي — أزهر" data-en="Grade 3 — Azhar"></option><option data-ar="أخرى" data-en="Other"></option></select></div>
+          <div class="fld"><label data-ar="كود المدرّس (اختياري)" data-en="Teacher code (optional)"></label><input id="pts-c" dir="ltr" data-ar-ph="SNR-T-0000" data-en-ph="SNR-T-0000"></div>
+        </div>
         <button class="btn b-o" style="width:100%" onclick="ptStudent()" data-ar="تفعيل وبدء الشراء" data-en="Activate &amp; start shopping"></button>
         <p class="pt-note" data-ar="إن أدخلت كود مدرّسك، يُحتسب خصمه لك عند تأكيد الطلب." data-en="If you enter your teacher's code, its discount is applied when we confirm the order."></p>
       </div>
@@ -1294,6 +1315,14 @@ const PRODUCTS=[
   fEn:['4 books in one order','Save 70 EGP','Free shipping nationwide']},
 ];
 const P=p=>LANG==='ar'?{t:p.tAr,d:p.dAr,m:p.mAr,f:p.fAr,b:p.badgeAr}:{t:p.tEn,d:p.dEn,m:p.mEn,f:p.fEn,b:p.badgeEn};
+/* price display: with an active code, strike the original and show the discounted price */
+function discPrice(v){return Math.round(v*(100-(typeof discountPct==='function'?discountPct():0))/100)}
+function priceHtml(p,cur){
+  const pct=typeof discountPct==='function'?discountPct():0;
+  if(pct>0)return `<span class="old">${p.price}</span><span class="n">${discPrice(p.price)}</span><span class="c">${cur}</span><span class="dtag">−${pct}%</span>`;
+  return p.oldPrice?`<span class="old">${p.oldPrice}</span><span class="n">${p.price}</span><span class="c">${cur}</span>`
+                   :`<span class="n">${p.price}</span><span class="c">${cur}</span>`;
+}
 let filter='all';
 function counts(){return{all:PRODUCTS.length,single:PRODUCTS.filter(p=>p.kind==='single').length,bundle:PRODUCTS.filter(p=>p.kind==='bundle').length}}
 function renderSeg(){
@@ -1309,8 +1338,7 @@ function renderProds(){
     const cv=p.kind==='bundle'
       ? `<div class="cv bundle">${badge}${p.imgs.map(s=>`<img src="${s}" alt="">`).join('')}</div>`
       : `<div class="cv">${badge}<img src="${p.img}" alt="${x.t}" loading="lazy"></div>`;
-    const price=p.oldPrice?`<span class="old">${p.oldPrice}</span><span class="n">${p.price}</span><span class="c">${t('ج','EGP')}</span>`
-                          :`<span class="n">${p.price}</span><span class="c">${t('ج','EGP')}</span>`;
+    const price=priceHtml(p,t('ج','EGP'));
     const el=document.createElement('div');el.className='card';
     el.innerHTML=`${cv}<div class="cbody">
       <div class="tags"><span class="tag" style="background:${p.accent}">${x.m}</span></div>
@@ -1328,7 +1356,7 @@ function renderProds(){
 function showProd(id){
   const p=PRODUCTS.find(v=>v.id===id),x=P(p);
   const cv=p.kind==='bundle'?`<div class="cv bundle">${p.imgs.map(s=>`<img src="${s}" alt="">`).join('')}</div>`:`<div class="cv"><img src="${p.img}" alt=""></div>`;
-  const price=p.oldPrice?`<span class="old">${p.oldPrice}</span><span class="n">${p.price}</span><span class="c">${t('جنيه','EGP')}</span>`:`<span class="n">${p.price}</span><span class="c">${t('جنيه','EGP')}</span>`;
+  const price=priceHtml(p,t('جنيه','EGP'));
   document.getElementById('pdBody').innerHTML=`<div class="pd">${cv}<div>
     <div class="tags" style="margin-bottom:8px"><span class="tag" style="background:${p.accent}">${x.m}</span></div>
     <h3>${x.t}</h3><p style="color:var(--muted);margin:10px 0;font-size:14px">${x.d}</p>
@@ -1366,7 +1394,7 @@ function renderCart(){
   ids.forEach(id=>{const p=PRODUCTS.find(v=>v.id===id);if(!p)return;const x=P(p);
     const th=p.kind==='bundle'?p.imgs[3]:p.img;
     const el=document.createElement('div');el.className='ci';
-    el.innerHTML=`<img src="${th}" alt=""><div class="in"><h4>${x.t}</h4><div class="p">${p.price} ${t('ج','EGP')}</div>
+    el.innerHTML=`<img src="${th}" alt=""><div class="in"><h4>${x.t}</h4><div class="p">${discountPct()>0?`<s style="color:var(--muted-3);font-weight:400">${p.price}</s> ${discPrice(p.price)}`:p.price} ${t('ج','EGP')}</div>
       <button class="rm" onclick="rm('${id}')">${t('حذف','Remove')}</button></div>
       <div class="qty"><button onclick="chg('${id}',-1)">−</button><span>${cart[id]}</span><button onclick="chg('${id}',1)">+</button></div>`;
     w.appendChild(el)});
@@ -1418,33 +1446,88 @@ function orderText(info){
     L.push(`${t('الإجمالي المستحق','Total due')}: ${payTotal()} ${t('ج','EGP')}`);}
   else L.push(`${t('الإجمالي','Total')}: ${total()} ${t('ج','EGP')}`);
   if(info){L.push('');L.push(`${t('الاسم','Name')}: ${info.n}`);L.push(`${t('الموبايل','Mobile')}: ${info.p}`);
-    L.push(`${t('المحافظة','Governorate')}: ${info.g}`);L.push(`${t('المسار','Track')}: ${info.tr}`);
+    L.push(`${t('المحافظة','Governorate')}: ${info.g}${info.city?` — ${info.city}`:''}`);L.push(`${t('المسار','Track')}: ${info.tr}`);
     L.push(`${t('العنوان','Address')}: ${info.a}`);L.push(`${t('وسيلة الدفع','Payment')}: ${info.m}`)}
   if(BUYER){L.push('');L.push(`${t('نوع المشتري','Buyer type')}: ${LANG==='ar'?BTYPE[BUYER.type][0]:BTYPE[BUYER.type][1]}`);
+    if(BUYER.school)L.push(`${t('المدرسة','School')}: ${BUYER.school}`);
     if(BUYER.code)L.push(`${t('كود الخصم','Discount code')}: ${BUYER.code}${BUYER.verified?'':t(' (بانتظار التحقق)',' (pending verification)')}`)}
   return encodeURIComponent(L.join('\n'));
 }
 function orderWA(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}window.open(`https://wa.me/${WA}?text=${orderText(null)}`,'_blank')}
 function openCheckout(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}
   if(typeof track==='function')track('ev','checkout');
-  document.getElementById('cotot').textContent=payTotal();renderPays();
-  const cb=document.getElementById('coBuyer');
-  if(cb){if(discAmt()>0){cb.style.display='block';
-      cb.textContent=`${t('خصم','Discount')} ${LANG==='ar'?BTYPE[BUYER.type][0]:BTYPE[BUYER.type][1]} ${discountPct()}% (${t('كود','code')} ${BUYER.code}): −${discAmt()} ${t('ج، من إجمالي','EGP, off')} ${total()} ${t('ج.','EGP.')}`}
-    else cb.style.display='none'}
+  if(BUYER){
+    if(BUYER.name&&!document.getElementById('co-n').value)document.getElementById('co-n').value=BUYER.name;
+    if(BUYER.mobile&&!document.getElementById('co-p').value)document.getElementById('co-p').value=BUYER.mobile;
+    if(BUYER.gov)document.getElementById('co-g').value=BUYER.gov;
+    if(BUYER.city&&!document.getElementById('co-city').value)document.getElementById('co-city').value=BUYER.city;
+    if(typeof BUYER.trackIdx==='number'&&BUYER.trackIdx>=0)document.getElementById('co-t').selectedIndex=BUYER.trackIdx;
+    if(BUYER.code)document.getElementById('co-code').value=BUYER.code;
+  }
+  renderPays();renderCoSum();
+  if(BUYER&&BUYER.code){
+    setCodeSt(BUYER.verified?'ok':'wait',
+      BUYER.verified
+        ?t('✓ الكود مفعَّل منذ التسجيل','✓ Code active since registration')+(BUYER.teacher?' — '+BUYER.teacher:'')
+        :t('🕓 الكود مسجَّل — يُتحقق منه عند تأكيد الطلب','🕓 Code recorded — verified on order confirmation'));
+  }else setCodeSt('','');
   openModal('mCheck')}
-function submitOrder(){
-  const n=document.getElementById('co-n').value.trim(),p=document.getElementById('co-p').value.trim(),a=document.getElementById('co-a').value.trim();
-  if(!n||!p||!a){toast(t('من فضلك أكمل البيانات','Please complete the fields'));return}
+function renderCoSum(){
+  const el=document.getElementById('coSum');if(!el)return;
+  const sub=total(),d=discAmt();
+  el.innerHTML=d>0
+    ?`<div class="csr"><span>${t('السعر الأصلي','Original price')}</span><b>${sub} ${t('ج','EGP')}</b></div>
+      <div class="csr disc"><span>${t('خصم كود المدرّس','Teacher-code discount')} (${discountPct()}%)</span><b>−${d} ${t('ج','EGP')}</b></div>
+      <div class="csr due"><span>${t('الإجمالي المستحق','Total due')}</span><b>${payTotal()} ${t('ج','EGP')}</b></div>`
+    :`<div class="csr due"><span>${t('الإجمالي','Total')}</span><b>${sub} ${t('ج','EGP')}</b></div>`;
+}
+function setCodeSt(state,msg){const s=document.getElementById('coCodeSt');if(!s)return;s.className='codeSt'+(state?' '+state:'');s.textContent=msg||''}
+let coCodeT;
+function coCodeInput(){
+  clearTimeout(coCodeT);
+  const v=document.getElementById('co-code').value.trim().toUpperCase();
+  if(!v){setCodeSt('','');renderCoSum();return}
+  if(BUYER&&BUYER.code===v&&BUYER.verified){setCodeSt('ok',t('✓ الكود مفعَّل','✓ Code active')+(BUYER.teacher?' — '+BUYER.teacher:''));renderCoSum();return}
+  setCodeSt('wait',t('جارٍ التحقق من الكود…','Checking the code…'));
+  coCodeT=setTimeout(async()=>{
+    const d=await apiFetch('/api/code/check?code='+encodeURIComponent(v));
+    if(d&&d.valid&&d.kind==='teacher'){
+      setBuyer({type:BUYER?BUYER.type:'student',name:(BUYER&&BUYER.name)||'',mobile:(BUYER&&BUYER.mobile)||'',
+        gov:(BUYER&&BUYER.gov)||'',city:(BUYER&&BUYER.city)||'',code:v,teacher:d.name||'',verified:true});
+      setCodeSt('ok',t('✓ الكود صحيح — خصمك مفعَّل','✓ Code valid — your discount is active')+(d.name?' ('+d.name+')':''));
+    }else if(d){setCodeSt('bad',t('✗ الكود غير صحيح','✗ Invalid code'))}
+    else setCodeSt('wait',t('🕓 يُتحقق من الكود عند تأكيد الطلب','🕓 Code will be verified on confirmation'));
+    renderCoSum();
+  },500);
+}
+async function submitOrder(){
+  const n=document.getElementById('co-n').value.trim(),p=document.getElementById('co-p').value.trim(),
+        a=document.getElementById('co-a').value.trim(),city=document.getElementById('co-city').value.trim();
+  if(!n||!p||!a||!city){toast(t('من فضلك أكمل البيانات (ومنها المدينة / المركز)','Please complete the fields (including city)'));return}
+  /* teacher code typed at checkout counts exactly like the portal one */
+  const codeIn=document.getElementById('co-code').value.trim().toUpperCase();
+  if(codeIn&&(!BUYER||BUYER.code!==codeIn)){
+    const d=await apiFetch('/api/code/check?code='+encodeURIComponent(codeIn));
+    if(d&&!d.valid){toast(t('كود المدرّس غير صحيح — صحّحه أو امسح الخانة','Invalid teacher code — fix it or clear the field'));return}
+    setBuyer({type:BUYER?BUYER.type:'student',name:(BUYER&&BUYER.name)||n,mobile:(BUYER&&BUYER.mobile)||p,
+      gov:document.getElementById('co-g').value,city,code:codeIn,teacher:d?(d.name||''):'',verified:!!(d&&d.valid)});
+    renderCoSum();
+  }
   const mp=PAYS.find(v=>v.k===METHOD);
-  const info={n,p,a,g:document.getElementById('co-g').value,tr:document.getElementById('co-t').selectedOptions[0].textContent,m:LANG==='ar'?mp.bAr:mp.bEn};
-  apiFetch('/api/order',{method:'POST',body:JSON.stringify({
-    buyerType:BUYER?BUYER.type:'guest',name:n,mobile:p,governorate:info.g,address:a,track:info.tr,
-    items:Object.keys(cart).map(k=>{const pr=PRODUCTS.find(v=>v.id===k);return{id:k,qty:cart[k],price:pr?pr.price:0}}),
-    refCode:BUYER&&BUYER.code?BUYER.code:null,payMethod:METHOD})});
+  const info={n,p,a,city,g:document.getElementById('co-g').value,tr:document.getElementById('co-t').selectedOptions[0].textContent,m:LANG==='ar'?mp.bAr:mp.bEn};
   if(typeof track==='function')track('ev','order',''+payTotal());
-  window.open(`https://wa.me/${WA}?text=${orderText(info)}`,'_blank');
-  closeModal('mCheck');toast(t('تم تجهيز طلبك على واتساب','Your order is ready on WhatsApp'));
+  const r=await apiFetch('/api/order',{method:'POST',body:JSON.stringify({
+    buyerType:BUYER?BUYER.type:'guest',name:n,mobile:p,governorate:info.g,city,school:(BUYER&&BUYER.school)||'',address:a,track:info.tr,
+    items:Object.keys(cart).map(k=>{const pr=PRODUCTS.find(v=>v.id===k);return{id:k,qty:cart[k],price:pr?pr.price:0}}),
+    refCode:codeIn||(BUYER&&BUYER.code)||null,payMethod:METHOD})});
+  if(r&&r.ok){
+    closeModal('mCheck');cart={};save();renderCart();
+    toast(t('✅ تم استلام طلبك رقم '+r.orderId+' — سنتواصل معك لتأكيده قريباً','✅ Order #'+r.orderId+' received — we will contact you to confirm it soon'));
+  }else{
+    /* backend unreachable → WhatsApp fallback so no order is ever lost */
+    window.open(`https://wa.me/${WA}?text=${orderText(info)}`,'_blank');
+    closeModal('mCheck');toast(t('تم تجهيز طلبك على واتساب — أرسله ليصلنا','Your order is ready on WhatsApp — send it to reach us'));
+  }
 }
 function sendContact(e){
   e.preventDefault();
@@ -1771,8 +1854,8 @@ const BTYPE={student:['طالب','Student'],teacher:['مدرّس','Teacher'],lib
 function openPortal(scr){document.getElementById('portal').classList.add('on');document.body.style.overflow='hidden';ptShow(scr||'pt-choose');if(typeof track==='function')track('ev','portal',scr||'choose')}
 function closePortal(){document.getElementById('portal').classList.remove('on');document.body.style.overflow=''}
 function ptShow(id){document.querySelectorAll('.pt-scr').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on')}
-function setBuyer(b){BUYER=b;localStorage.setItem('senior_buyer',JSON.stringify(b));renderPtBanner()}
-function clearBuyer(){BUYER=null;localStorage.removeItem('senior_buyer');renderPtBanner()}
+function setBuyer(b){BUYER=b;localStorage.setItem('senior_buyer',JSON.stringify(b));renderPtBanner();if(typeof renderProds==='function')renderProds();if(typeof renderCart==='function')renderCart()}
+function clearBuyer(){BUYER=null;localStorage.removeItem('senior_buyer');renderPtBanner();if(typeof renderProds==='function')renderProds();if(typeof renderCart==='function')renderCart()}
 function renderPtBanner(){
   const el=document.getElementById('ptBanner');if(!el)return;
   if(BUYER){
@@ -1800,14 +1883,16 @@ function payTotal(){return total()-discAmt()}
 const mobOK=v=>/^01[0-9]{9}$/.test((v||'').replace(/\D/g,''));
 async function ptStudent(){
   const n=document.getElementById('pts-n').value.trim(),p=document.getElementById('pts-p').value.trim(),
-        g=document.getElementById('pts-g').value,c=document.getElementById('pts-c').value.trim().toUpperCase();
+        g=document.getElementById('pts-g').value,city=document.getElementById('pts-city').value.trim(),
+        school=document.getElementById('pts-school').value.trim(),
+        c=document.getElementById('pts-c').value.trim().toUpperCase();
   if(!n||!mobOK(p)){toast(t('أكمل الاسم ورقم موبايل صحيحاً','Enter your name and a valid mobile number'));return}
   let verified=false,tname='';
   if(c){
     const d=await apiFetch('/api/code/check?code='+encodeURIComponent(c));
     if(d){if(!d.valid||d.kind!=='teacher'){toast(t('كود المدرّس غير صحيح','Invalid teacher code'));return}verified=true;tname=d.name||''}
   }
-  setBuyer({type:'student',name:n,mobile:p,gov:g,code:c||null,teacher:tname,verified});
+  setBuyer({type:'student',name:n,mobile:p,gov:g,city,school,trackIdx:document.getElementById('pts-t').selectedIndex,code:c||null,teacher:tname,verified});
   closePortal();toast(t('تم تفعيل حساب الطالب','Student account activated'));
 }
 async function ptTeacherExist(){
