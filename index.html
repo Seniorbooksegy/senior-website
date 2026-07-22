@@ -103,18 +103,13 @@ nav.links a:hover{color:var(--teal)}
 .i-s{background:var(--slate-l);color:var(--ink)}
 
 /* shop */
-.shop-gate{max-width:720px;margin:0 auto;background:linear-gradient(150deg,var(--teal-l),#fff 62%);border:1.5px solid var(--line-2);border-radius:24px;padding:36px 26px;text-align:center;box-shadow:0 12px 38px rgba(14,110,96,.09)}
-.sg-badge{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line-2);color:var(--teal);font-weight:700;font-size:12px;border-radius:999px;padding:6px 14px;margin-bottom:15px}
-.sg-h{font-size:24px;color:var(--ink);font-weight:700;margin-bottom:9px}
-.sg-sub{color:var(--muted);font-size:14px;line-height:1.8;max-width:520px;margin:0 auto 24px}
-.sg-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
-.sg-card{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:20px 14px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:5px;transition:.18s}
-.sg-card:hover{border-color:var(--teal);transform:translateY(-3px);box-shadow:var(--sh-card)}
-.sg-card .em{font-size:30px;margin-bottom:2px}
-.sg-card b{font-size:15px;color:var(--ink);font-weight:700}
-.sg-card small{font-size:11.5px;color:var(--muted);line-height:1.6}
-.sg-guest{background:none;border:none;color:var(--teal);font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;padding:8px;text-decoration:underline;text-underline-offset:3px}
-@media(max-width:620px){.sg-cards{grid-template-columns:1fr}.sg-h{font-size:20px}.shop-gate{padding:28px 18px}}
+.buy-exp{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:linear-gradient(120deg,var(--teal-l),#fff 72%);border:1.5px solid var(--line-2);border-radius:18px;padding:16px 20px;margin-bottom:22px}
+.buy-exp .be-ic{font-size:24px;background:#fff;border:1px solid var(--line-2);width:48px;height:48px;border-radius:14px;display:grid;place-items:center;flex-shrink:0}
+.buy-exp .be-tx{flex:1;min-width:190px}
+.buy-exp .be-tx b{display:block;font-size:16px;color:var(--ink)}
+.buy-exp .be-tx span{font-size:13px;color:var(--muted);line-height:1.6}
+.buy-exp .be-bs{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:620px){.buy-exp{padding:14px 16px}.buy-exp .be-bs{width:100%}.buy-exp .be-bs .btn{flex:1}}
 .seg-wrap{display:flex;justify-content:center;margin:0 0 36px}
 .seg{display:inline-flex;gap:4px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px;box-shadow:0 6px 20px rgba(14,110,96,.07)}
 .seg button{background:transparent;color:var(--muted);border:none;cursor:pointer;font-family:inherit;border-radius:999px;padding:11px 22px;font-weight:600;font-size:13.5px;display:inline-flex;align-items:center;gap:8px;transition:.15s}
@@ -772,25 +767,11 @@ header.scr .brand img{height:26px}
       <h2 class="t" data-ar="كتب الصف الثالث الثانوي — عام وأزهر" data-en="Grade 3 Secondary books — General &amp; Azhar"></h2>
       <p class="lead" data-ar="خمسة كتب متكاملة — الشرح والتمارين والمهارات وقطع الفهم والقواعد، جميعها بإجابات نموذجية. اطلب الكتاب الذي تحتاجه أو المجموعة كاملة بسعر أوفر." data-en="Five complete books — Explanation, Exercises, Skills, Comprehension and Grammar, all with model answers. Order the book you need, or the full set at a better price."></p>
     </div>
-    <!-- SOFT-HOOK GATE: books stay hidden until the visitor picks an identity or chooses guest -->
-    <div class="shop-gate" id="shopGate" style="display:none">
-      <div class="sg-badge">🔐 <span data-ar="تجربة شراء مخصّصة" data-en="A personalized purchase experience"></span></div>
-      <h3 class="sg-h" data-ar="لكل مشترٍ سعره وخصمه" data-en="Every buyer has their own price"></h3>
-      <p class="sg-sub" data-ar="اختر صفتك لتبدأ تجربة شراء استثنائية يظهر لك فيها سعرك الخاص وخصمك المناسب — أو تصفّح الكتب كزائر." data-en="Choose your role to begin a tailored experience that reveals your own price and discount — or browse the books as a guest."></p>
-      <div class="sg-cards">
-        <button class="sg-card" onclick="openPortal('pt-student')"><span class="em">🎓</span><b data-ar="طالب" data-en="Student"></b><small data-ar="خصمك عبر كود مدرّسك" data-en="Your discount via your teacher's code"></small></button>
-        <button class="sg-card" onclick="openPortal('pt-teacher')"><span class="em">🧑‍🏫</span><b data-ar="مدرّس" data-en="Teacher"></b><small data-ar="كودك وعمولتك ومكافآتك" data-en="Your code, commission &amp; rewards"></small></button>
-        <button class="sg-card" onclick="openPortal('pt-lib')"><span class="em">🏪</span><b data-ar="مكتبة / موزّع" data-en="Bookshop"></b><small data-ar="أسعار الجملة حسب الكمية" data-en="Wholesale pricing by quantity"></small></button>
-      </div>
-      <button class="sg-guest" onclick="enterGuest()" data-ar="تصفّح الكتب كزائر ←" data-en="Browse the books as a guest →"></button>
-    </div>
-
-    <div id="shopInner" style="display:none">
-      <div class="pt-banner" id="ptBanner"></div>
-      <div class="seg-wrap"><div class="seg" id="seg"></div></div>
-      <div class="prods" id="prods"></div>
-      <p class="ship-note" data-ar="🚚 <b>شحن مجاني</b> عند طلب السلسلة كاملة · الدفع عند الاستلام لكل المحافظات" data-en="🚚 <b>Free shipping</b> on the full series · cash on delivery nationwide"></p>
-    </div>
+    <div class="pt-banner" id="ptBanner"></div>
+    <div class="buy-exp" id="buyExp"></div>
+    <div class="seg-wrap"><div class="seg" id="seg"></div></div>
+    <div class="prods" id="prods"></div>
+    <p class="ship-note" data-ar="🚚 <b>شحن مجاني</b> عند طلب السلسلة كاملة · الدفع عند الاستلام لكل المحافظات" data-en="🚚 <b>Free shipping</b> on the full series · cash on delivery nationwide"></p>
   </div>
 </section>
 
@@ -1040,7 +1021,7 @@ header.scr .brand img{height:26px}
         <div class="pt-card" onclick="ptShow('pt-teacher')"><div class="em">🧑‍🏫</div><div><h4 data-ar="مدرّس" data-en="Teacher"></h4><p data-ar="لديك كود؟ فعّله مباشرة. مدرّس جديد؟ سجّل بياناتك ليصلك كودك الخاص بعد المراجعة." data-en="Have a code? Activate it. New teacher? Register and receive your own code after review."></p></div></div>
         <div class="pt-card" onclick="ptShow('pt-lib')"><div class="em">🏪</div><div><h4 data-ar="مكتبة / موزّع" data-en="Bookshop / Distributor"></h4><p data-ar="أسعار الجملة عبر كود المندوب الخاص بمنطقتك." data-en="Wholesale pricing via your area representative's code."></p></div></div>
       </div>
-      <button class="pt-guest" onclick="enterGuest()" data-ar="المتابعة كزائر بدون خصم" data-en="Continue as a guest without a discount"></button>
+      <button class="pt-guest" onclick="closePortal()" data-ar="المتابعة كزائر بدون خصم" data-en="Continue as a guest without a discount"></button>
     </div>
 
     <div class="pt-scr" id="pt-student">
@@ -1115,7 +1096,7 @@ header.scr .brand img{height:26px}
         <div style="font-size:44px;margin-bottom:8px">✅</div>
         <h3 class="pt-h" data-ar="تم استلام طلبك" data-en="Request received"></h3>
         <p class="pt-sub" id="ptDoneMsg"></p>
-        <button class="btn b-t" onclick="enterGuest()" data-ar="تصفّح الكتب الآن" data-en="Browse the books now"></button>
+        <button class="btn b-t" onclick="closePortal()" data-ar="العودة للموقع" data-en="Back to the site"></button>
       </div>
     </div>
 
@@ -1281,6 +1262,7 @@ function applyLang(){
   document.querySelectorAll('[data-ar-ph]').forEach(el=>{const v=el.getAttribute('data-'+LANG+'-ph');if(v!==null)el.placeholder=v});
   renderSeg();renderProds();renderCart();renderPays();
   if(typeof renderPtBanner==='function')renderPtBanner();
+  if(typeof renderBuyExp==='function')renderBuyExp();
 }
 function toggleLang(){LANG=LANG==='ar'?'en':'ar';localStorage.setItem('senior_lang',LANG);applyLang()}
 
@@ -1885,44 +1867,36 @@ function sendReport(who){
 /* ===== PURCHASE PORTAL ===== */
 let BUYER=null;try{BUYER=JSON.parse(localStorage.getItem('senior_buyer')||'null')}catch(e){}
 const BTYPE={student:['طالب','Student'],teacher:['مدرّس','Teacher'],library:['مكتبة / موزّع','Bookshop / Distributor']};
-/* soft-hook gate: books stay hidden until the visitor registers OR chooses guest (persists across visits) */
-let shopEntered=false;try{shopEntered=localStorage.getItem('senior_entered')==='1'}catch(e){}
-function renderShopGate(){
-  const gate=document.getElementById('shopGate'),inner=document.getElementById('shopInner');
-  if(!gate||!inner)return;
-  const open=!!(BUYER||shopEntered);
-  gate.style.display=open?'none':'block';
-  inner.style.display=open?'block':'none';
-}
-function enterGuest(){
-  shopEntered=true;try{localStorage.setItem('senior_entered','1')}catch(e){}
-  closePortal();renderShopGate();
-  if(typeof renderProds==='function')renderProds();
-  if(typeof track==='function')track('ev','enter','guest');
-  const sh=document.getElementById('shop');if(sh)sh.scrollIntoView({behavior:'smooth',block:'start'});
+/* buy-experience card: books are always visible; this card invites the visitor to unlock their price/discount */
+function renderBuyExp(){
+  const el=document.getElementById('buyExp');if(!el)return;
+  if(BUYER){el.style.display='none';return}
+  el.style.display='flex';
+  el.innerHTML=`<div class="be-ic">🔓</div>
+    <div class="be-tx"><b>${t('لكل مشترٍ سعره وخصمه','Every buyer has their own price')}</b><span>${t('اختر صفتك ليظهر لك سعرك الخاص وخصمك المناسب — أو تصفّح الكتب بالأسفل.','Choose your role to reveal your own price and discount — or browse the books below.')}</span></div>
+    <div class="be-bs">
+      <button class="btn b-t b-sm" onclick="openPortal('pt-student')">🎓 ${t('طالب','Student')}</button>
+      <button class="btn b-t b-sm" onclick="openPortal('pt-teacher')">🧑‍🏫 ${t('مدرّس','Teacher')}</button>
+      <button class="btn b-g b-sm" onclick="openPortal('pt-lib')">🏪 ${t('مكتبة','Bookshop')}</button>
+    </div>`;
 }
 function openPortal(scr){document.getElementById('portal').classList.add('on');document.body.style.overflow='hidden';ptShow(scr||'pt-choose');if(typeof track==='function')track('ev','portal',scr||'choose')}
 function closePortal(){document.getElementById('portal').classList.remove('on');document.body.style.overflow=''}
 function ptShow(id){document.querySelectorAll('.pt-scr').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on')}
-function setBuyer(b){BUYER=b;localStorage.setItem('senior_buyer',JSON.stringify(b));shopEntered=true;try{localStorage.setItem('senior_entered','1')}catch(e){}renderPtBanner();renderShopGate();if(typeof renderProds==='function')renderProds();if(typeof renderCart==='function')renderCart()}
-function clearBuyer(){BUYER=null;localStorage.removeItem('senior_buyer');renderPtBanner();renderShopGate();if(typeof renderProds==='function')renderProds();if(typeof renderCart==='function')renderCart()}
+function setBuyer(b){BUYER=b;localStorage.setItem('senior_buyer',JSON.stringify(b));renderPtBanner();renderBuyExp();if(typeof renderProds==='function')renderProds();if(typeof renderCart==='function')renderCart()}
+function clearBuyer(){BUYER=null;localStorage.removeItem('senior_buyer');renderPtBanner();renderBuyExp();if(typeof renderProds==='function')renderProds();if(typeof renderCart==='function')renderCart()}
 function renderPtBanner(){
   const el=document.getElementById('ptBanner');if(!el)return;
   if(BUYER){
     const ty=LANG==='ar'?BTYPE[BUYER.type][0]:BTYPE[BUYER.type][1];
     const code=BUYER.code?` · ${t('كود','code')} <b dir="ltr">${BUYER.code}</b>`:'';
     const ver=BUYER.code&&!BUYER.verified?'🕓':'✅';
-    el.classList.add('ok');
+    el.style.display='flex';el.classList.add('ok');
     el.innerHTML=`<div class="tx">${ver} ${t('مسجَّل بصفة','Registered as')}: <b>${ty}</b>${code}<small>${discountPct()>0?t(`خصم ${discountPct()}% مفعَّل على طلباتك.`,`A ${discountPct()}% discount is active on your orders.`):''}</small></div>
       <div class="bs"><button class="lk" onclick="openPortal()">${t('تغيير','Change')}</button><button class="lk" onclick="clearBuyer()">${t('إلغاء','Remove')}</button></div>`;
   }else{
-    el.classList.remove('ok');
-    el.innerHTML=`<div class="tx">${t('لكل صفةٍ سعرها وخصمها — اختر صفتك قبل الطلب.','Every buyer has their price and discount — choose yours before ordering.')}</div>
-      <div class="bs">
-        <button class="btn b-t b-sm" onclick="openPortal('pt-student')">🎓 ${t('طالب','Student')}</button>
-        <button class="btn b-t b-sm" onclick="openPortal('pt-teacher')">🧑‍🏫 ${t('مدرّس','Teacher')}</button>
-        <button class="btn b-t b-sm" onclick="openPortal('pt-lib')">🏪 ${t('مكتبة','Bookshop')}</button>
-      </div>`;
+    /* the invite lives in the buy-experience card; keep this status banner hidden when no buyer */
+    el.style.display='none';el.classList.remove('ok');el.innerHTML='';
   }
 }
 /* TEMPORARY discount percentages until Mr. Salah confirms the real numbers.
@@ -1997,7 +1971,7 @@ async function ptLib(){
 }
 ['pts-g','ptn-a','ptl-g'].forEach(id=>{const s=document.getElementById(id);if(s&&!s.options.length)GOVS.forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=g;s.appendChild(o)})});
 renderPtBanner();
-renderShopGate();
+renderBuyExp();
 /* teacher affiliate link: ?ref=SNR-T-xxxx auto-applies the code for the student */
 (function(){
   try{
