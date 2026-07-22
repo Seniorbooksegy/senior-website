@@ -30,7 +30,7 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
 .low{color:#C0421C;font-weight:700}
 
 /* shell */
-#app{display:flex;gap:18px;max-width:1200px;margin:0 auto;padding:18px}
+#app{display:flex;gap:18px;width:100%;margin:0 auto;padding:18px 22px}
 #side{width:212px;flex-shrink:0;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 10px;position:sticky;top:18px;align-self:flex-start;display:flex;flex-direction:column;min-height:calc(100vh - 36px)}
 .brand{display:flex;align-items:center;gap:9px;padding:6px 8px 14px}
 .brand .lg{width:30px;height:30px;border-radius:8px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
@@ -79,30 +79,40 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
 .subtabs button.on{background:var(--ink);color:#fff}
 .subpanel{display:none}.subpanel.on{display:block}
 
-/* icon filters (orders) */
-.ofbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.ofic{position:relative;background:#fff;border:1.5px solid var(--line2);border-radius:12px;min-width:46px;height:44px;padding:0 12px;font-size:18px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s}
-.ofic:hover{border-color:var(--teal)}.ofic span{font-size:12px;font-weight:700;color:var(--teal)}.ofic span:empty{display:none}
-.ofic.on{background:var(--ink);border-color:var(--ink)}.ofic.on span{color:var(--orange)}
-.ofcount{font-size:12px;color:var(--muted);font-weight:600}
-.ofpanel{background:#F6F1E9;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:10px;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
-.ofpanel .oflabel{font-size:12.5px;font-weight:700;color:var(--muted);margin-inline-end:2px}
-.ofpanel .opt{background:#fff;border:1.5px solid var(--line2);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--ink)}
-.ofpanel .opt.on{background:var(--teal);color:#fff;border-color:var(--teal)}
-.ofpanel input{margin:0;flex:1;min-width:220px}
-.ofchips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+/* unified filter (Trendyol-style single panel) */
+.filterbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.filterbtn{background:#fff;border:1.5px solid var(--line2);border-radius:12px;padding:10px 18px;font-size:13.5px;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.filterbtn:hover{border-color:var(--teal)}
+.filterbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.filterbtn .fb{background:var(--orange);color:#5a3a10;border-radius:999px;font-size:11px;padding:1px 8px;font-weight:700}
+.filterbtn .fb:empty{display:none}
+.ofcount{font-size:12.5px;color:var(--muted);font-weight:600}
+.filterpanel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 20px;margin-bottom:12px}
+.fgroup{padding:14px 0;border-top:1px solid #F0EBE2}
+.fgroup:first-child{border-top:none}
+.fgroup>label{font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:9px}
+.fgroup input{margin:0;max-width:420px}
+.fopts{display:flex;gap:8px;flex-wrap:wrap}
+.fopt{background:#F6F1E9;border:1.5px solid transparent;border-radius:999px;padding:8px 16px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--ink)}
+.fopt:hover{border-color:var(--line2)}
+.fopt.on{background:var(--teal);color:#fff}
+.factions{display:flex;gap:8px;justify-content:flex-end;padding:14px 0 6px;border-top:1px solid #F0EBE2}
+.ofchips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
 .ofchip{background:var(--teal-l);border:1px solid #CBE7D3;color:var(--teal);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer}
 .ofchip.clr{background:#FDECEC;border-color:#F3C6C6;color:#C0421C}
-/* orders table */
-.otbl td{padding:12px 8px}
+/* wide orders table */
+.otblwrap{overflow-x:auto}
+.otbl{width:100%;min-width:1080px}
+.otbl th,.otbl td{padding:13px 12px;white-space:nowrap;vertical-align:middle}
+.otbl td.nm{white-space:normal;min-width:120px}
 .bname{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;background:none;border:none;font-family:inherit;font-size:13px;padding:0;text-align:right}
 .bname:hover{color:#E4572E}
-.dt{font-size:11px;color:var(--muted2);margin-top:3px}.dt.del{color:var(--green);font-weight:600}.dt.none{color:#B9917A}
+.dt{font-size:11px;color:var(--green);font-weight:600;margin-top:3px}
 .stsel{margin:0;width:auto;font-weight:600;border-width:1.5px}
 .tag.bt-student{background:#E7F0FB;color:var(--blue)}.tag.bt-guest{background:#F1EDE6;color:#8A6A3B}.tag.bt-teacher{background:var(--teal-l);color:var(--teal)}.tag.bt-library{background:#FBEEE6;color:#C0561C}
-.items{display:inline-grid;gap:5px;min-width:150px}
-.items .it{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;font-size:12px}
-.items .it .bk{font-weight:600}.items .it .qt{color:var(--muted);direction:ltr;font-weight:600}.items .it .pr{color:var(--muted);white-space:nowrap}
+.icol .ir{padding:3px 0;font-size:12.5px;border-top:1px dotted #F0EBE2;line-height:1.5;white-space:nowrap}
+.icol .ir:first-child{border-top:none}
+.icol.q .ir,.icol.p .ir{direction:ltr;color:var(--muted)}
 /* charts */
 .note{background:#FDF4E6;border:1px solid #F0E0C0;border-radius:10px;padding:9px 13px;font-size:12.5px;color:#7A5511;margin-bottom:12px}
 .chart{display:flex;align-items:flex-end;gap:6px;height:150px;padding:10px 4px 4px;direction:ltr}
@@ -174,18 +184,22 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
     <!-- ORDERS -->
     <section class="sec" id="sec-orders">
       <div class="card">
-        <div class="ofbar">
-          <button class="ofic" id="ofic-type" onclick="openFilter('type')" title="نوع المشتري">👥<span></span></button>
-          <button class="ofic" id="ofic-status" onclick="openFilter('status')" title="حالة الطلب">🚦<span></span></button>
-          <button class="ofic" id="ofic-gov" onclick="openFilter('gov')" title="المحافظة">📍<span></span></button>
-          <button class="ofic" id="ofic-q" onclick="openFilter('q')" title="بحث">🔎<span></span></button>
-          <span style="flex:1"></span><span class="ofcount" id="ofCount"></span>
-          <button class="b-g iconb" onclick="exportOrdersCSV()" title="تصدير Excel">⬇️</button>
+        <div class="filterbar">
+          <button class="filterbtn" id="filterBtn" onclick="toggleFilters()">🔎 الفلاتر <span class="fb" id="fCount"></span></button>
+          <div class="ofchips" id="ofChips" style="margin:0"></div>
+          <span style="flex:1"></span>
+          <span class="ofcount" id="ofCount"></span>
+          <button class="b-g iconb" onclick="exportOrdersCSV()" title="تصدير Excel">⬇️ Excel</button>
         </div>
-        <div class="ofpanel" id="ofPanel" style="display:none"></div>
-        <div class="ofchips" id="ofChips"></div>
-        <div class="note" style="margin:6px 0 10px">👤 اضغط اسم المشتري لعرض ملفه الكامل · 🧾 فاتورة · 💬 واتساب</div>
-        <div id="oList">…</div>
+        <div class="filterpanel" id="ofPanel" style="display:none">
+          <div class="fgroup"><label>بحث</label><input id="ofq" placeholder="رقم الطلب أو الاسم أو الموبايل أو الكود…" oninput="F.q=this.value;renderFilterChips();renderFCount();renderOrders()"></div>
+          <div class="fgroup"><label>نوع المشتري</label><div class="fopts" id="fTypeOpts"></div></div>
+          <div class="fgroup"><label>حالة الطلب</label><div class="fopts" id="fStatusOpts"></div></div>
+          <div class="fgroup"><label>المحافظة</label><div class="fopts" id="fGovOpts"></div></div>
+          <div class="factions"><button class="b-g" onclick="clearAllF()">مسح الكل</button><button class="b-t" onclick="toggleFilters()">تم</button></div>
+        </div>
+        <div class="note" style="margin:2px 0 12px">👤 اضغط اسم المشتري لعرض ملفه الكامل · 🧾 فاتورة · 💬 واتساب</div>
+        <div class="otblwrap" id="oList">…</div>
       </div>
     </section>
 
@@ -435,26 +449,25 @@ const WAMSGS={
   cancelled:o=>`أهلاً ${o.name}، تم إلغاء طلبك رقم ${o.order_no||o.id}. إن كان بالخطأ فتواصل معنا.`,
 };
 async function loadOrders(){
-  try{const d=await api('/api/admin/orders');ORDERS=d.orders;renderFilterBar();renderFilterChips();renderOrders();renderRecent();}
+  try{const d=await api('/api/admin/orders');ORDERS=d.orders;renderFilterChips();renderFCount();renderOrders();renderRecent();}
   catch(e){document.getElementById('oList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 function govOpts(){return [...new Set(ORDERS.map(o=>o.governorate).filter(Boolean))]}
-function openFilter(dim){
-  const panel=document.getElementById('ofPanel');
-  if(ofOpen===dim){ofOpen='';panel.style.display='none';renderFilterBar();return}
-  ofOpen=dim;let html='';
-  if(dim==='type')html='<span class="oflabel">نوع المشتري:</span>'+TYPE_OPTS.map(([v,l])=>`<button class="opt ${F.type===v?'on':''}" onclick="setF('type','${v}')">${l}</button>`).join('');
-  else if(dim==='status')html='<span class="oflabel">الحالة:</span>'+[['','الكل'],...Object.entries(ST)].map(([v,l])=>`<button class="opt ${F.status===v?'on':''}" onclick="setF('status','${v}')">${l}</button>`).join('');
-  else if(dim==='gov')html='<span class="oflabel">المحافظة:</span><button class="opt '+(F.gov===''?'on':'')+'" onclick="setF(\'gov\',\'\')">الكل</button>'+govOpts().map(g=>`<button class="opt ${F.gov===g?'on':''}" onclick="setF('gov','${esc(g)}')">${esc(g)}</button>`).join('');
-  else if(dim==='q')html=`<span class="oflabel">بحث:</span><input id="ofq" placeholder="رقم الطلب أو الاسم أو الموبايل أو الكود…" value="${esc(F.q)}" oninput="F.q=this.value;renderFilterBar();renderFilterChips();renderOrders()"><button class="opt" onclick="setF('q','')">مسح</button>`;
-  panel.innerHTML=html;panel.style.display='flex';renderFilterBar();
-  if(dim==='q')setTimeout(()=>{const i=document.getElementById('ofq');if(i)i.focus()},10);
+/* single unified filter panel (Trendyol-style) */
+function toggleFilters(){
+  const p=document.getElementById('ofPanel'),open=p.style.display==='none';
+  p.style.display=open?'block':'none';document.getElementById('filterBtn').classList.toggle('on',open);
+  if(open){renderFilterPanel();const q=document.getElementById('ofq');if(q)q.value=F.q}
 }
-function setF(dim,val){F[dim]=val;if(dim!=='q'){ofOpen='';document.getElementById('ofPanel').style.display='none'}renderFilterBar();renderFilterChips();renderOrders()}
-function renderFilterBar(){
-  const val={type:F.type&&(TYPE_OPTS.find(t=>t[0]===F.type)||['',''])[1],status:F.status&&ST[F.status],gov:F.gov,q:F.q&&'…'};
-  ['type','status','gov','q'].forEach(d=>{const b=document.getElementById('ofic-'+d);if(!b)return;b.classList.toggle('on',!!F[d]||ofOpen===d);b.querySelector('span').textContent=val[d]||''});
+function renderFilterPanel(){
+  const opt=(v,l,cur,dim)=>`<button class="fopt ${cur===v?'on':''}" onclick="setF('${dim}','${v}')">${esc(l)}</button>`;
+  document.getElementById('fTypeOpts').innerHTML=TYPE_OPTS.map(([v,l])=>opt(v,l,F.type,'type')).join('');
+  document.getElementById('fStatusOpts').innerHTML=[['','الكل'],...Object.entries(ST)].map(([v,l])=>opt(v,l,F.status,'status')).join('');
+  document.getElementById('fGovOpts').innerHTML=[['','الكل'],...govOpts().map(g=>[g,g])].map(([v,l])=>opt(v,l,F.gov,'gov')).join('');
 }
+function setF(dim,val){F[dim]=val;renderFilterPanel();renderFilterChips();renderFCount();renderOrders();if(dim==='q'){const q=document.getElementById('ofq');if(q)q.value=val}}
+function activeCount(){return ['type','status','gov','q'].filter(k=>F[k]).length}
+function renderFCount(){const el=document.getElementById('fCount');if(el)el.textContent=activeCount()||''}
 function renderFilterChips(){
   const chips=[];
   if(F.type)chips.push(['type',(TYPE_OPTS.find(t=>t[0]===F.type)||['',''])[1]]);
@@ -463,30 +476,30 @@ function renderFilterChips(){
   if(F.q)chips.push(['q','🔎 '+F.q]);
   document.getElementById('ofChips').innerHTML=chips.map(([d,l])=>`<button class="ofchip" onclick="setF('${d}','')">${esc(l)} ✕</button>`).join('')+(chips.length>1?`<button class="ofchip clr" onclick="clearAllF()">مسح الكل ✕</button>`:'');
 }
-function clearAllF(){F={type:'',status:'',gov:'',q:''};ofOpen='';document.getElementById('ofPanel').style.display='none';renderFilterBar();renderFilterChips();renderOrders()}
+function clearAllF(){F={type:'',status:'',gov:'',q:''};const q=document.getElementById('ofq');if(q)q.value='';renderFilterPanel();renderFilterChips();renderFCount();renderOrders()}
 function filteredOrders(){
   const q=F.q.trim(),qU=q.toUpperCase();
   return ORDERS.filter(o=>(!F.type||o.buyer_type===F.type)&&(!F.status||o.status===F.status)&&(!F.gov||o.governorate===F.gov)&&(!q||o.name.includes(q)||(o.mobile||'').includes(q)||(o.order_no||'').toUpperCase().includes(qU)||(o.ref_code||'').toUpperCase().includes(qU)));
 }
-function itemsHtml(o){return '<div class="items">'+o.items.map(i=>`<div class="it"><span class="bk">${BOOKS[i.id]||i.id}</span><span class="qt">×${i.qty}</span><span class="pr">${i.price} ج</span></div>`).join('')+'</div>'}
 function renderOrders(){
   const el=document.getElementById('oList'),list=filteredOrders();
   const cnt=document.getElementById('ofCount');if(cnt)cnt.textContent=list.length+(list.length===ORDERS.length?'':' / '+ORDERS.length)+' طلب';
   if(!list.length){el.innerHTML='<p class="msg">لا توجد طلبات مطابقة.</p>';return}
-  el.innerHTML=`<table class="otbl"><tr><th>الطلب والتواريخ</th><th>المشتري</th><th>الكتب</th><th>الإجمالي</th><th>الحالة</th><th></th></tr>`+
+  const col=(o,f)=>'<div class="icol '+f.cls+'">'+o.items.map(f.fn).join('')+'</div>';
+  el.innerHTML=`<table class="otbl"><tr><th>رقم الطلب</th><th>تاريخ الطلب</th><th>نوع المشتري</th><th>اسم المشتري</th><th>رقم التواصل</th><th>المحافظة</th><th>المركز</th><th>الكتاب</th><th>العدد</th><th>السعر</th><th>الإجمالي</th><th>حالة الطلب</th></tr>`+
     list.map(o=>`<tr>
-      <td><span class="code" style="font-size:12px">${esc(o.order_no||('#'+o.id))}</span>
-        <div class="dt">🗓️ الطلب: ${esc((o.created_at||'').slice(0,10))}</div>
-        ${o.delivered_at?`<div class="dt del">✅ التسليم: ${esc(o.delivered_at.slice(0,10))}</div>`:'<div class="dt none">⏳ لم يُسلَّم بعد</div>'}</td>
-      <td><button class="bname" onclick="buyerClick(${o.id})">${esc(o.name)}</button>
-        <div dir="ltr" style="font-size:11.5px;color:var(--muted)">${esc(o.mobile)}</div>
-        <span class="tag bt-${o.buyer_type}">${BT[o.buyer_type]||o.buyer_type}</span>
-        <span style="font-size:11px;color:var(--muted2)">${esc(o.governorate||'')}${o.city?' — '+esc(o.city):''}</span>
-        ${o.ref_code?`<div><span class="code" style="font-size:11px">${esc(o.ref_code)}</span></div>`:''}</td>
-      <td>${itemsHtml(o)}</td>
+      <td><span class="code" style="font-size:12px">${esc(o.order_no||('#'+o.id))}</span></td>
+      <td style="color:var(--muted);font-size:12px">${esc((o.created_at||'').slice(0,10))}</td>
+      <td><span class="tag bt-${o.buyer_type}">${BT[o.buyer_type]||o.buyer_type}</span></td>
+      <td class="nm"><button class="bname" onclick="buyerClick(${o.id})">${esc(o.name)}</button>${o.ref_code?`<div><span class="code" style="font-size:10.5px">${esc(o.ref_code)}</span></div>`:''}</td>
+      <td dir="ltr" style="font-size:12px;color:var(--muted)">${esc(o.mobile)}</td>
+      <td>${esc(o.governorate||'—')}</td>
+      <td>${esc(o.city||'—')}</td>
+      <td>${col(o,{cls:'b',fn:i=>`<div class="ir" style="font-weight:600">${BOOKS[i.id]||i.id}</div>`})}</td>
+      <td>${col(o,{cls:'q',fn:i=>`<div class="ir">×${i.qty}</div>`})}</td>
+      <td>${col(o,{cls:'p',fn:i=>`<div class="ir">${i.price} ج</div>`})}</td>
       <td><b>${o.total} ج</b></td>
-      <td><select class="stsel" style="border-color:${STC[o.status]};color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></td>
-      <td style="white-space:nowrap">${o.status==='delivered'?`<button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>`:`<button class="b-g iconb" style="opacity:.35" title="الفاتورة تُصدر بعد دفع/تسليم الطلب" onclick="invoiceBlocked()">🧾</button>`} <button class="b-wa iconb" title="واتساب" onclick="waCustomer(${o.id})">💬</button></td></tr>`).join('')+'</table>';
+      <td><select class="stsel" style="border-color:${STC[o.status]};color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select>${o.delivered_at?`<div class="dt">✅ سُلّم ${esc(o.delivered_at.slice(0,10))}</div>`:''}<div style="white-space:nowrap;margin-top:5px">${o.status==='delivered'?`<button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>`:`<button class="b-g iconb" style="opacity:.35" title="الفاتورة تُصدر بعد دفع/تسليم الطلب" onclick="invoiceBlocked()">🧾</button>`} <button class="b-wa iconb" title="واتساب" onclick="waCustomer(${o.id})">💬</button></div></td></tr>`).join('')+'</table>';
 }
 async function setStatus(id,status){
   try{await api('/api/admin/order/status',{method:'POST',body:JSON.stringify({id,status})});
