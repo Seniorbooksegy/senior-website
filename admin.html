@@ -486,7 +486,7 @@ function renderOrders(){
       <td>${itemsHtml(o)}</td>
       <td><b>${o.total} ج</b></td>
       <td><select class="stsel" style="border-color:${STC[o.status]};color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></td>
-      <td style="white-space:nowrap"><button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button> <button class="b-wa iconb" title="واتساب" onclick="waCustomer(${o.id})">💬</button></td></tr>`).join('')+'</table>';
+      <td style="white-space:nowrap">${o.status==='delivered'?`<button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>`:`<button class="b-g iconb" style="opacity:.35" title="الفاتورة تُصدر بعد دفع/تسليم الطلب" onclick="invoiceBlocked()">🧾</button>`} <button class="b-wa iconb" title="واتساب" onclick="waCustomer(${o.id})">💬</button></td></tr>`).join('')+'</table>';
 }
 async function setStatus(id,status){
   try{await api('/api/admin/order/status',{method:'POST',body:JSON.stringify({id,status})});
@@ -500,8 +500,10 @@ function exportOrdersCSV(){
   filteredOrders().forEach(o=>rows.push([o.order_no||o.id,(o.created_at||'').slice(0,16),(o.delivered_at||'').slice(0,16),o.name,o.mobile,o.governorate||'',o.city||'',o.school||'',o.address||'',BT[o.buyer_type]||o.buyer_type,o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join(' + '),o.total,o.ref_code||'',o.pay_method||'',ST[o.status]||o.status,o.utm||'']));
   dlCSV(rows,'senior-orders');
 }
+function invoiceBlocked(){alert('لا يمكن إصدار الفاتورة إلا بعد دفع/تسليم الطلب — غيّر الحالة إلى «سُلِّم» أولاً.')}
 function invoice(id){
   const o=ORDERS.find(x=>x.id===id);if(!o)return;
+  if(o.status!=='delivered'){invoiceBlocked();return}
   const rows=o.items.map(i=>`<tr><td>${BOOKS[i.id]||i.id}</td><td>${i.qty}</td><td>${i.price}</td><td>${i.qty*i.price}</td></tr>`).join('');
   const w=window.open('','_blank');
   w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>فاتورة ${o.order_no||o.id}</title>
