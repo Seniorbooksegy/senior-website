@@ -102,15 +102,18 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
 .ofchip.clr{background:#FDECEC;border-color:#F3C6C6;color:#C0421C}
 /* wide orders table */
 .otblwrap{overflow-x:auto}
-.otbl{width:100%;min-width:1080px}
-.otbl th,.otbl td{padding:13px 12px;white-space:nowrap;vertical-align:middle}
-.otbl td.nm{white-space:normal;min-width:120px}
-.bname{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;background:none;border:none;font-family:inherit;font-size:13px;padding:0;text-align:right}
+.otbl{width:100%;min-width:1040px}
+.otbl th,.otbl td{padding:7px 8px;white-space:nowrap;vertical-align:middle;font-size:12.5px}
+.otbl th{padding-top:4px;padding-bottom:8px}
+.otbl td.nm{white-space:normal;min-width:110px}
+.bname{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;background:none;border:none;font-family:inherit;font-size:12.5px;padding:0;text-align:right}
 .bname:hover{color:#E4572E}
-.dt{font-size:11px;color:var(--green);font-weight:600;margin-top:3px}
-.stsel{margin:0;width:auto;font-weight:600;border-width:1.5px}
+.dt{font-size:10.5px;color:var(--green);font-weight:600;margin-top:2px}
+.stsel{margin:0;width:auto;font-weight:600;border-width:1.5px;padding:5px 8px;font-size:12px;border-radius:8px}
+.otbl .iconb{padding:4px 8px;font-size:12px}
+.acts{display:flex;align-items:center;gap:5px;white-space:nowrap}
 .tag.bt-student{background:#E7F0FB;color:var(--blue)}.tag.bt-guest{background:#F1EDE6;color:#8A6A3B}.tag.bt-teacher{background:var(--teal-l);color:var(--teal)}.tag.bt-library{background:#FBEEE6;color:#C0561C}
-.icol .ir{padding:3px 0;font-size:12.5px;border-top:1px dotted #F0EBE2;line-height:1.5;white-space:nowrap}
+.icol .ir{padding:2px 0;font-size:12px;border-top:1px dotted #F0EBE2;line-height:1.45;white-space:nowrap}
 .icol .ir:first-child{border-top:none}
 .icol.q .ir,.icol.p .ir{direction:ltr;color:var(--muted)}
 /* charts */
@@ -499,7 +502,7 @@ function renderOrders(){
       <td>${col(o,{cls:'q',fn:i=>`<div class="ir">×${i.qty}</div>`})}</td>
       <td>${col(o,{cls:'p',fn:i=>`<div class="ir">${i.price} ج</div>`})}</td>
       <td><b>${o.total} ج</b></td>
-      <td><select class="stsel" style="border-color:${STC[o.status]};color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select>${o.delivered_at?`<div class="dt">✅ سُلّم ${esc(o.delivered_at.slice(0,10))}</div>`:''}<div style="white-space:nowrap;margin-top:5px">${o.status==='delivered'?`<button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>`:`<button class="b-g iconb" style="opacity:.35" title="الفاتورة تُصدر بعد دفع/تسليم الطلب" onclick="invoiceBlocked()">🧾</button>`} <button class="b-wa iconb" title="واتساب" onclick="waCustomer(${o.id})">💬</button></div></td></tr>`).join('')+'</table>';
+      <td><div class="acts"><select class="stsel" style="border-color:${STC[o.status]};color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select>${o.status==='delivered'?`<button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>`:`<button class="b-g iconb" style="opacity:.35" title="الفاتورة تُصدر بعد دفع/تسليم الطلب" onclick="invoiceBlocked()">🧾</button>`}<button class="b-wa iconb" title="واتساب" onclick="waCustomer(${o.id})">💬</button></div>${o.delivered_at?`<div class="dt">✅ سُلّم ${esc(o.delivered_at.slice(0,10))}</div>`:''}</td></tr>`).join('')+'</table>';
 }
 async function setStatus(id,status){
   try{await api('/api/admin/order/status',{method:'POST',body:JSON.stringify({id,status})});
