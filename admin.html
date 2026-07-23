@@ -274,6 +274,15 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
       </div>
     </section>
 
+    <!-- SENIOR PLUS -->
+    <section class="sec" id="sec-plus">
+      <div class="card">
+        <h3>⭐ طلاب Senior Plus <span class="msg" id="plusCount" style="font-weight:400"></span></h3>
+        <div class="note">الطلبة الذين فعّلوا كود Senior Plus على المنصة — اضغط 📊 لعرض تاريخ تقاريره الأسبوعية وتنزيلها PDF.</div>
+        <div class="otblwrap" id="plusList">…</div>
+      </div>
+    </section>
+
     <!-- TEACHERS -->
     <section class="sec" id="sec-teachers">
       <div class="subtabs" id="tchTabs">
@@ -443,6 +452,20 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
       </div>
     </section>
 
+    <!-- AI REPORT -->
+    <section class="sec" id="sec-ai">
+      <div class="card" style="padding:14px 18px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <h3 style="margin:0">🤖 تقرير الذكاء الاصطناعي</h3>
+          <span style="flex:1"></span>
+          <span class="ofcount" id="aiMeta"></span>
+          <button class="b-t" id="aiGenBtn" onclick="genAIReport()">🔄 توليد تقرير جديد</button>
+        </div>
+        <div class="note" style="margin:10px 0 0">يحلّل كل بيانات الموقع والمبيعات (آخر ٣٠ يوماً مقارنة بما قبلها) ويقترح: ما ينجح لتستثمر فيه أكثر · فرص التحسين · خطة تركيز قابلة للتنفيذ.</div>
+      </div>
+      <div id="aiBox"><p class="msg" style="padding:8px 4px">لم يُولَّد تقرير بعد — اضغط «توليد تقرير جديد».</p></div>
+    </section>
+
     <!-- FINANCE -->
     <section class="sec" id="sec-finance">
       <div class="tiles" id="fKpis"></div>
@@ -459,8 +482,8 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
 
 <script>
 const API='https://senior-api.seniorbooksegy.workers.dev';
-const SECTIONS=[['overview','🏠','نظرة عامة'],['orders','🛍️','الطلبات'],['students','🎓','الطلاب'],['teachers','🧑‍🏫','المدرسون'],['libraries','🏪','المكتبات'],['inventory','📦','المخزون'],['analytics','📈','التحليلات'],['finance','💰','المالية'],['admin','🛡️','الإدارة']];
-const ROLE_SEC={gm:['overview','orders','students','teachers','libraries','inventory','analytics','finance','admin'],kam:['overview','orders','students','teachers','libraries','inventory','analytics'],sales:['orders']};
+const SECTIONS=[['overview','🏠','نظرة عامة'],['orders','🛍️','الطلبات'],['students','🎓','الطلاب'],['plus','⭐','Senior Plus'],['teachers','🧑‍🏫','المدرسون'],['libraries','🏪','المكتبات'],['inventory','📦','المخزون'],['analytics','📈','التحليلات'],['ai','🤖','تقرير الذكاء'],['finance','💰','المالية'],['admin','🛡️','الإدارة']];
+const ROLE_SEC={gm:['overview','orders','students','plus','teachers','libraries','inventory','analytics','ai','finance','admin'],kam:['overview','orders','students','plus','teachers','libraries','inventory','analytics','ai'],sales:['orders']};
 const SECTITLE=Object.fromEntries(SECTIONS.map(s=>[s[0],s[2]]));
 const BOOKS={sharh:'الشرح',exercises:'التمارين',skills:'المهارات',comprehension:'قطع الفهم',grammar:'القواعد',bundle:'المجموعة كاملة'};
 const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي',returned:'مرتجع'};
@@ -504,7 +527,7 @@ async function connect(){
 function logout(){localStorage.removeItem('snr_key');location.reload()}
 function refreshAll(){
   loadOrders();
-  if(ME.role!=='sales'){loadStats();loadInv();loadTeachersApproved();loadJoin();loadStudents();loadLibraries();loadReps();loadAnalytics()}
+  if(ME.role!=='sales'){loadStats();loadInv();loadTeachersApproved();loadJoin();loadStudents();loadLibraries();loadReps();loadAnalytics();loadPlus();loadAIReport()}
   if(ME.role==='gm'){loadFinance();loadComms();loadTeamList();loadAudit()}
 }
 function show(sec){
@@ -1319,6 +1342,97 @@ async function loadLibraries(){const el=document.getElementById('lList');try{con
   el.innerHTML=LIBS.length?'<table><tr><th>المكتبة / السنتر</th><th>الكود</th><th>المسؤول</th><th>رقم التواصل</th><th>المنطقة / المركز</th><th>العنوان</th><th>كود المندوب</th><th>طلبات</th><th>مشتريات</th><th>آخر طلب</th><th>تاريخ التسجيل</th></tr>'+LIBS.map(l=>`<tr><td><b>${esc(l.name)}</b></td><td>${l.code?'<span class="code">'+esc(l.code)+'</span>':'—'}</td><td>${esc(l.contact||'—')}</td><td dir="ltr">${esc(l.mobile||'—')}</td><td>${esc(l.area||'—')}</td><td style="max-width:200px">${esc(l.address||'—')}</td><td>${l.rep_code?'<span class="code">'+esc(l.rep_code)+'</span>':'<span style="color:var(--muted2)">— مباشر</span>'}</td><td>${l.orders}</td><td>${l.revenue} ج</td><td style="color:var(--muted2);font-size:11.5px">${esc((l.last||'').slice(0,10))||'—'}</td><td style="color:var(--muted2);font-size:11.5px">${esc((l.created_at||'').slice(0,10))||'—'}</td></tr>`).join('')+'</table>':'<p class="msg">لا مكتبات بعد — تُسجَّل تلقائياً مع أول طلب مكتبة.</p>'}catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}}
 async function addLibrary(){const n=document.getElementById('lbName').value.trim(),p=document.getElementById('lbMob').value.trim(),a=document.getElementById('lbArea').value.trim(),ad=document.getElementById('lbAddr').value.trim(),m=document.getElementById('lbMsg');if(!n||!p){m.textContent='أدخل الاسم ورقم التواصل.';return}try{await api('/api/admin/library/add',{method:'POST',body:JSON.stringify({name:n,mobile:p,area:a,address:ad})});m.textContent='تمت الإضافة.';document.getElementById('lbName').value='';document.getElementById('lbMob').value='';document.getElementById('lbArea').value='';document.getElementById('lbAddr').value='';loadLibraries()}catch(e){m.textContent='خطأ: '+e.message}}
 
+/* ============ SENIOR PLUS: activated students + weekly reports (PDF) ============ */
+const PTYPES={grammar:['📐','القواعد'],comp:['📖','قطع الفهم'],trans:['🔤','الترجمة'],novel:['🗝️','الرواية']};
+let PLUSR={};/* code → last fetched reports (for PDF) */
+async function loadPlus(){
+  const el=document.getElementById('plusList');if(!el)return;
+  try{const d=await api('/api/admin/plus');
+    const list=d.students||[];
+    const cnt=document.getElementById('plusCount');if(cnt)cnt.textContent=list.length?'('+list.length+')':'';
+    el.innerHTML=list.length?'<table class="otbl"><thead><tr><th>الطالب</th><th>الكود</th><th>رقم التواصل</th><th>القناة</th><th>تاريخ التفعيل</th><th>عدد التقارير</th><th>آخر تقرير</th><th>تاريخ الريبورتات</th></tr></thead><tbody>'+list.map(s=>
+      `<tr><td class="nm"><b>${esc(s.student_name||'—')}</b></td>`+
+      `<td style="text-align:center"><span class="code" style="font-size:11px">${esc(s.code)}</span></td>`+
+      `<td style="text-align:center"><span dir="ltr" style="font-size:12px;color:var(--muted)">${esc(s.mobile||'—')}</span></td>`+
+      `<td style="text-align:center">${esc(chLabel(s))}</td>`+
+      `<td style="text-align:center;color:var(--muted2);font-size:11.5px">${esc((s.activated_at||'').slice(0,10))}</td>`+
+      `<td style="text-align:center"><b>${s.reports||0}</b></td>`+
+      `<td style="text-align:center;color:var(--muted2);font-size:11.5px">${s.last_report?esc(s.last_report.slice(0,10)):'—'}</td>`+
+      `<td style="text-align:center"><button class="b-g iconb" title="تاريخ التقارير الأسبوعية" onclick="showPlusReports('${esc(s.code)}','${esc(s.student_name||'').replace(/'/g,'')}')" ${s.reports?'':'disabled'}>📊</button></td></tr>`
+    ).join('')+'</tbody></table>':'<p class="msg">لا طلاب مفعَّلين بعد — تُفعَّل الأكواد من منصة Senior Plus على الموقع.</p>';
+  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+async function showPlusReports(code,name){
+  openBuyerModal('<p class="msg">جارٍ تحميل التقارير…</p>');
+  try{
+    const d=await api('/api/student/summary?code='+encodeURIComponent(code));
+    const reps=(d.reports||[]).slice().reverse();/* oldest → newest */
+    PLUSR[code]=reps;
+    const rows=reps.map((r,i)=>{const p=r.payload||{};
+      return `<tr><td><b>أسبوع ${esc(String(r.weekId))}</b></td><td style="color:var(--muted2);font-size:11.5px">${esc((p.d||r.at||'').slice(0,10))}</td>`+
+      `<td><b style="color:${p.pct>=70?'var(--green)':p.pct>=45?'#C98A22':'#C0421C'}">${p.pct??'—'}%</b></td>`+
+      `<td>${p.ok??'—'} / ${p.dn??'—'}</td>`+
+      `<td>${Object.entries(p.types||{}).map(([k,v])=>`${(PTYPES[k]||['',k])[0]}${v.done?Math.round(v.ok/v.done*100):0}%`).join(' · ')||'—'}</td>`+
+      `<td><button class="b-g iconb" title="تنزيل PDF" onclick="plusPDF('${esc(code)}',${i})">🖨</button></td></tr>`}).join('');
+    openBuyerModal(`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h3 style="margin:0">📊 تقارير ${esc(name||'الطالب')} <span class="code">${esc(code)}</span></h3>`+
+      `<span><button class="b-t iconb" onclick="plusPDF('${esc(code)}',-1)">🖨 PDF كامل التاريخ</button> <button class="b-g iconb" onclick="closeBuyer()">إغلاق ×</button></span></div>`+
+      (reps.length?`<p class="msg" style="margin:8px 0">${reps.length} تقريراً أسبوعياً — الأقدم أولاً. النسب حسب الأنواع: 📐 قواعد · 📖 فهم · 🔤 ترجمة · 🗝️ رواية.</p>`+
+      `<table><tr><th>الأسبوع</th><th>التاريخ</th><th>النتيجة</th><th>صحيح/محلول</th><th>حسب النوع</th><th>PDF</th></tr>${rows}</table>`
+      :'<p class="msg">لا تقارير محفوظة لهذا الكود بعد.</p>'));
+  }catch(e){openBuyerModal('<p class="msg">خطأ: '+esc(e.message)+'</p><button class="b-g iconb" onclick="closeBuyer()">إغلاق</button>')}
+}
+function plusPDF(code,idx){
+  const reps=PLUSR[code]||[];if(!reps.length)return;
+  const list=idx<0?reps:[reps[idx]];
+  const name=esc((reps[0]&&document.querySelector('#buyerBox h3'))?document.querySelector('#buyerBox h3').innerText.replace('📊 تقارير ',''):code);
+  const block=r=>{const p=r.payload||{};
+    const tys=Object.entries(p.types||{}).map(([k,v])=>{const pct=v.done?Math.round(v.ok/v.done*100):0;const t=PTYPES[k]||['',k];
+      return `<div class="ty"><span>${t[0]} ${t[1]}</span><div class="bar"><i style="width:${pct}%"></i></div><b>${pct}% (${v.ok}/${v.done})</b></div>`}).join('');
+    return `<div class="rep"><div class="rh"><b>أسبوع ${esc(String(r.weekId))}</b><span>${esc((p.d||r.at||'').slice(0,10))}</span></div>
+      <div class="score"><b>${p.pct??'—'}%</b><span>${p.ok??'—'} صحيحة من ${p.dn??'—'} محلولة${p.sec?` · زمن الحل ${Math.floor(p.sec/60)} دقيقة`:''}</span></div>${tys}</div>`};
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>تقارير Senior Plus — ${code}</title>
+  <style>body{font-family:'Readex Pro','Segoe UI',Tahoma,sans-serif;color:#16323C;max-width:640px;margin:0 auto;padding:0 6px}
+  .bar2{background:#16323C;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;font-size:13px;border-radius:0 0 12px 12px}
+  .bar2 button{font-family:inherit;background:#F2A03D;color:#16323C;border:none;border-radius:999px;padding:8px 18px;font-weight:700;cursor:pointer}
+  .hd{display:flex;justify-content:space-between;align-items:center;border-bottom:2.5px solid #0E6E60;padding:16px 0 10px;margin-bottom:14px}
+  h2{color:#0E6E60;margin:0}.sub{color:#5E7078;font-size:12.5px}
+  .rep{border:1.5px solid #E3DECF;border-radius:14px;padding:14px 16px;margin-bottom:14px;page-break-inside:avoid}
+  .rh{display:flex;justify-content:space-between;font-size:13.5px;color:#5E7078;margin-bottom:8px}.rh b{color:#16323C;font-size:15px}
+  .score{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}.score b{font-size:30px;color:#0E6E60}.score span{color:#5E7078;font-size:13px}
+  .ty{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:13px}.ty span{width:120px}.ty b{white-space:nowrap;font-size:12px}
+  .bar{flex:1;height:9px;background:#F1EDE6;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:#0E6E60;border-radius:99px}
+  @media print{.bar2{display:none}}</style></head><body>
+  <div class="bar2"><span>للتنزيل PDF: اضغط الزر ثم «حفظ بتنسيق PDF»</span><button onclick="window.print()">🖨 طباعة / PDF</button></div>
+  <div class="hd"><div><h2>Senior Plus — تقرير الطالب</h2><div class="sub">${name} · <span dir="ltr">${esc(code)}</span></div></div><div class="sub">${new Date().toISOString().slice(0,10)}</div></div>
+  ${list.map(block).join('')}
+  <p class="sub" style="text-align:center;margin:18px 0">سلسلة Senior — seniorbookegy.com</p><script>window.print()<\/script></body></html>`);
+  w.document.close();
+}
+
+/* ============ AI REPORT ============ */
+async function loadAIReport(){try{const d=await api('/api/admin/ai-report');if(d.report)renderAIReport(d.report)}catch(e){}}
+async function genAIReport(){
+  const b=document.getElementById('aiGenBtn');const old=b.textContent;b.textContent='🧠 جارٍ التحليل…';b.disabled=true;
+  try{const d=await api('/api/admin/ai-report',{method:'POST'});renderAIReport(d.report)}
+  catch(e){alert('تعذّر توليد التقرير: '+e.message)}
+  b.textContent=old;b.disabled=false;
+}
+function renderAIReport(r){
+  const meta=document.getElementById('aiMeta');
+  if(meta)meta.textContent=(r.source==='ai'?'🤖 ذكاء اصطناعي':'⚙️ تحليل آلي')+' · '+(r.generated_at||'').slice(0,16).replace('T',' ');
+  const PR={'عالية':['#FBEAE7','#C0421C'],'متوسطة':['#FBF1DF','#C98A22'],'منخفضة':['#E7F0FB','#2E6DB4']};
+  const card=(icon,title,items,color,renderItem)=>`<div class="card" style="margin-bottom:0;border-top:3px solid ${color}"><h3>${icon} ${title}</h3>${(items||[]).map(renderItem).join('')||'<p class="msg">—</p>'}</div>`;
+  document.getElementById('aiBox').innerHTML=
+    `<div class="card" style="background:linear-gradient(135deg,#0E6E60,#0A574C);color:#fff"><div style="font-size:12px;opacity:.8;margin-bottom:4px">خلاصة الوضع</div><div style="font-size:17px;font-weight:800;line-height:1.6">${esc(r.headline||'')}</div></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:14px">
+      ${card('✅','ما ينجح — استثمر فيه أكثر',r.wins,'var(--green)',w=>`<div style="margin-bottom:10px"><b style="font-size:13.5px">${esc(w.title||'')}</b><div style="font-size:12.5px;color:var(--muted);line-height:1.6">${esc(w.detail||'')}</div></div>`)}
+      ${card('🎯','ركّز هنا — فرص التحسين',r.focus,'#C98A22',x=>{const pr=PR[x.priority]||PR['متوسطة'];return `<div style="margin-bottom:10px"><b style="font-size:13.5px">${esc(x.title||'')}</b> <span class="tag" style="background:${pr[0]};color:${pr[1]};font-size:10.5px">${esc(x.priority||'متوسطة')}</span><div style="font-size:12.5px;color:var(--muted);line-height:1.6">${esc(x.detail||'')}</div></div>`})}
+      ${card('⚠️','راقب',r.watch,'#C0421C',x=>`<div style="margin-bottom:10px"><b style="font-size:13.5px">${esc(x.title||'')}</b><div style="font-size:12.5px;color:var(--muted);line-height:1.6">${esc(x.detail||'')}</div></div>`)}
+    </div>
+    <div class="card"><h3>🗂️ خطة التنفيذ — أسبوعان</h3>${(r.plan||[]).map((p,i)=>`<div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px"><span style="min-width:28px;height:28px;border-radius:99px;background:var(--teal);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:13px">${i+1}</span><div><b style="font-size:13.5px">${esc(p.step||'')}</b><div style="font-size:12.5px;color:var(--muted);line-height:1.6">${esc(p.why||'')}</div></div></div>`).join('')||'<p class="msg">—</p>'}</div>`;
+}
+
 /* ============ ADMIN: team / audit ============ */
 async function loadTeamList(){try{const d=await api('/api/admin/team');TEAM=d.team||[];if(!isGM())return;document.getElementById('mList').innerHTML=TEAM.length?'<table><tr><th>الاسم</th><th>الدور</th><th>موبايل</th><th>المفتاح الشخصي</th><th>الحالة</th><th></th></tr>'+TEAM.map(m=>`<tr><td><b>${esc(m.name)}</b></td><td><span class="tag role-${m.role}">${ROLE_AR[m.role]||m.role}</span></td><td dir="ltr">${esc(m.mobile||'—')}</td><td><span class="code" style="font-size:11px">${esc(m.akey||'')}</span> <button class="b-g iconb" onclick="cpKey('${esc(m.akey||'')}')">📋</button></td><td>${m.active?'✅ نشط':'⛔ معطَّل'}</td><td style="white-space:nowrap"><button class="b-g iconb" onclick="renameMember(${m.id},'${esc(m.name).replace(/'/g,"\\'")}')">✏️</button> <button class="b-g iconb" onclick="rekeyMember(${m.id})">🔑</button> <button class="b-g iconb" onclick="toggleMember(${m.id},${m.active?0:1})">${m.active?'تعطيل':'تفعيل'}</button></td></tr>`).join('')+'</table>':'<p class="msg">لا أعضاء بعد.</p>'}catch(e){if(isGM())document.getElementById('mList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}}
 function cpKey(k){navigator.clipboard&&navigator.clipboard.writeText(k);alert('نُسخ المفتاح — أرسله للعضو مع رابط اللوحة seniorbookegy.com/admin.html')}
@@ -1326,7 +1440,7 @@ async function addMember(){const n=document.getElementById('tmName').value.trim(
 async function renameMember(id,cur){const n=prompt('الاسم الجديد:',cur);if(!n)return;try{await api('/api/admin/team/update',{method:'POST',body:JSON.stringify({id,name:n})});loadTeamList()}catch(e){alert(e.message)}}
 async function rekeyMember(id){if(!confirm('توليد مفتاح جديد؟ القديم سيتوقف.'))return;try{const d=await api('/api/admin/team/update',{method:'POST',body:JSON.stringify({id,rekey:true})});alert('المفتاح الجديد: '+d.akey);loadTeamList()}catch(e){alert(e.message)}}
 async function toggleMember(id,active){try{await api('/api/admin/team/update',{method:'POST',body:JSON.stringify({id,active:!!active})});loadTeamList()}catch(e){alert(e.message)}}
-const ACT_AR={order_status:'حالة طلب',teacher_approve:'اعتماد مدرّس',teacher_reject:'رفض مدرّس',rep_add:'كود مندوب',restock:'توريد مخزون',inventory_set:'تصحيح مخزون',team_add:'إضافة عضو',team_update:'تعديل عضو',payout:'دفعة عمولة',withdrawal_advance:'بدء تحويل',withdrawal_pay:'إتمام تحويل',library_add:'إضافة مكتبة'};
+const ACT_AR={order_status:'حالة طلب',teacher_approve:'اعتماد مدرّس',teacher_reject:'رفض مدرّس',teacher_update:'تعديل مدرّس',rep_add:'كود مندوب',restock:'توريد مخزون',inventory_set:'تصحيح مخزون',team_add:'إضافة عضو',team_update:'تعديل عضو',payout:'دفعة عمولة',withdrawal_advance:'بدء تحويل',withdrawal_pay:'إتمام تحويل',library_add:'إضافة مكتبة',codes_generate:'توليد أكواد',ai_report:'تقرير ذكاء اصطناعي'};
 async function loadAudit(){const el=document.getElementById('gList');try{const d=await api('/api/admin/audit');el.innerHTML=(d.audit||[]).length?'<table><tr><th>الوقت</th><th>العضو</th><th>الإجراء</th><th>التفاصيل</th></tr>'+d.audit.map(a=>`<tr><td style="color:var(--muted2);font-size:11.5px;white-space:nowrap">${esc((a.created_at||'').slice(0,16))}</td><td>${esc(a.actor)} <span class="tag role-${a.role}">${ROLE_AR[a.role]||a.role||''}</span></td><td><b>${ACT_AR[a.action]||esc(a.action)}</b></td><td>${esc(a.detail||'')}</td></tr>`).join('')+'</table>':'<p class="msg">لا نشاط بعد.</p>'}catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}}
 
 /* ============ FINANCE ============ */
