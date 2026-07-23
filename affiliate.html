@@ -241,7 +241,7 @@ function render(){
   show('monthlyCard',kind==='teacher');show('batchCard',kind==='teacher'&&A.batch&&A.batch.total>0);
   show('libsCard',kind==='rep');show('mainKpis',kind!=='library');show('libKpis',kind==='library');
   show('wdCard',kind!=='library');show('paysCard',kind!=='library');show('commNote',kind!=='library');
-  document.getElementById('hdTitle').textContent=kind==='rep'?'لوحة المندوب':kind==='library'?'لوحة المكتبة':'لوحة المدرّس الشريك';
+  document.getElementById('hdTitle').textContent=kind==='rep'?'لوحة المندوب':kind==='library'?'لوحة المكتبة / السنتر':'لوحة المدرّس الشريك';
   document.getElementById('ordersTitle').textContent=kind==='library'?'🧾 طلبات مكتبتك':'🧾 الطلبات التي جاءت عبرك';
   if(kind==='library'){
     document.getElementById('lkOrders').textContent=A.orders;

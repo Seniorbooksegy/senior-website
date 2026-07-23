@@ -908,7 +908,7 @@ header.scr .brand img{height:26px}
         <div class="fld"><label data-ar="الاسم" data-en="Name"></label><input id="cf-n" required data-ar-ph="اسمك بالكامل" data-en-ph="Your full name"></div>
         <div class="fld"><label data-ar="رقم الموبايل" data-en="Mobile"></label><input id="cf-p" required data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
         <div class="fld"><label data-ar="أنا..." data-en="I am..."></label>
-          <select id="cf-r"><option data-ar="وليّ أمر" data-en="Parent"></option><option data-ar="طالب" data-en="Student"></option><option data-ar="مدرّس / مركز تعليمي" data-en="Teacher / Centre"></option><option data-ar="مكتبة / موزّع" data-en="Bookshop / Distributor"></option></select></div>
+          <select id="cf-r"><option data-ar="وليّ أمر" data-en="Parent"></option><option data-ar="طالب" data-en="Student"></option><option data-ar="مدرّس / مركز تعليمي" data-en="Teacher / Centre"></option><option data-ar="مكتبة / سنتر" data-en="Bookshop / Centre"></option></select></div>
         <div class="fld"><label data-ar="رسالتك" data-en="Message"></label><textarea id="cf-m" rows="3" data-ar-ph="اكتب طلبك أو سؤالك..." data-en-ph="Write your request or question..."></textarea></div>
         <button class="btn b-wa" style="width:100%" type="submit" data-ar="إرسال عبر واتساب" data-en="Send via WhatsApp"></button>
       </form>
@@ -1032,7 +1032,7 @@ header.scr .brand img{height:26px}
       <div class="pt-cards">
         <div class="pt-card" onclick="ptShow('pt-student')"><div class="em">🎓</div><div><h4 data-ar="طالب" data-en="Student"></h4><p data-ar="اطلب كتبك، وأدخل كود مدرّسك إن وُجد للحصول على خصمه." data-en="Order your books, and enter your teacher's code — if you have one — for its discount."></p></div></div>
         <div class="pt-card" onclick="ptShow('pt-teacher')"><div class="em">🧑‍🏫</div><div><h4 data-ar="مدرّس" data-en="Teacher"></h4><p data-ar="لديك كود؟ فعّله مباشرة. مدرّس جديد؟ سجّل بياناتك ليصلك كودك الخاص بعد المراجعة." data-en="Have a code? Activate it. New teacher? Register and receive your own code after review."></p></div></div>
-        <div class="pt-card" onclick="ptShow('pt-lib')"><div class="em">🏪</div><div><h4 data-ar="مكتبة / موزّع" data-en="Bookshop / Distributor"></h4><p data-ar="أسعار الجملة عبر كود المندوب الخاص بمنطقتك." data-en="Wholesale pricing via your area representative's code."></p></div></div>
+        <div class="pt-card" onclick="ptShow('pt-lib')"><div class="em">🏪</div><div><h4 data-ar="مكتبة / سنتر" data-en="Bookshop / Centre"></h4><p data-ar="أسعار الجملة — عبر مندوب منطقتك أو بالتعامل المباشر معنا." data-en="Wholesale pricing — via your area representative or directly with us."></p></div></div>
       </div>
       <button class="pt-guest" onclick="closePortal()" data-ar="المتابعة كزائر بدون خصم" data-en="Continue as a guest without a discount"></button>
     </div>
@@ -1116,18 +1116,21 @@ header.scr .brand img{height:26px}
     <div class="pt-scr" id="pt-lib">
       <button class="pt-back" onclick="ptShow('pt-choose')" data-ar="→ رجوع" data-en="← Back"></button>
       <div class="pt-form">
-        <h3 class="pt-h" data-ar="🏪 مكتبة / موزّع" data-en="🏪 Bookshop / Distributor"></h3>
+        <h3 class="pt-h" data-ar="🏪 مكتبة / سنتر" data-en="🏪 Bookshop / Centre"></h3>
         <div class="two">
-          <div class="fld"><label data-ar="اسم المكتبة" data-en="Bookshop name"></label><input id="ptl-n"></div>
+          <div class="fld"><label data-ar="اسم المكتبة / السنتر" data-en="Bookshop / centre name"></label><input id="ptl-n"></div>
           <div class="fld"><label data-ar="اسم المسؤول" data-en="Contact person"></label><input id="ptl-o"></div>
         </div>
         <div class="two">
-          <div class="fld"><label data-ar="رقم الموبايل" data-en="Mobile"></label><input id="ptl-p" data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
-          <div class="fld"><label data-ar="المنطقة / المحافظة" data-en="Area / governorate"></label><select id="ptl-g"></select></div>
+          <div class="fld"><label data-ar="رقم التواصل" data-en="Contact number"></label><input id="ptl-p" data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
+          <div class="fld"><label data-ar="المحافظة" data-en="Governorate"></label><select id="ptl-g"></select></div>
         </div>
-        <div class="fld"><label data-ar="كود المندوب" data-en="Representative code"></label><input id="ptl-c" dir="ltr" data-ar-ph="SNR-R-0000" data-en-ph="SNR-R-0000"></div>
-        <button class="btn b-o" style="width:100%" onclick="ptLib()" data-ar="تفعيل حساب المكتبة" data-en="Activate the bookshop account"></button>
-        <p class="pt-note" data-ar="تُحتسب أسعار الجملة عبر كود مندوب منطقتك، ويتواصل معك فريق التوزيع لتأكيد الكميات." data-en="Wholesale pricing is applied via your area representative's code; our distribution team contacts you to confirm quantities."></p>
+        <div class="two">
+          <div class="fld"><label data-ar="المنطقة / المركز" data-en="Area / district"></label><input id="ptl-city"></div>
+          <div class="fld"><label data-ar="كود المندوب (اختياري)" data-en="Representative code (optional)"></label><input id="ptl-c" dir="ltr" data-ar-ph="SNR-R-0000" data-en-ph="SNR-R-0000"></div>
+        </div>
+        <button class="btn b-o" style="width:100%" onclick="ptLib()" data-ar="تفعيل حساب المكتبة / السنتر" data-en="Activate the account"></button>
+        <p class="pt-note" data-ar="إن سجّلت عبر مندوب فأدخل كوده، وإن كنت تتعامل معنا مباشرة فاترك الخانة فارغة — يتواصل معك فريق التوزيع لتأكيد الكميات والأسعار." data-en="If a representative signed you up, enter their code; if you deal with us directly leave it empty — our distribution team contacts you to confirm quantities and pricing."></p>
       </div>
     </div>
 
@@ -1547,7 +1550,7 @@ async function submitOrder(){
   const info={n,p,a,city,g:document.getElementById('co-g').value,tr:document.getElementById('co-t').selectedOptions[0].textContent,m:LANG==='ar'?mp.bAr:mp.bEn};
   if(typeof track==='function')track('ev','order',''+payTotal());
   const r=await apiFetch('/api/order',{method:'POST',body:JSON.stringify({
-    buyerType:BUYER?BUYER.type:'guest',name:n,mobile:p,governorate:info.g,city,school:(BUYER&&BUYER.school)||'',address:a,track:info.tr,
+    buyerType:BUYER?BUYER.type:'guest',name:n,mobile:p,governorate:info.g,city,school:(BUYER&&BUYER.school)||'',contact:(BUYER&&BUYER.contact)||'',address:a,track:info.tr,
     items:Object.keys(cart).map(k=>{const pr=PRODUCTS.find(v=>v.id===k);return{id:k,qty:cart[k],price:pr?pr.price:0}}),
     refCode:codeIn||(BUYER&&BUYER.code)||null,payMethod:METHOD,
     utm:(typeof UTM!=='undefined'&&UTM)||''})});
@@ -1900,7 +1903,7 @@ function sendReport(who){
 
 /* ===== PURCHASE PORTAL ===== */
 let BUYER=null;try{BUYER=JSON.parse(localStorage.getItem('senior_buyer')||'null')}catch(e){}
-const BTYPE={student:['طالب','Student'],teacher:['مدرّس','Teacher'],library:['مكتبة / موزّع','Bookshop / Distributor']};
+const BTYPE={student:['طالب','Student'],teacher:['مدرّس','Teacher'],library:['مكتبة / سنتر','Bookshop / Centre']};
 /* buy-experience card: books are always visible; this card invites the visitor to unlock their price/discount */
 function renderBuyExp(){
   const el=document.getElementById('buyExp');if(!el)return;
@@ -1911,7 +1914,7 @@ function renderBuyExp(){
     <div class="be-bs">
       <button class="btn b-t b-sm" onclick="openPortal('pt-student')">🎓 ${t('طالب','Student')}</button>
       <button class="btn b-t b-sm" onclick="openPortal('pt-teacher')">🧑‍🏫 ${t('مدرّس','Teacher')}</button>
-      <button class="btn b-g b-sm" onclick="openPortal('pt-lib')">🏪 ${t('مكتبة','Bookshop')}</button>
+      <button class="btn b-g b-sm" onclick="openPortal('pt-lib')">🏪 ${t('مكتبة / سنتر','Bookshop / Centre')}</button>
     </div>`;
 }
 function openPortal(scr){document.getElementById('portal').classList.add('on');document.body.style.overflow='hidden';ptShow(scr||'pt-choose');if(typeof track==='function')track('ev','portal',scr||'choose')}
@@ -1998,12 +2001,18 @@ async function ptTeacherNew(){
 async function ptLib(){
   const n=document.getElementById('ptl-n').value.trim(),o=document.getElementById('ptl-o').value.trim(),
         p=document.getElementById('ptl-p').value.trim(),g=document.getElementById('ptl-g').value,
+        city=document.getElementById('ptl-city').value.trim(),
         c=document.getElementById('ptl-c').value.trim().toUpperCase();
-  if(!n||!mobOK(p)||!c){toast(t('أكمل اسم المكتبة والموبايل وكود المندوب','Complete the bookshop name, mobile and representative code'));return}
-  const d=await apiFetch('/api/code/check?code='+encodeURIComponent(c));
-  if(d&&(!d.valid||d.kind!=='rep')){toast(t('كود المندوب غير صحيح','Invalid representative code'));return}
-  setBuyer({type:'library',name:n,contact:o,mobile:p,gov:g,code:c,verified:!!(d&&d.valid)});
-  closePortal();toast(t('تم تفعيل حساب المكتبة','Bookshop account activated'));
+  if(!n||!o||!mobOK(p)||!city){toast(t('أكمل البيانات كاملة: اسم المكتبة / السنتر والمسؤول ورقم التواصل والمنطقة / المركز','Complete all fields: name, contact person, contact number and area'));return}
+  /* rep code optional — a library/centre may register directly with us */
+  let verified=false;
+  if(c){
+    const d=await apiFetch('/api/code/check?code='+encodeURIComponent(c));
+    if(d&&(!d.valid||d.kind!=='rep')){toast(t('كود المندوب غير صحيح — صحّحه أو اترك الخانة فارغة','Invalid representative code — fix it or leave it empty'));return}
+    verified=!!(d&&d.valid);
+  }
+  setBuyer({type:'library',name:n,contact:o,mobile:p,gov:g,city,code:c||null,verified});
+  closePortal();toast(t('تم تفعيل حساب المكتبة / السنتر','Account activated'));
 }
 ['pts-g','ptn-a','ptl-g'].forEach(id=>{const s=document.getElementById(id);if(s&&!s.options.length)GOVS.forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=g;s.appendChild(o)})});
 renderPtBanner();
