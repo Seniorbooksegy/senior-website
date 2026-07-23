@@ -276,6 +276,11 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
 
     <!-- SENIOR PLUS -->
     <section class="sec" id="sec-plus">
+      <div class="tiles" id="plusKpis"></div>
+      <div class="grid2" id="plusCharts" style="display:none">
+        <div class="card"><h3>📊 مستويات الطلاب <span class="msg" style="font-weight:400">(آخر تقرير لكل طالب)</span></h3><div id="plusLevels"></div></div>
+        <div class="card"><h3>🏅 الأنشط والأعلى</h3><div id="plusTops"></div></div>
+      </div>
       <div class="card">
         <h3>⭐ طلاب Senior Plus <span class="msg" id="plusCount" style="font-weight:400"></span></h3>
         <div class="note">الطلبة الذين فعّلوا كود Senior Plus على المنصة — اضغط 📊 لعرض تاريخ تقاريره الأسبوعية وتنزيلها PDF.</div>
@@ -719,7 +724,7 @@ const WAMSGS={
   cancelled:o=>`أهلاً ${o.name}، تم إلغاء طلبك رقم ${o.order_no||o.id}. إن كان بالخطأ فتواصل معنا.`,
 };
 async function loadOrders(){
-  try{const d=await api('/api/admin/orders');ORDERS=d.orders;renderFilterChips();renderFCount();renderOrders();renderRecent();renderRegStudents();renderTeachers();renderOrdersAnalytics();}
+  try{const d=await api('/api/admin/orders');ORDERS=d.orders;renderFilterChips();renderFCount();renderOrders();renderRecent();renderRegStudents();renderTeachers();renderOrdersAnalytics();renderPlusKpis();}
   catch(e){document.getElementById('oList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 function govOpts(){return [...new Set(ORDERS.map(o=>o.governorate).filter(Boolean))]}
@@ -1313,7 +1318,7 @@ async function downloadStudentsXlsx(){
 /* ============ CUSTOMERS: students / libraries ============ */
 async function loadStudents(){
   try{const d=await api('/api/admin/students');
-    REGST=d.registered||[];renderRegStudents();
+    REGST=d.registered||[];renderRegStudents();renderPlusKpis();
     document.getElementById('kStats').innerHTML=`<div class="tile"><div class="l">أكواد الشراء</div><div class="n">${d.codes.total||0}</div></div><div class="tile"><div class="l">مفعَّلة</div><div class="n">${d.codes.activated||0}</div></div><div class="tile"><div class="l">متبقية</div><div class="n">${(d.codes.total||0)-(d.codes.activated||0)}</div></div>`;
     document.getElementById('kGenBtn').style.display=isGM()?'':'none';
     document.getElementById('kList').innerHTML=(d.recent||[]).length?'<table><tr><th>الكود</th><th>القناة</th><th>الطالب</th><th>موبايل</th><th>التفعيل</th></tr>'+d.recent.map(c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(chLabel(c))}</td><td>${esc(c.student_name||'—')}</td><td dir="ltr">${esc(c.mobile||'—')}</td><td>${esc((c.activated_at||'').slice(0,16))}</td></tr>`).join('')+'</table>':'<p class="msg">لا أكواد مفعَّلة بعد — بانتظار قرار المطبعة.</p>';
@@ -1345,9 +1350,44 @@ async function addLibrary(){const n=document.getElementById('lbName').value.trim
 /* ============ SENIOR PLUS: activated students + weekly reports (PDF) ============ */
 const PTYPES={grammar:['📐','القواعد'],comp:['📖','قطع الفهم'],trans:['🔤','الترجمة'],novel:['🗝️','الرواية']};
 let PLUSR={};/* code → last fetched reports (for PDF) */
+let PLUSD=null;/* last /api/admin/plus payload (for the dashboard) */
+function renderPlusKpis(){
+  const el=document.getElementById('plusKpis');if(!el||!PLUSD)return;
+  const list=PLUSD.students||[],st=PLUSD.stats||{};
+  const plusCodes=new Set(list.map(s=>s.code));
+  const latest=(st.latest||[]).filter(x=>plusCodes.has(x.student_code)&&x.pct!=null);
+  const avg=latest.length?Math.round(latest.reduce((a,x)=>a+x.pct,0)/latest.length):null;
+  const regTotal=(typeof sregRows==='function')?sregRows().length:0;
+  const pctReg=regTotal?Math.round(list.length/regTotal*100):null;
+  const withReports=list.filter(s=>s.reports>0).length;
+  const perStudent=withReports?(st.reportsTotal/withReports).toFixed(1):0;
+  el.innerHTML=
+    `<div class="tile"><div class="l">مفعّلو Senior Plus</div><div class="n">${list.length}</div><div class="s">${withReports} منهم حلّوا تقارير</div></div>
+     <div class="tile"><div class="l">مقارنة بالطلاب المسجلين</div><div class="n">${pctReg!=null?pctReg+'%':'—'}</div><div class="s">${list.length} مفعّل من ${regTotal} طالباً مسجلاً</div></div>
+     <div class="tile"><div class="l">نشطون آخر ٧ أيام</div><div class="n">${st.active7||0}</div><div class="s">${st.reports7||0} تقريراً هذا الأسبوع</div></div>
+     <div class="tile"><div class="l">إجمالي التقارير المحلولة</div><div class="n">${st.reportsTotal||0}</div><div class="s">${perStudent} تقرير / طالب نشط</div></div>
+     <div class="tile"><div class="l">متوسط النتيجة</div><div class="n" style="color:${avg==null?'inherit':avg>=70?'var(--green)':avg>=45?'#C98A22':'#C0421C'}">${avg!=null?avg+'%':'—'}</div><div class="s">آخر تقرير لكل طالب</div></div>`;
+  /* levels distribution + tops */
+  const charts=document.getElementById('plusCharts');
+  if(!latest.length){if(charts)charts.style.display='none';return}
+  if(charts)charts.style.display='';
+  const lv=[['🟢 ممتاز (٧٥٪ فأعلى)',latest.filter(x=>x.pct>=75).length,'var(--green)'],
+            ['🟡 متوسط (٤٥–٧٤٪)',latest.filter(x=>x.pct>=45&&x.pct<75).length,'#C98A22'],
+            ['🔴 يحتاج دعماً (أقل من ٤٥٪)',latest.filter(x=>x.pct<45).length,'#C0421C']];
+  const lmx=Math.max(1,...lv.map(l=>l[1]));
+  document.getElementById('plusLevels').innerHTML=lv.map(([l,c,col])=>`<div class="hbar"><span class="nm" style="width:190px">${l}</span><div class="tr"><i style="width:${c/lmx*100}%;background:${col}"></i></div><b>${c}</b></div>`).join('')+
+    '<p class="msg">الطلاب تحت الخط الأحمر يحتاجون تواصلاً — نقطة بيع ممتازة لكتب الشرح والتمارين.</p>';
+  const nameOf=c=>{const s=list.find(x=>x.code===c);return s?(s.student_name||c):c};
+  const top=[...latest].sort((a,b)=>b.pct-a.pct).slice(0,3);
+  const activeTop=[...list].filter(s=>s.reports>0).sort((a,b)=>b.reports-a.reports).slice(0,3);
+  document.getElementById('plusTops').innerHTML=
+    '<div class="msg" style="margin-bottom:4px">🥇 أعلى النتائج</div>'+top.map((x,i)=>`<div class="hbar"><span class="nm">${['🥇','🥈','🥉'][i]||''} ${esc(nameOf(x.student_code))}</span><div class="tr"><i style="width:${x.pct}%;background:var(--teal)"></i></div><b>${x.pct}%</b></div>`).join('')+
+    '<div class="msg" style="margin:10px 0 4px">🔥 الأكثر مواظبة</div>'+activeTop.map(s=>`<div class="hbar"><span class="nm">${esc(s.student_name||s.code)}</span><div class="tr"><i style="width:${s.reports/Math.max(1,activeTop[0].reports)*100}%;background:#7C5CBF"></i></div><b>${s.reports} تقرير</b></div>`).join('');
+}
 async function loadPlus(){
   const el=document.getElementById('plusList');if(!el)return;
   try{const d=await api('/api/admin/plus');
+    PLUSD=d;renderPlusKpis();
     const list=d.students||[];
     const cnt=document.getElementById('plusCount');if(cnt)cnt.textContent=list.length?'('+list.length+')':'';
     el.innerHTML=list.length?'<table class="otbl"><thead><tr><th>الطالب</th><th>الكود</th><th>رقم التواصل</th><th>القناة</th><th>تاريخ التفعيل</th><th>عدد التقارير</th><th>آخر تقرير</th><th>تاريخ الريبورتات</th></tr></thead><tbody>'+list.map(s=>
