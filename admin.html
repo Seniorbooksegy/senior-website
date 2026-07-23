@@ -409,17 +409,36 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
 
     <!-- ANALYTICS -->
     <section class="sec" id="sec-analytics">
-      <div class="card"><h3>📈 الطلبات — آخر ١٤ يوماً</h3><div class="chart" id="dDays"></div></div>
-      <div class="grid2">
-        <div class="card"><h3>📚 المبيعات حسب الكتاب</h3><div id="dBooks"></div></div>
-        <div class="card"><h3>🧾 حالة الطلبات</h3><div class="donutwrap"><div class="donut" id="dDonut"></div><div class="leg" id="dLeg"></div></div></div>
-      </div>
-      <div class="card"><h3>🗺️ أعلى المحافظات</h3><div id="dGovs"></div></div>
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
-          <h3 style="margin:0">🌐 تحليلات الموقع</h3>
-          <div class="chips" style="margin:0"><button class="chip on" id="an7" onclick="loadAnalytics(7)">٧ أيام</button><button class="chip" id="an30" onclick="loadAnalytics(30)">٣٠ يوماً</button></div>
+      <div class="card" style="padding:13px 18px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <b style="font-size:13.5px">🗓️ الفترة:</b>
+          <div class="chips" style="margin:0" id="anChips">
+            <button class="chip on" onclick="setAN('7')">آخر ٧ أيام</button>
+            <button class="chip" onclick="setAN('30')">آخر شهر</button>
+            <button class="chip" onclick="setAN('custom')">تحديد يدوي</button>
+          </div>
+          <span id="anCustom" style="display:none;align-items:center;gap:6px;flex-wrap:wrap">
+            <label style="margin:0;font-size:12px">من</label><input type="date" id="anFrom" style="width:auto;margin:0">
+            <label style="margin:0;font-size:12px">إلى</label><input type="date" id="anTo" style="width:auto;margin:0">
+            <button class="b-t iconb" onclick="applyANCustom()">تطبيق</button>
+          </span>
+          <span style="flex:1"></span>
+          <span class="ofcount" id="anRangeLbl"></span>
         </div>
+      </div>
+      <div class="tiles" id="anKpis"></div>
+      <div class="card"><h3>📈 الطلبات <span class="msg" id="dDaysLbl" style="font-weight:400"></span></h3><div class="chart" id="dDays"></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-bottom:14px">
+        <div class="card" style="margin-bottom:0"><h3>📚 المبيعات حسب الكتاب <span class="msg" style="font-weight:400">(المؤكدة فقط)</span></h3><div id="dBooks"></div></div>
+        <div class="card" style="margin-bottom:0"><h3>🧾 حالة الطلبات</h3><div class="donutwrap"><div class="donut" id="dDonut"></div><div class="leg" id="dLeg"></div></div></div>
+        <div class="card" style="margin-bottom:0"><h3>🗺️ الطلبات حسب المحافظات</h3><div id="dGovs"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><h3>⏰ ساعات الذروة <span class="msg" style="font-weight:400">(بتوقيت القاهرة)</span></h3><div class="chart" id="dHours"></div></div>
+        <div class="card"><h3>📅 الطلبات حسب أيام الأسبوع</h3><div id="dDows"></div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:12px">🌐 تحليلات الموقع <span class="msg" style="font-weight:400">(بنفس الفترة المختارة)</span></h3>
         <div id="anBox">…</div>
       </div>
     </section>
@@ -485,7 +504,7 @@ async function connect(){
 function logout(){localStorage.removeItem('snr_key');location.reload()}
 function refreshAll(){
   loadOrders();
-  if(ME.role!=='sales'){loadStats();loadInv();loadTeachersApproved();loadJoin();loadStudents();loadLibraries();loadReps();loadAnalytics(7)}
+  if(ME.role!=='sales'){loadStats();loadInv();loadTeachersApproved();loadJoin();loadStudents();loadLibraries();loadReps();loadAnalytics()}
   if(ME.role==='gm'){loadFinance();loadComms();loadTeamList();loadAudit()}
 }
 function show(sec){
@@ -526,32 +545,103 @@ async function loadStats(){
     const badge=document.getElementById('treqBadge');if(badge)badge.textContent=s.pendingTeachers||'';
     (s.lowStock||[]).forEach(b=>al.push(['w','📉',`مخزون ${BOOKS[b.book_id]||b.book_id} منخفض: ${b.stock} نسخة`,`show('inventory')`,'المخزون']));
     document.getElementById('ovAtt').innerHTML=al.length?al.map(a=>`<div class="att ${a[0]}"><span class="ico">${a[1]}</span><span class="tx">${a[2]}</span><button class="b-g" onclick="${a[3]}">${a[4]}</button></div>`).join(''):'<div class="okline">✅ لا شيء يحتاج تدخلك الآن — كل شيء تحت السيطرة.</div>';
-    /* charts (analytics section) */
-    const days=[];for(let i=13;i>=0;i--){const d=new Date(Date.now()-i*86400000);days.push(d.toISOString().slice(0,10))}
-    const map={};(s.byDay||[]).forEach(r=>map[r.d]=r);const mx=Math.max(1,...days.map(d=>(map[d]||{}).c||0));
-    document.getElementById('dDays').innerHTML=days.map(d=>{const r=map[d]||{c:0,s:0};const dd=new Date(d);return `<div class="cbar" title="${d}: ${r.c} طلب"><b>${r.c||''}</b><i style="height:${Math.max(3,r.c/mx*100)}%"></i><span>${dd.getDate()}/${dd.getMonth()+1}</span></div>`}).join('');
-    const bmx=Math.max(1,...(s.byBook||[]).map(b=>+b.qty));
-    document.getElementById('dBooks').innerHTML=(s.byBook||[]).map(b=>`<div class="hbar"><span class="nm">${BOOKS[b.id]||b.id}</span><div class="tr"><i style="width:${b.qty/bmx*100}%"></i></div><b>${b.qty}</b></div>`).join('')||'<p class="msg">لا مبيعات بعد.</p>';
-    const tot=(s.byStatus||[]).reduce((a,x)=>a+x.c,0);
-    if(tot){let acc=0;const segs=(s.byStatus||[]).map(x=>{const from=acc/tot*360;acc+=x.c;return `${STC[x.status]||'#ccc'} ${from}deg ${acc/tot*360}deg`});
-      document.getElementById('dDonut').style.background=`conic-gradient(${segs.join(',')})`;
-      document.getElementById('dLeg').innerHTML=(s.byStatus||[]).map(x=>`<div><i style="background:${STC[x.status]}"></i>${ST[x.status]}: <b>${x.c}</b></div>`).join('');
-    }else{document.getElementById('dDonut').style.background='#F1EDE6';document.getElementById('dLeg').innerHTML='<p class="msg">لا طلبات.</p>'}
-    const gmx=Math.max(1,...(s.byGov||[]).map(g=>+g.c));
-    document.getElementById('dGovs').innerHTML=(s.byGov||[]).map(g=>`<div class="hbar"><span class="nm">${esc(g.g||'—')}</span><div class="tr"><i style="width:${g.c/gmx*100}%;background:var(--teal)"></i></div><b>${g.c}</b></div>`).join('')||'<p class="msg">لا بيانات.</p>';
   }catch(e){document.getElementById('ovAtt').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+
+/* ============ ANALYTICS: unified period filter (7 / 30 / custom from-to) governs the whole page ============ */
+let AN={mode:'7',from:'',to:''};
+function anBoundsStr(){
+  const today=new Date().toISOString().slice(0,10);
+  if(AN.mode==='custom'&&AN.from&&AN.to)return[AN.from,AN.to];
+  const n=AN.mode==='30'?30:7;
+  return[new Date(Date.now()-(n-1)*86400000).toISOString().slice(0,10),today];
+}
+function setAN(m){
+  AN.mode=m;
+  document.querySelectorAll('#anChips .chip').forEach((b,i)=>b.classList.toggle('on',['7','30','custom'][i]===m));
+  document.getElementById('anCustom').style.display=m==='custom'?'inline-flex':'none';
+  if(m!=='custom')renderAnalyticsAll();
+}
+function applyANCustom(){
+  const f=document.getElementById('anFrom').value,t=document.getElementById('anTo').value;
+  if(!f||!t||f>t){alert('حدد تاريخين صحيحين (من ≤ إلى).');return}
+  AN.from=f;AN.to=t;renderAnalyticsAll();
+}
+function renderAnalyticsAll(){renderOrdersAnalytics();loadAnalytics()}
+function ordersBetween(f,t){return ORDERS.filter(o=>{const d=(o.created_at||'').slice(0,10);return d>=f&&d<=t})}
+const CAIRO_H=ts=>{try{return +new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',hour:'2-digit',hour12:false}).format(ts)%24}catch(e){return null}};
+function renderOrdersAnalytics(){
+  const el=document.getElementById('anKpis');if(!el)return;
+  const [f,t]=anBoundsStr();
+  const lbl=document.getElementById('anRangeLbl');if(lbl)lbl.textContent=f+' ← '+t;
+  const cur=ordersBetween(f,t);
+  /* KPIs vs previous equal-length period */
+  const len=Math.round((new Date(t)-new Date(f))/86400000)+1;
+  const pf=new Date(new Date(f).getTime()-len*86400000).toISOString().slice(0,10);
+  const pt=new Date(new Date(f).getTime()-86400000).toISOString().slice(0,10);
+  const prev=ordersBetween(pf,pt);
+  const calc=list=>{const ok=list.filter(o=>!['cancelled','returned'].includes(o.status));const rev=ok.reduce((s,o)=>s+(+o.total||0),0);return{c:ok.length,rev,aov:ok.length?Math.round(rev/ok.length):0,bad:list.length?Math.round((list.length-ok.length)/list.length*100):0}};
+  const A=calc(cur),B=calc(prev);
+  const before=new Set(ORDERS.filter(o=>(o.created_at||'').slice(0,10)<f).map(o=>o.mobile));
+  const mobiles=[...new Set(cur.map(o=>o.mobile))];
+  const ret=mobiles.length?Math.round(mobiles.filter(m=>before.has(m)).length/mobiles.length*100):0;
+  const delta=(a,b,inv)=>{if(!b)return '<div class="s">—</div>';const d=Math.round((a-b)/b*100);if(!d)return '<div class="s">مثل الفترة السابقة</div>';const good=inv?d<0:d>0;return `<div class="s" style="color:${good?'var(--green)':'#C0421C'};font-weight:700">${d>0?'▲':'▼'} ${Math.abs(d)}% عن السابقة</div>`};
+  el.innerHTML=
+    `<div class="tile"><div class="l">طلبات الفترة</div><div class="n">${A.c}</div>${delta(A.c,B.c)}</div>
+     <div class="tile"><div class="l">إيراد الفترة (ج)</div><div class="n">${A.rev}</div>${delta(A.rev,B.rev)}</div>
+     <div class="tile"><div class="l">متوسط قيمة الطلب (ج)</div><div class="n">${A.aov}</div>${delta(A.aov,B.aov)}</div>
+     <div class="tile"><div class="l">إلغاء / مرتجع</div><div class="n">${A.bad}%</div>${delta(A.bad,B.bad,1)}</div>
+     <div class="tile"><div class="l">عملاء عائدون</div><div class="n">${ret}%</div><div class="s">من مشتري الفترة</div></div>`;
+  /* orders per day (weekly buckets for long ranges) */
+  const days=[];{let d=new Date(f);while(d.toISOString().slice(0,10)<=t){days.push(d.toISOString().slice(0,10));d=new Date(d.getTime()+86400000)}}
+  const cnt={};cur.forEach(o=>{if(['cancelled','returned'].includes(o.status))return;const d=(o.created_at||'').slice(0,10);cnt[d]=(cnt[d]||0)+1});
+  let bars,mode;
+  if(days.length>42){const wk={};days.forEach(d=>{const dd=new Date(d);const ws=new Date(dd.getTime()-((dd.getUTCDay()+1)%7)*86400000).toISOString().slice(0,10);wk[ws]=(wk[ws]||0)+(cnt[d]||0)});bars=Object.entries(wk);mode='أسبوعياً'}
+  else{bars=days.map(d=>[d,cnt[d]||0]);mode='يومياً'}
+  const mx=Math.max(1,...bars.map(b=>b[1]));
+  document.getElementById('dDaysLbl').textContent='('+mode+')';
+  document.getElementById('dDays').innerHTML=bars.map(([d,c])=>{const dd=new Date(d);return `<div class="cbar" title="${d}: ${c} طلب"><b>${c||''}</b><i style="height:${Math.max(3,c/mx*100)}%"></i><span>${dd.getUTCDate()}/${dd.getUTCMonth()+1}</span></div>`}).join('');
+  /* books — confirmed/shipped/delivered only */
+  const bq={};cur.filter(o=>['confirmed','shipped','delivered'].includes(o.status)).forEach(o=>(o.items||[]).forEach(i=>bq[i.id]=(bq[i.id]||0)+(+i.qty||0)));
+  const bl=Object.entries(bq).sort((a,b)=>b[1]-a[1]);const bmx=Math.max(1,...bl.map(b=>b[1]));
+  document.getElementById('dBooks').innerHTML=bl.length?bl.map(([id,q])=>`<div class="hbar"><span class="nm">${BOOKS[id]||id}</span><div class="tr"><i style="width:${q/bmx*100}%"></i></div><b>${q}</b></div>`).join(''):'<p class="msg">لا مبيعات مؤكَّدة في الفترة.</p>';
+  /* status donut */
+  const sc={};cur.forEach(o=>sc[o.status]=(sc[o.status]||0)+1);
+  const st=Object.entries(sc);const tot=cur.length;
+  if(tot){let acc=0;const segs=st.map(([k,c])=>{const a0=acc/tot*360;acc+=c;return `${STC[k]||'#ccc'} ${a0}deg ${acc/tot*360}deg`});
+    document.getElementById('dDonut').style.background=`conic-gradient(${segs.join(',')})`;
+    document.getElementById('dLeg').innerHTML=st.map(([k,c])=>`<div><i style="background:${STC[k]||'#ccc'}"></i>${ST[k]||k}: <b>${c}</b></div>`).join('');
+  }else{document.getElementById('dDonut').style.background='#F1EDE6';document.getElementById('dLeg').innerHTML='<p class="msg">لا طلبات في الفترة.</p>'}
+  /* governorates */
+  const gv={};cur.filter(o=>!['cancelled','returned'].includes(o.status)).forEach(o=>{const g=o.governorate||'—';gv[g]=(gv[g]||0)+1});
+  const gl=Object.entries(gv).sort((a,b)=>b[1]-a[1]).slice(0,10);const gmx=Math.max(1,...gl.map(g=>g[1]));
+  document.getElementById('dGovs').innerHTML=gl.length?gl.map(([g,c])=>`<div class="hbar"><span class="nm">${esc(g)}</span><div class="tr"><i style="width:${c/gmx*100}%;background:var(--teal)"></i></div><b>${c}</b></div>`).join(''):'<p class="msg">لا بيانات.</p>';
+  /* peak hours + weekdays (Cairo tz) */
+  const hh=new Array(24).fill(0),dw=new Array(7).fill(0);
+  const DOWI={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+  cur.forEach(o=>{
+    if(['cancelled','returned'].includes(o.status))return;
+    const ts=new Date((o.created_at||'').replace(' ','T')+'Z');if(isNaN(ts))return;
+    const h=CAIRO_H(ts);if(h!=null)hh[h]++;
+    try{const wd=DOWI[new Intl.DateTimeFormat('en-US',{timeZone:'Africa/Cairo',weekday:'short'}).format(ts)];if(wd!=null)dw[wd]++}catch(e){}
+  });
+  const hmx=Math.max(1,...hh);
+  document.getElementById('dHours').innerHTML=hh.map((c,h)=>`<div class="cbar" title="الساعة ${h}:00 — ${c} طلب"><b>${c||''}</b><i style="height:${Math.max(3,c/hmx*100)}%;background:#9b7bd4"></i><span>${h}</span></div>`).join('');
+  const DOW=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const wmx=Math.max(1,...dw);
+  document.getElementById('dDows').innerHTML=DOW.map((n,i)=>`<div class="hbar"><span class="nm">${n}</span><div class="tr"><i style="width:${dw[i]/wmx*100}%;background:#2E6DB4"></i></div><b>${dw[i]}</b></div>`).join('');
 }
 
 /* ============ SITE ANALYTICS ============ */
 const SECN={why:'لماذا Senior',shop:'المتجر',plus:'Senior Plus',content:'المقالات',teachers:'للمدرّسين',about:'من نحن',contact:'تواصل واطلب'};
 const CTRY={EG:'مصر 🇪🇬',SA:'السعودية 🇸🇦',AE:'الإمارات 🇦🇪',KW:'الكويت 🇰🇼',QA:'قطر 🇶🇦',US:'أمريكا 🇺🇸',GB:'بريطانيا 🇬🇧'};
 const fmtDur=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
-async function loadAnalytics(days){
-  days=days||7;
-  document.getElementById('an7').classList.toggle('on',days===7);document.getElementById('an30').classList.toggle('on',days===30);
+async function loadAnalytics(){
   const el=document.getElementById('anBox');
   try{
-    const a=await api('/api/admin/analytics?days='+days);
+    const [f,t]=anBoundsStr();
+    const qs=AN.mode==='custom'?('from='+f+'&to='+t):('days='+(AN.mode==='30'?30:7));
+    const a=await api('/api/admin/analytics?'+qs);
     const mob=(a.device.find(d=>d.device==='mobile')||{}).c||0,dsk=(a.device.find(d=>d.device==='desktop')||{}).c||0;
     const mobPct=(mob+dsk)?Math.round(mob/(mob+dsk)*100):0;
     let html=`<div class="tiles">
@@ -559,7 +649,7 @@ async function loadAnalytics(days){
       <div class="tile"><div class="l">زيارة للصفحة</div><div class="n">${a.views}</div></div>
       <div class="tile"><div class="l">متوسط المدة</div><div class="n">${fmtDur(a.avgSec)}</div></div>
       <div class="tile"><div class="l">من الموبايل</div><div class="n">${mobPct}%</div></div></div>`;
-    const dayList=[];for(let i=days-1;i>=0;i--){dayList.push(new Date(Date.now()-i*86400000).toISOString().slice(0,10))}
+    const dayList=[];{let d=new Date(f);while(d.toISOString().slice(0,10)<=t){dayList.push(d.toISOString().slice(0,10));d=new Date(d.getTime()+86400000)}}
     const dmap={};(a.byDay||[]).forEach(r=>dmap[r.d]=r);const dmx=Math.max(1,...dayList.map(d=>(dmap[d]||{}).v||0));
     html+=`<h3 style="margin-top:6px">الزوّار يومياً</h3><div class="chart">`+dayList.map(d=>{const r=dmap[d]||{v:0};const dd=new Date(d);return `<div class="cbar" title="${d}: ${r.v} زائر"><b>${r.v||''}</b><i style="height:${Math.max(3,(r.v||0)/dmx*100)}%;background:var(--blue)"></i><span>${dd.getDate()}/${dd.getMonth()+1}</span></div>`}).join('')+'</div>';
     const smx=Math.max(1,...(a.sections||[]).map(s=>+s.c));
@@ -606,7 +696,7 @@ const WAMSGS={
   cancelled:o=>`أهلاً ${o.name}، تم إلغاء طلبك رقم ${o.order_no||o.id}. إن كان بالخطأ فتواصل معنا.`,
 };
 async function loadOrders(){
-  try{const d=await api('/api/admin/orders');ORDERS=d.orders;renderFilterChips();renderFCount();renderOrders();renderRecent();renderRegStudents();renderTeachers();}
+  try{const d=await api('/api/admin/orders');ORDERS=d.orders;renderFilterChips();renderFCount();renderOrders();renderRecent();renderRegStudents();renderTeachers();renderOrdersAnalytics();}
   catch(e){document.getElementById('oList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 function govOpts(){return [...new Set(ORDERS.map(o=>o.governorate).filter(Boolean))]}
