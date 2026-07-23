@@ -641,14 +641,25 @@ async function downloadXlsx(){
     const hr=ws.getRow(2);
     cols.forEach((c,i)=>{const cell=hr.getCell(i+1);cell.value=c.l;cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF0E6E60'}};cell.font={bold:true,color:{argb:'FFFFFFFF'},size:11};cell.alignment={horizontal:'center',vertical:'middle',wrapText:true};cell.border=border});
     hr.height=24;
-    /* data */
-    list.forEach((o,idx)=>{
+    /* data — explode multi-book orders into one row per book (line total = qty×price); single-book orders stay one row.
+       zebra stripe by order (row.oi) so an order's rows share one shade and read as a group. */
+    const flat=[];
+    list.forEach((o,oi)=>{
+      const items=o.items||[];
+      if(items.length>1) items.forEach(it=>flat.push({o,it,oi}));
+      else flat.push({o,it:null,oi});
+    });
+    flat.forEach((row,idx)=>{
+      const o=row.o,it=row.it;
       const r=ws.getRow(idx+3);
       cols.forEach((c,i)=>{
-        const cell=r.getCell(i+1);cell.value=c.x(o);cell.border=border;
+        const cell=r.getCell(i+1);
+        let v=c.x(o);
+        if(it){ if(c.k==='book')v=BOOKS[it.id]||it.id; else if(c.k==='qty')v=''+it.qty; else if(c.k==='price')v=it.price+' ج'; else if(c.k==='total')v=(it.qty*it.price)+' ج'; }
+        cell.value=v;cell.border=border;
         cell.alignment={horizontal:center.has(c.k)?'center':'right',vertical:'middle',wrapText:wrap.has(c.k)};
         cell.font={size:10.5};
-        if(idx%2)cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFBF9F4'}};
+        if(row.oi%2)cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFBF9F4'}};
         if(c.k==='total')cell.font={bold:true,size:10.5};
         if(c.k==='status'){cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:argb(STBG[o.status])}};cell.font={bold:true,size:10.5,color:{argb:argb(STC[o.status])}}}
       });
