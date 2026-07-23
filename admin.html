@@ -545,11 +545,11 @@ function statusCell(o){return `<div class="acts"><span class="stwrap" style="--s
 /* ---- smart buyer code: guest=/, student=own code (stable, derived from mobile), teacher/library=their ref/rep code ---- */
 function studentCode(mobile){const m=String(mobile||'').replace(/\D/g,'');if(!m)return '';let h=0;for(let i=0;i<m.length;i++)h=(h*31+m.charCodeAt(i))>>>0;const A='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='',n=h;for(let i=0;i<5;i++){s+=A[n%A.length];n=Math.floor(n/A.length)}return 'SNR-C-'+s}
 function buyerCodeText(o){
-  if(o.buyer_type==='guest')return '/';
-  if(o.buyer_type==='student')return studentCode(o.mobile)||'/';
-  return o.ref_code||'/'; /* teacher → their SNR-T · library → SNR-R (both live in ref_code) */
+  if(o.buyer_type==='guest')return '-';
+  if(o.buyer_type==='student')return studentCode(o.mobile)||'-';
+  return o.ref_code||'-'; /* teacher → their SNR-T · library → SNR-R (both live in ref_code) */
 }
-function buyerCodeHtml(o){const c=buyerCodeText(o);return c==='/'?'<span style="color:var(--muted2)">/</span>':`<span class="code" style="font-size:11px">${esc(c)}</span>`}
+function buyerCodeHtml(o){const c=buyerCodeText(o);return c==='-'?'<span style="color:var(--muted2)">-</span>':`<span class="code" style="font-size:11px">${esc(c)}</span>`}
 
 /* ---- columns model: cell = HTML for the view, x = plain text for Excel (Excel uses ALL columns in this order) ---- */
 const COLS=[
@@ -565,7 +565,7 @@ const COLS=[
   {k:'school',l:'المدرسة',def:0,cell:o=>esc(o.school||'—'),x:o=>o.school||''},
   {k:'address',l:'العنوان',def:0,td:'nm',cell:o=>esc(o.address||'—'),x:o=>o.address||''},
   {k:'book',l:'الكتاب',fixed:1,def:1,cell:o=>icol(o,'b',i=>`<div class="ir" style="font-weight:600">${BOOKS[i.id]||i.id}</div>`),x:o=>o.items.map(i=>BOOKS[i.id]||i.id).join('\n')},
-  {k:'qty',l:'العدد',fixed:1,def:1,cell:o=>icol(o,'q',i=>`<div class="ir">×${i.qty}</div>`),x:o=>o.items.map(i=>'×'+i.qty).join('\n')},
+  {k:'qty',l:'العدد',fixed:1,def:1,cell:o=>icol(o,'q',i=>`<div class="ir">${i.qty}</div>`),x:o=>o.items.map(i=>''+i.qty).join('\n')},
   {k:'price',l:'السعر',fixed:1,def:1,cell:o=>icol(o,'p',i=>`<div class="ir">${i.price} ج</div>`),x:o=>o.items.map(i=>i.price+' ج').join('\n')},
   {k:'total',l:'الإجمالي',fixed:1,def:1,cell:o=>`<b>${o.total} ج</b>`,x:o=>o.total+' ج'},
   {k:'pay',l:'طريقة الدفع',def:0,cell:o=>PAYN[o.pay_method]||esc(o.pay_method||'—'),x:o=>PAYN[o.pay_method]||o.pay_method||''},
@@ -608,7 +608,7 @@ function showOrder(id){
       <tr><th>كود المدرّس</th><td>${isT?'<span class="code">'+esc(o.ref_code)+'</span>':'—'}</td><th>كود المندوب</th><td>${isR?'<span class="code">'+esc(o.ref_code)+'</span>':'—'}</td></tr>
       <tr><th>العنوان</th><td colspan="3">${esc(o.address||'—')}</td></tr></table>
     <h3 style="margin-top:12px">📚 الكتب</h3>
-    <table><tr><th>الكتاب</th><th>العدد</th><th>سعر الوحدة</th><th>القيمة</th></tr>${o.items.map(i=>`<tr><td>${BOOKS[i.id]||i.id}</td><td dir="ltr">×${i.qty}</td><td>${i.price} ج</td><td>${i.qty*i.price} ج</td></tr>`).join('')}<tr><td colspan="3" style="text-align:left"><b>الإجمالي</b></td><td><b>${o.total} ج</b></td></tr></table>
+    <table><tr><th>الكتاب</th><th>العدد</th><th>سعر الوحدة</th><th>القيمة</th></tr>${o.items.map(i=>`<tr><td>${BOOKS[i.id]||i.id}</td><td dir="ltr">${i.qty}</td><td>${i.price} ج</td><td>${i.qty*i.price} ج</td></tr>`).join('')}<tr><td colspan="3" style="text-align:left"><b>الإجمالي</b></td><td><b>${o.total} ج</b></td></tr></table>
     <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${o.status==='delivered'?`<button class="b-g" onclick="closeBuyer();invoice(${o.id})">🧾 فاتورة</button>`:''}<button class="b-wa" onclick="waCustomer(${o.id})">💬 واتساب</button><button class="b-g" onclick="closeBuyer();buyerClick(${o.id})">👤 ملف المشتري</button></div>`);
 }
 async function setStatus(id,status){
