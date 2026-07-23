@@ -559,7 +559,7 @@ const COLS=[
   {k:'type',l:'نوع المشتري',def:1,cell:o=>`<span class="tag bt-${o.buyer_type}">${BT[o.buyer_type]||o.buyer_type}</span>`,x:o=>BT[o.buyer_type]||o.buyer_type},
   {k:'name',l:'اسم المشتري',fixed:1,def:1,td:'nm',cell:o=>`<button class="bname" onclick="buyerClick(${o.id})">${esc(o.name)}</button>`,x:o=>o.name||''},
   {k:'buyercode',l:'كود المشتري',def:1,cell:buyerCodeHtml,x:buyerCodeText},
-  {k:'mobile',l:'رقم التواصل',def:1,cell:o=>`<span dir="ltr" style="font-size:12px;color:var(--muted)">${esc(o.mobile)}</span>`,x:o=>o.mobile||''},
+  {k:'mobile',l:'رقم التواصل',def:1,cell:o=>`<span dir="ltr" style="font-size:12px;color:var(--muted)">${esc(o.mobile||'—')}</span>`,x:o=>o.mobile||''},
   {k:'gov',l:'المحافظة',def:1,cell:o=>esc(o.governorate||'—'),x:o=>o.governorate||''},
   {k:'city',l:'المركز',def:1,cell:o=>esc(o.city||'—'),x:o=>o.city||''},
   {k:'school',l:'المدرسة',def:0,cell:o=>esc(o.school||'—'),x:o=>o.school||''},
@@ -625,7 +625,7 @@ async function downloadXlsx(){
   const btn=document.getElementById('dlBtn');const old=btn.textContent;btn.textContent='⏳ جارٍ التحضير…';
   try{await loadExcelJS()}catch(e){btn.textContent=old;alert('تعذّر تحميل أداة التصدير — تحقق من الاتصال بالإنترنت.');return}
   try{
-    const list=filteredOrders();
+    const list=ORDERS; /* download ALL orders, not just the filtered view */
     const today=new Date().toISOString().slice(0,10);
     const wb=new ExcelJS.Workbook();
     const ws=wb.addWorksheet('طلبات Senior',{views:[{rightToLeft:true,state:'frozen',ySplit:2}]});
@@ -656,6 +656,7 @@ async function downloadXlsx(){
         const cell=r.getCell(i+1);
         let v=c.x(o);
         if(it){ if(c.k==='book')v=BOOKS[it.id]||it.id; else if(c.k==='qty')v=''+it.qty; else if(c.k==='price')v=it.price+' ج'; else if(c.k==='total')v=(it.qty*it.price)+' ج'; }
+        if(v==null||v==='')v='—'; /* empty cells show — like the rest of the table */
         cell.value=v;cell.border=border;
         cell.alignment={horizontal:center.has(c.k)?'center':'right',vertical:'middle',wrapText:wrap.has(c.k)};
         cell.font={size:10.5};
@@ -663,6 +664,20 @@ async function downloadXlsx(){
         if(c.k==='total')cell.font={bold:true,size:10.5};
         if(c.k==='status'){cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:argb(STBG[o.status])}};cell.font={bold:true,size:10.5,color:{argb:argb(STC[o.status])}}}
       });
+    });
+    /* totals row: total number of books + total amount only */
+    const totBooks=list.reduce((s,o)=>s+(o.items||[]).reduce((a,i)=>a+(+i.qty||0),0),0);
+    const totAmount=list.reduce((s,o)=>s+(+o.total||0),0);
+    const tr=ws.getRow(flat.length+3);tr.height=24;
+    cols.forEach((c,i)=>{
+      const cell=tr.getCell(i+1);cell.border=border;
+      cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFEAF3F1'}};
+      cell.font={bold:true,size:11,color:{argb:'FF0E6E60'}};
+      cell.alignment={horizontal:center.has(c.k)?'center':'right',vertical:'middle'};
+      if(c.k==='qty')cell.value=totBooks;
+      else if(c.k==='total')cell.value=totAmount+' ج';
+      else if(i===0)cell.value='الإجماليات';
+      else cell.value='';
     });
     cols.forEach((c,i)=>ws.getColumn(i+1).width=CW[c.k]||14);
     ws.autoFilter={from:{row:2,column:1},to:{row:2,column:cols.length}};
