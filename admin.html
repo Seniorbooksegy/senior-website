@@ -207,16 +207,16 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
         <div class="filterbar">
           <button class="filterbtn" id="filterBtn" onclick="toggleFilters()">🔎 الفلاتر <span class="fb" id="fCount"></span></button>
           <button class="filterbtn" id="colBtn" onclick="toggleCols()">⚙️ الأعمدة</button>
+          <button class="filterbtn" id="dlBtn" onclick="downloadXlsx()">⬇️ تحميل</button>
           <div class="ofchips" id="ofChips" style="margin:0"></div>
           <span style="flex:1"></span>
           <span class="ofcount" id="ofCount"></span>
-          <button class="b-g iconb" onclick="exportOrdersCSV()" title="تصدير Excel">⬇️ Excel</button>
         </div>
         <div class="filterpanel" id="ofPanel" style="display:none">
           <div class="fgroup"><label>بحث</label><input id="ofq" placeholder="رقم الطلب أو الاسم أو الموبايل أو الكود…" oninput="F.q=this.value;renderFilterChips();renderFCount();renderOrders()"></div>
           <div class="fgroup"><label>نوع المشتري</label><div class="fopts" id="fTypeOpts"></div></div>
           <div class="fgroup"><label>حالة الطلب</label><div class="fopts" id="fStatusOpts"></div></div>
-          <div class="fgroup"><label>المحافظة</label><div class="fopts" id="fGovOpts"></div></div>
+          <div class="fgroup"><label>تاريخ الطلب</label><div class="fopts" id="fDateOpts"></div></div>
           <div class="factions"><button class="b-g" onclick="clearAllF()">مسح الكل</button><button class="b-t" onclick="toggleFilters()">تم</button></div>
         </div>
         <div class="filterpanel" id="colPanel" style="display:none">
@@ -464,8 +464,19 @@ async function loadAnalytics(days){
 }
 
 /* ============ ORDERS ============ */
-let F={type:'',status:'',gov:'',q:''}, ofOpen='';
+let F={type:'',status:'',date:'',q:''}, ofOpen='';
 const TYPE_OPTS=[['','الكل'],['guest','زائر'],['student','طالب'],['teacher','مدرّس'],['library','مكتبة / سنتر']];
+const DATE_OPTS=[['','الكل'],['today','اليوم'],['7d','آخر ٧ أيام'],['30d','آخر ٣٠ يوماً']];
+function passDate(o){
+  if(!F.date)return true;
+  const s=(o.created_at||'').slice(0,10);if(!s)return true;
+  const today=new Date().toISOString().slice(0,10);
+  if(F.date==='today')return s===today;
+  const diff=(Date.parse(today)-Date.parse(s))/86400000;
+  if(F.date==='7d')return diff<=6;
+  if(F.date==='30d')return diff<=29;
+  return true;
+}
 const WAMSGS={
   new:o=>`أهلاً ${o.name}، استلمنا طلبك رقم ${o.order_no||o.id} من Senior وسنتواصل معك لتأكيده قريباً.`,
   confirmed:o=>`أهلاً ${o.name}، تم تأكيد طلبك رقم ${o.order_no||o.id} من Senior وجارٍ تجهيزه. الإجمالي: ${o.total} جنيه.`,
@@ -489,23 +500,23 @@ function renderFilterPanel(){
   const opt=(v,l,cur,dim)=>`<button class="fopt ${cur===v?'on':''}" onclick="setF('${dim}','${v}')">${esc(l)}</button>`;
   document.getElementById('fTypeOpts').innerHTML=TYPE_OPTS.map(([v,l])=>opt(v,l,F.type,'type')).join('');
   document.getElementById('fStatusOpts').innerHTML=[['','الكل'],...Object.entries(ST)].map(([v,l])=>opt(v,l,F.status,'status')).join('');
-  document.getElementById('fGovOpts').innerHTML=[['','الكل'],...govOpts().map(g=>[g,g])].map(([v,l])=>opt(v,l,F.gov,'gov')).join('');
+  document.getElementById('fDateOpts').innerHTML=DATE_OPTS.map(([v,l])=>opt(v,l,F.date,'date')).join('');
 }
 function setF(dim,val){F[dim]=val;renderFilterPanel();renderFilterChips();renderFCount();renderOrders();if(dim==='q'){const q=document.getElementById('ofq');if(q)q.value=val}}
-function activeCount(){return ['type','status','gov','q'].filter(k=>F[k]).length}
+function activeCount(){return ['type','status','date','q'].filter(k=>F[k]).length}
 function renderFCount(){const el=document.getElementById('fCount');if(el)el.textContent=activeCount()||''}
 function renderFilterChips(){
   const chips=[];
   if(F.type)chips.push(['type',(TYPE_OPTS.find(t=>t[0]===F.type)||['',''])[1]]);
   if(F.status)chips.push(['status',ST[F.status]]);
-  if(F.gov)chips.push(['gov','📍 '+F.gov]);
+  if(F.date)chips.push(['date','🗓️ '+(DATE_OPTS.find(t=>t[0]===F.date)||['',''])[1]]);
   if(F.q)chips.push(['q','🔎 '+F.q]);
   document.getElementById('ofChips').innerHTML=chips.map(([d,l])=>`<button class="ofchip" onclick="setF('${d}','')">${esc(l)} ✕</button>`).join('')+(chips.length>1?`<button class="ofchip clr" onclick="clearAllF()">مسح الكل ✕</button>`:'');
 }
-function clearAllF(){F={type:'',status:'',gov:'',q:''};const q=document.getElementById('ofq');if(q)q.value='';renderFilterPanel();renderFilterChips();renderFCount();renderOrders()}
+function clearAllF(){F={type:'',status:'',date:'',q:''};const q=document.getElementById('ofq');if(q)q.value='';renderFilterPanel();renderFilterChips();renderFCount();renderOrders()}
 function filteredOrders(){
   const q=F.q.trim(),qU=q.toUpperCase();
-  return ORDERS.filter(o=>(!F.type||o.buyer_type===F.type)&&(!F.status||o.status===F.status)&&(!F.gov||o.governorate===F.gov)&&(!q||o.name.includes(q)||(o.mobile||'').includes(q)||(o.order_no||'').toUpperCase().includes(qU)||(o.ref_code||'').toUpperCase().includes(qU)));
+  return ORDERS.filter(o=>(!F.type||o.buyer_type===F.type)&&(!F.status||o.status===F.status)&&passDate(o)&&(!q||o.name.includes(q)||(o.mobile||'').includes(q)||(o.order_no||'').toUpperCase().includes(qU)||(o.ref_code||'').toUpperCase().includes(qU)));
 }
 /* ---- order source (from utm) ---- */
 const PAYN={cod:'عند الاستلام',instapay:'InstaPay',wallet:'محفظة',fawry:'فوري'};
@@ -522,7 +533,7 @@ function orderSource(o){
 }
 function icol(o,cls,fn){return '<div class="icol '+cls+'">'+o.items.map(fn).join('')+'</div>'}
 const WA_SVG='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="#25D366" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>';
-function statusCell(o){return `<div class="acts"><span class="stwrap" style="--sc:${STC[o.status]};--sbg:${STBG[o.status]}"><select class="stpill" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></span><span class="asep"></span><span class="abtns">${o.status==='delivered'?`<button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>`:`<button class="b-g iconb" style="opacity:.4" title="الفاتورة تُصدر بعد دفع/تسليم الطلب" onclick="invoiceBlocked()">🧾</button>`}<button class="b-g iconb wa" title="واتساب العميل" onclick="waCustomer(${o.id})">${WA_SVG}</button></span></div>${o.delivered_at?`<div class="dt">✅ سُلّم ${esc(o.delivered_at.slice(0,10))}</div>`:''}`}
+function statusCell(o){return `<div class="acts"><span class="stwrap" style="--sc:${STC[o.status]};--sbg:${STBG[o.status]}"><select class="stpill" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></span><span class="asep"></span><span class="abtns">${o.status==='delivered'?`<button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>`:`<button class="b-g iconb" style="opacity:.4" title="الفاتورة تُصدر بعد دفع/تسليم الطلب" onclick="invoiceBlocked()">🧾</button>`}<button class="b-g iconb wa" title="واتساب العميل" onclick="waCustomer(${o.id})">${WA_SVG}</button></span></div>`}
 
 /* ---- columns model: lean default + toggleable extras (persisted) ---- */
 const COLS=[
@@ -590,6 +601,50 @@ async function setStatus(id,status){
   }catch(e){alert(e.message);loadOrders()}
 }
 function waCustomer(id){const o=ORDERS.find(x=>x.id===id);if(!o)return;window.open(`https://wa.me/2${o.mobile}?text=${encodeURIComponent((WAMSGS[o.status]||WAMSGS.new)(o))}`,'_blank')}
+/* ---- styled Excel export (ExcelJS, lazy-loaded) — ALL fields, colored & arranged ---- */
+function loadExcelJS(){return new Promise((res,rej)=>{if(window.ExcelJS)return res();const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
+const argb=h=>'FF'+String(h).replace('#','').toUpperCase();
+async function downloadXlsx(){
+  const btn=document.getElementById('dlBtn');const old=btn.textContent;btn.textContent='⏳ جارٍ التحضير…';
+  try{await loadExcelJS()}catch(e){btn.textContent=old;alert('تعذّر تحميل أداة التصدير — تحقق من الاتصال بالإنترنت.');return}
+  try{
+    const list=filteredOrders();
+    const today=new Date().toISOString().slice(0,10);
+    const wb=new ExcelJS.Workbook();
+    const ws=wb.addWorksheet('طلبات Senior',{views:[{rightToLeft:true,state:'frozen',ySplit:2}]});
+    const heads=['رقم الطلب','تاريخ الطلب','تاريخ التسليم','المصدر','نوع المشتري','اسم المشتري','رقم التواصل','المحافظة','المركز','المدرسة','العنوان','كود المدرّس','كود المندوب','طريقة الدفع','الكتب','عدد النسخ','الإجمالي (ج)','الحالة'];
+    const widths=[15,13,13,13,12,20,15,12,12,20,30,14,14,13,34,10,12,12];
+    const center=new Set([2,3,4,7,8,12,13,16,18]); /* 1-based columns to center */
+    const thin={style:'thin',color:{argb:'FFE3DECF'}};const border={top:thin,left:thin,bottom:thin,right:thin};
+    /* title */
+    ws.mergeCells(1,1,1,heads.length);
+    const tc=ws.getCell(1,1);tc.value='📚 طلبات Senior — تصدير '+today+'  ('+list.length+' طلب)';
+    tc.font={bold:true,size:14,color:{argb:'FF0E6E60'}};tc.alignment={horizontal:'right',vertical:'middle'};ws.getRow(1).height=28;
+    /* header */
+    const hr=ws.getRow(2);
+    heads.forEach((h,i)=>{const c=hr.getCell(i+1);c.value=h;c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF0E6E60'}};c.font={bold:true,color:{argb:'FFFFFFFF'},size:11};c.alignment={horizontal:'center',vertical:'middle',wrapText:true};c.border=border});
+    hr.height=24;
+    /* data */
+    list.forEach((o,idx)=>{
+      const r=ws.getRow(idx+3);
+      const src=orderSource(o);
+      const isT=o.ref_code&&/^SNR-T/i.test(o.ref_code),isR=o.ref_code&&/^SNR-R/i.test(o.ref_code);
+      const books=o.items.map(i=>`${BOOKS[i.id]||i.id} ×${i.qty} (${i.price} ج)`).join('، ');
+      const qty=o.items.reduce((s,i)=>s+i.qty,0);
+      const vals=[o.order_no||('#'+o.id),(o.created_at||'').slice(0,10),o.delivered_at?o.delivered_at.slice(0,10):'—',src.l,BT[o.buyer_type]||o.buyer_type,o.name,o.mobile,o.governorate||'—',o.city||'—',o.school||'—',o.address||'—',isT?o.ref_code:'—',isR?o.ref_code:'—',PAYN[o.pay_method]||o.pay_method||'—',books,qty,o.total,ST[o.status]||o.status];
+      vals.forEach((v,i)=>{const c=r.getCell(i+1);c.value=v;c.border=border;c.font={size:10.5};c.alignment={horizontal:center.has(i+1)?'center':'right',vertical:'middle',wrapText:i===10||i===14};
+        if(idx%2)c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFBF9F4'}}});
+      r.getCell(17).font={bold:true,size:10.5};
+      const sc=r.getCell(18);sc.fill={type:'pattern',pattern:'solid',fgColor:{argb:argb(STBG[o.status])}};sc.font={bold:true,size:10.5,color:{argb:argb(STC[o.status])}};
+    });
+    widths.forEach((w,i)=>ws.getColumn(i+1).width=w);
+    ws.autoFilter={from:{row:2,column:1},to:{row:2,column:heads.length}};
+    const buf=await wb.xlsx.writeBuffer();
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+    a.download='طلبات-Senior-'+today+'.xlsx';a.click();URL.revokeObjectURL(a.href);
+  }catch(e){alert('خطأ في التصدير: '+e.message)}
+  btn.textContent=old;
+}
 function exportOrdersCSV(){
   const rows=[['رقم الطلب','تاريخ الطلب','تاريخ التسليم','الاسم','الموبايل','المحافظة','المدينة','المدرسة','العنوان','الصفة','الكتب','الإجمالي','كود الخصم','الدفع','الحالة','الحملة']];
   filteredOrders().forEach(o=>rows.push([o.order_no||o.id,(o.created_at||'').slice(0,16),(o.delivered_at||'').slice(0,16),o.name,o.mobile,o.governorate||'',o.city||'',o.school||'',o.address||'',BT[o.buyer_type]||o.buyer_type,o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join(' + '),o.total,o.ref_code||'',o.pay_method||'',ST[o.status]||o.status,o.utm||'']));
