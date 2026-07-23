@@ -1121,6 +1121,7 @@ header.scr .brand img{height:26px}
           <div class="fld"><label data-ar="اسم المكتبة / السنتر" data-en="Bookshop / centre name"></label><input id="ptl-n"></div>
           <div class="fld"><label data-ar="اسم المسؤول" data-en="Contact person"></label><input id="ptl-o"></div>
         </div>
+        <div class="fld"><label data-ar="عنوان المكتبة / السنتر" data-en="Bookshop / centre address"></label><input id="ptl-addr" data-ar-ph="الشارع والحي والعلامة المميزة…" data-en-ph="Street, district, landmark…"></div>
         <div class="two">
           <div class="fld"><label data-ar="رقم التواصل" data-en="Contact number"></label><input id="ptl-p" data-ar-ph="01xxxxxxxxx" data-en-ph="01xxxxxxxxx"></div>
           <div class="fld"><label data-ar="المحافظة" data-en="Governorate"></label><select id="ptl-g"></select></div>
@@ -1487,6 +1488,7 @@ function openCheckout(){if(!count()){toast(t('السلّة فارغة','Cart is 
     if(BUYER.mobile&&!document.getElementById('co-p').value)document.getElementById('co-p').value=BUYER.mobile;
     if(BUYER.gov)document.getElementById('co-g').value=BUYER.gov;
     if(BUYER.city&&!document.getElementById('co-city').value)document.getElementById('co-city').value=BUYER.city;
+    if(BUYER.address&&!document.getElementById('co-a').value)document.getElementById('co-a').value=BUYER.address;
     if(typeof BUYER.trackIdx==='number'&&BUYER.trackIdx>=0)document.getElementById('co-t').selectedIndex=BUYER.trackIdx;
     if(BUYER.code)document.getElementById('co-code').value=BUYER.code;
   }
@@ -2002,8 +2004,9 @@ async function ptLib(){
   const n=document.getElementById('ptl-n').value.trim(),o=document.getElementById('ptl-o').value.trim(),
         p=document.getElementById('ptl-p').value.trim(),g=document.getElementById('ptl-g').value,
         city=document.getElementById('ptl-city').value.trim(),
+        addr=document.getElementById('ptl-addr').value.trim(),
         c=document.getElementById('ptl-c').value.trim().toUpperCase();
-  if(!n||!o||!mobOK(p)||!city){toast(t('أكمل البيانات كاملة: اسم المكتبة / السنتر والمسؤول ورقم التواصل والمنطقة / المركز','Complete all fields: name, contact person, contact number and area'));return}
+  if(!n||!o||!mobOK(p)||!city||!addr){toast(t('أكمل البيانات كاملة: الاسم والمسؤول والعنوان ورقم التواصل والمنطقة / المركز','Complete all fields: name, contact person, address, contact number and area'));return}
   /* rep code optional — a library/centre may register directly with us */
   let verified=false;
   if(c){
@@ -2011,7 +2014,7 @@ async function ptLib(){
     if(d&&(!d.valid||d.kind!=='rep')){toast(t('كود المندوب غير صحيح — صحّحه أو اترك الخانة فارغة','Invalid representative code — fix it or leave it empty'));return}
     verified=!!(d&&d.valid);
   }
-  setBuyer({type:'library',name:n,contact:o,mobile:p,gov:g,city,code:c||null,verified});
+  setBuyer({type:'library',name:n,contact:o,mobile:p,gov:g,city,address:addr,code:c||null,verified});
   closePortal();toast(t('تم تفعيل حساب المكتبة / السنتر','Account activated'));
 }
 ['pts-g','ptn-a','ptl-g'].forEach(id=>{const s=document.getElementById(id);if(s&&!s.options.length)GOVS.forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=g;s.appendChild(o)})});
