@@ -109,9 +109,14 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
 .bname{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;background:none;border:none;font-family:inherit;font-size:12.5px;padding:0;text-align:right}
 .bname:hover{color:#E4572E}
 .dt{font-size:10.5px;color:var(--green);font-weight:600;margin-top:2px}
-.stsel{margin:0;width:auto;font-weight:600;border-width:1.5px;padding:5px 8px;font-size:12px;border-radius:8px}
-.otbl .iconb{padding:4px 8px;font-size:12px}
-.acts{display:flex;align-items:center;gap:5px;white-space:nowrap}
+.stwrap{position:relative;display:inline-block}
+.stwrap::before{content:'';position:absolute;inset-inline-start:13px;top:50%;transform:translateY(-50%);width:7px;height:7px;border-radius:50%;background:var(--sc);pointer-events:none}
+.stwrap::after{content:'⌄';position:absolute;inset-inline-end:12px;top:44%;transform:translateY(-50%);font-size:13px;color:var(--sc);pointer-events:none;font-weight:700}
+.stpill{appearance:none;-webkit-appearance:none;margin:0;width:auto;min-width:104px;background:var(--sbg);color:var(--sc);border:1.5px solid transparent;border-radius:999px;padding:7px 26px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;transition:.15s}
+.stpill:hover{border-color:var(--sc)}
+.stpill:focus{outline:none;border-color:var(--sc);box-shadow:0 0 0 3px var(--sbg)}
+.otbl .iconb{padding:0;width:30px;height:30px;border-radius:9px;font-size:13px;display:inline-flex;align-items:center;justify-content:center}
+.acts{display:flex;align-items:center;gap:6px;white-space:nowrap}
 .tag.bt-student{background:#E7F0FB;color:var(--blue)}.tag.bt-guest{background:#F1EDE6;color:#8A6A3B}.tag.bt-teacher{background:var(--teal-l);color:var(--teal)}.tag.bt-library{background:#FBEEE6;color:#C0561C}
 .icol .ir{padding:2px 0;font-size:12px;border-top:1px dotted #F0EBE2;line-height:1.45;white-space:nowrap}
 .icol .ir:first-child{border-top:none}
@@ -508,7 +513,7 @@ function orderSource(o){
   return{ic:'❔',l:'غير معروف',c:'#8A9499'};
 }
 function icol(o,cls,fn){return '<div class="icol '+cls+'">'+o.items.map(fn).join('')+'</div>'}
-function statusCell(o){return `<div class="acts"><select class="stsel" style="border-color:${STC[o.status]};color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select>${o.status==='delivered'?`<button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>`:`<button class="b-g iconb" style="opacity:.35" title="الفاتورة تُصدر بعد دفع/تسليم الطلب" onclick="invoiceBlocked()">🧾</button>`}<button class="b-wa iconb" title="واتساب" onclick="waCustomer(${o.id})">💬</button></div>${o.delivered_at?`<div class="dt">✅ سُلّم ${esc(o.delivered_at.slice(0,10))}</div>`:''}`}
+function statusCell(o){return `<div class="acts"><span class="stwrap" style="--sc:${STC[o.status]};--sbg:${STBG[o.status]}"><select class="stpill" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></span>${o.status==='delivered'?`<button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>`:`<button class="b-g iconb" style="opacity:.35" title="الفاتورة تُصدر بعد دفع/تسليم الطلب" onclick="invoiceBlocked()">🧾</button>`}<button class="b-wa iconb" title="واتساب" onclick="waCustomer(${o.id})">💬</button></div>${o.delivered_at?`<div class="dt">✅ سُلّم ${esc(o.delivered_at.slice(0,10))}</div>`:''}`}
 
 /* ---- columns model: lean default + toggleable extras (persisted) ---- */
 const COLS=[
