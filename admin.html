@@ -320,6 +320,7 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
         </div>
       </div>
       <div class="subpanel" id="sub-tpart">
+        <div class="tiles" id="tpartKpis"></div>
         <div class="card">
           <h3>🤝 المدرسون الشركاء — العمولات</h3>
           <div class="note">⚠️ العمولة على الطلبات <b>المُسلَّمة فقط</b>. درجات تجريبية: 🥈 فضّي 10% · 🥇 ذهبي 12% · 💎 بلاتيني 15%.</div>
@@ -1162,6 +1163,19 @@ async function loadComms(){
     const row=c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(c.name)}</td><td>${c.kind==='rep'?'مندوب':c.tier==='فضّي'?'🥈':c.tier==='ذهبي'?'🥇':c.tier==='بلاتيني'?'💎':'—'} ${c.kind==='rep'?'':esc(c.tier||'')}</td><td>${c.delivered}</td><td>${c.revenue} ج</td><td>${c.pct}%</td><td><b>${c.commission} ج</b></td><td style="color:var(--green)">${c.paid} ج</td><td style="color:#C0421C"><b>${c.pending} ج</b>${c.requested?`<br><span class="tag">قيد السحب: ${c.requested}</span>`:''}</td><td style="white-space:nowrap"><button class="b-g iconb" onclick="showPartner('${esc(c.code)}')">👤</button>${c.pending>0&&!c.requested?` <button class="b-t iconb" onclick="payOut('${esc(c.code)}',${c.pending})">💸</button>`:''}</td></tr>`;
     const head='<table><tr><th>الكود</th><th>الاسم</th><th>الدرجة</th><th>مُسلَّم</th><th>مبيعات</th><th>النسبة</th><th>العمولة</th><th>مدفوع</th><th>مستحق</th><th></th></tr>';
     const tch=COMMS.filter(c=>c.kind!=='rep'),reps=COMMS.filter(c=>c.kind==='rep');
+    /* quick partners dashboard */
+    const kp=document.getElementById('tpartKpis');
+    if(kp){
+      const sum=k=>tch.reduce((a,c)=>a+(+c[k]||0),0);
+      const top=[...tch].sort((a,b)=>(+b.revenue||0)-(+a.revenue||0))[0];
+      const openReq=tch.filter(c=>+c.requested>0);
+      kp.innerHTML=
+        `<div class="tile"><div class="l">شركاء نشطون</div><div class="n">${tch.length}</div><div class="s">من ${TCHRS.length||tch.length} مدرّساً معتمداً</div></div>
+         <div class="tile"><div class="l">مبيعات مُسلَّمة عبرهم (ج)</div><div class="n">${sum('revenue')}</div><div class="s">${sum('delivered')} طلباً مُسلَّماً</div></div>
+         <div class="tile"><div class="l">عمولات محقَّقة (ج)</div><div class="n">${sum('commission')}</div><div class="s">مدفوع ${sum('paid')} ج</div></div>
+         <div class="tile"><div class="l">مستحق للسحب (ج)</div><div class="n" style="color:${sum('pending')>0?'#C0421C':'inherit'}">${sum('pending')}</div><div class="s">${openReq.length?openReq.length+' طلب سحب مفتوح ('+sum('requested')+' ج)':'لا طلبات سحب مفتوحة'}</div></div>
+         <div class="tile"><div class="l">أفضل شريك</div><div class="n" style="font-size:15px">${top?esc(top.name):'—'}</div><div class="s">${top?top.revenue+' ج مُسلَّمة عبر كوده':'لا مبيعات بعد'}</div></div>`;
+    }
     if(el)el.innerHTML=tch.length?head+tch.map(row).join('')+'</table>':'<p class="msg">لا طلبات بأكواد مدرّسين بعد.</p>';
     if(elR)elR.innerHTML=reps.length?head+reps.map(row).join('')+'</table>':'<p class="msg">لا طلبات بأكواد مناديب بعد.</p>';
     loadWithdrawals();
