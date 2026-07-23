@@ -951,8 +951,21 @@ header.scr .brand img{height:26px}
     </div>
   </div>
   <div class="wrap fbot"><span data-ar="© 2026 Senior — جميع الحقوق محفوظة · تأليف الأستاذ صلاح علي · توزيع مؤسسة الكتب الذهبية" data-en="© 2026 Senior — All rights reserved · By Mr. Salah Ali · Distributed by Golden Books"></span>
-    <span style="display:block;margin-top:6px"><a href="policies.html#privacy" style="color:#8CA3A9;text-decoration:underline;text-underline-offset:3px" data-ar="سياسة الخصوصية" data-en="Privacy policy"></a></span></div>
+    <span style="display:block;margin-top:6px"><a href="policies.html#privacy" style="color:#8CA3A9;text-decoration:underline;text-underline-offset:3px" data-ar="سياسة الخصوصية" data-en="Privacy policy"></a>
+    <a href="#" onclick="openModal('mTrack');return false" style="color:#8CA3A9;text-decoration:underline;text-underline-offset:3px;margin-inline-start:14px" data-ar="🔎 تتبع طلبك" data-en="🔎 Track your order"></a></span></div>
 </footer>
+
+<!-- ORDER TRACKING -->
+<div class="modal" id="mTrack">
+  <div class="mbg" onclick="closeModal('mTrack')"></div>
+  <div class="mcard">
+    <div class="mhead"><h3 data-ar="تتبع طلبك" data-en="Track your order"></h3><button class="x" onclick="closeModal('mTrack')">×</button></div>
+    <div class="fld"><label data-ar="رقم الطلب" data-en="Order number"></label><input id="tk-no" dir="ltr" placeholder="SNR-2027-000XX"></div>
+    <div class="fld"><label data-ar="رقم الموبايل المسجَّل على الطلب" data-en="Mobile used on the order"></label><input id="tk-p" dir="ltr" placeholder="01XXXXXXXXX"></div>
+    <button class="btn b-o" style="width:100%;margin-top:8px" onclick="trackOrder()" data-ar="عرض حالة الطلب" data-en="Show order status"></button>
+    <div id="tkRes" style="margin-top:12px"></div>
+  </div>
+</div>
 
 <!-- CART -->
 <div class="ov" id="ov" onclick="closeCart()"></div>
@@ -982,7 +995,7 @@ header.scr .brand img{height:26px}
       </div>
       <div class="two">
         <div class="fld"><label data-ar="المسار" data-en="Track"></label><select id="co-t"><option data-ar="ثالثة ثانوي — عام" data-en="Grade 3 — General"></option><option data-ar="ثالثة ثانوي — أزهر" data-en="Grade 3 — Azhar"></option><option data-ar="أخرى" data-en="Other"></option></select></div>
-        <div class="fld"><label data-ar="كود المدرّس (اختياري)" data-en="Teacher code (optional)"></label><input id="co-code" dir="ltr" data-ar-ph="SNR-T-0000" data-en-ph="SNR-T-0000" oninput="coCodeInput()"><div id="coCodeSt" class="codeSt"></div></div>
+        <div class="fld"><label data-ar="كود المدرّس أو كود الشراء (اختياري)" data-en="Teacher or purchase code (optional)"></label><input id="co-code" dir="ltr" data-ar-ph="SNR-T-0000 / SNR-S-XXXXXX" data-en-ph="SNR-T-0000 / SNR-S-XXXXXX" oninput="coCodeInput()"><div id="coCodeSt" class="codeSt"></div></div>
       </div>
       <div class="fld"><label data-ar="العنوان بالتفصيل" data-en="Full address"></label><textarea id="co-a" rows="2" required data-ar-ph="الشارع، رقم العمارة، علامة مميّزة" data-en-ph="Street, building no., landmark"></textarea></div>
       <h4 style="font-size:15px;font-weight:700;margin:16px 0 10px" data-ar="اختر وسيلة الدفع" data-en="Choose payment method"></h4>
@@ -1506,11 +1519,13 @@ function coCodeInput(){
   setCodeSt('wait',t('جارٍ التحقق من الكود…','Checking the code…'));
   coCodeT=setTimeout(async()=>{
     const d=await apiFetch('/api/code/check?code='+encodeURIComponent(v));
-    if(d&&d.valid&&d.kind==='teacher'){
+    if(d&&d.valid&&(d.kind==='teacher'||d.kind==='scode')){
+      /* scode = printed purchase code; if channelled to a teacher, attribution is automatic */
       setBuyer({type:BUYER?BUYER.type:'student',name:(BUYER&&BUYER.name)||'',mobile:(BUYER&&BUYER.mobile)||'',
         gov:(BUYER&&BUYER.gov)||'',city:(BUYER&&BUYER.city)||'',code:v,teacher:d.name||'',verified:true});
-      setCodeSt('ok',t('✓ الكود صحيح — خصمك مفعَّل','✓ Code valid — your discount is active')+(d.name?' ('+d.name+')':''));
-    }else if(d){setCodeSt('bad',t('✗ الكود غير صحيح','✗ Invalid code'))}
+      setCodeSt('ok',(d.kind==='scode'?t('✓ كود شراء صحيح — خصمك مفعَّل','✓ Purchase code valid — your discount is active'):t('✓ الكود صحيح — خصمك مفعَّل','✓ Code valid — your discount is active'))+(d.name?' ('+d.name+')':''));
+    }else if(d&&d.used){setCodeSt('bad',t('✗ هذا الكود استُخدم من قبل','✗ This code was already used'))}
+    else if(d){setCodeSt('bad',t('✗ الكود غير صحيح','✗ Invalid code'))}
     else setCodeSt('wait',t('🕓 يُتحقق من الكود عند تأكيد الطلب','🕓 Code will be verified on confirmation'));
     renderCoSum();
   },500);
@@ -1523,7 +1538,7 @@ async function submitOrder(){
   const codeIn=document.getElementById('co-code').value.trim().toUpperCase();
   if(codeIn&&(!BUYER||BUYER.code!==codeIn)){
     const d=await apiFetch('/api/code/check?code='+encodeURIComponent(codeIn));
-    if(d&&!d.valid){toast(t('كود المدرّس غير صحيح — صحّحه أو امسح الخانة','Invalid teacher code — fix it or clear the field'));return}
+    if(d&&!d.valid){toast(d.used?t('هذا الكود استُخدم من قبل — امسح الخانة أو استخدم كوداً آخر','This code was already used — clear the field or use another'):t('الكود غير صحيح — صحّحه أو امسح الخانة','Invalid code — fix it or clear the field'));return}
     setBuyer({type:BUYER?BUYER.type:'student',name:(BUYER&&BUYER.name)||n,mobile:(BUYER&&BUYER.mobile)||p,
       gov:document.getElementById('co-g').value,city,code:codeIn,teacher:d?(d.name||''):'',verified:!!(d&&d.valid)});
     renderCoSum();
@@ -1538,7 +1553,7 @@ async function submitOrder(){
     utm:(typeof UTM!=='undefined'&&UTM)||''})});
   if(r&&r.ok){
     closeModal('mCheck');cart={};save();renderCart();
-    toast(t('✅ تم استلام طلبك رقم '+r.orderId+' — سنتواصل معك لتأكيده قريباً','✅ Order #'+r.orderId+' received — we will contact you to confirm it soon'));
+    toast(t('✅ تم استلام طلبك رقم '+(r.orderNo||r.orderId)+' — سنتواصل معك لتأكيده، ويمكنك متابعته من «تتبع طلبك» أسفل الصفحة','✅ Order '+(r.orderNo||r.orderId)+' received — we will contact you, and you can follow it via "Track your order" in the footer'));
   }else{
     /* backend unreachable → WhatsApp fallback so no order is ever lost */
     window.open(`https://wa.me/${WA}?text=${orderText(info)}`,'_blank');
@@ -1562,6 +1577,25 @@ function verifyCode(){
 
 const openModal=id=>document.getElementById(id).classList.add('on');
 const closeModal=id=>document.getElementById(id).classList.remove('on');
+/* ---- public order tracking (order no + mobile) ---- */
+async function trackOrder(){
+  const no=document.getElementById('tk-no').value.trim(),p=document.getElementById('tk-p').value.trim(),el=document.getElementById('tkRes');
+  if(!no||!mobOK(p)){el.innerHTML='<p style="color:#C0421C;font-size:13.5px">'+t('أدخل رقم الطلب ورقم الموبايل المسجَّل عليه.','Enter the order number and the mobile used on it.')+'</p>';return}
+  el.innerHTML='<p style="color:var(--muted);font-size:13.5px">'+t('جارٍ البحث…','Looking up…')+'</p>';
+  const d=await apiFetch('/api/order/track?no='+encodeURIComponent(no)+'&mobile='+encodeURIComponent(p));
+  if(!d){el.innerHTML='<p style="color:#C0421C;font-size:13.5px">'+t('تعذّر الاتصال — حاول بعد قليل.','Connection failed — try again shortly.')+'</p>';return}
+  if(!d.ok){el.innerHTML='<p style="color:#C0421C;font-size:13.5px">'+t('لا يوجد طلب بهذه البيانات — راجع الرقمين.','No order matches — check both numbers.')+'</p>';return}
+  const STA={new:['🕓',t('جديد — في انتظار التأكيد','New — awaiting confirmation')],confirmed:['✅',t('مؤكَّد — يجهَّز للشحن','Confirmed — being prepared')],shipped:['🚚',t('شُحن — في الطريق إليك','Shipped — on its way')],delivered:['🎉',t('سُلِّم','Delivered')],cancelled:['✖️',t('أُلغي','Cancelled')],returned:['↩️',t('مرتجع','Returned')]};
+  const steps=['new','confirmed','shipped','delivered'];
+  const idx=steps.indexOf(d.status);
+  const bar=(d.status==='cancelled'||d.status==='returned')?'':'<div style="display:flex;gap:6px;margin:10px 0">'+steps.map((s,i)=>`<div style="flex:1;height:7px;border-radius:99px;background:${i<=idx?'var(--teal,#0E6E60)':'#E4DFD2'}"></div>`).join('')+'</div>';
+  const st=STA[d.status]||['❔',d.status];
+  el.innerHTML=`<div style="border:1.5px solid #E4DFD2;border-radius:12px;padding:12px 14px">
+    <div style="font-weight:700">${st[0]} ${st[1]}</div>${bar}
+    <div style="font-size:13.5px;color:var(--muted)">${t('طلب','Order')} <b dir="ltr">${d.orderNo||no}</b> · ${d.total} ${t('ج','EGP')} · ${t('بتاريخ','placed')} ${(d.createdAt||'').slice(0,10)}${d.deliveredAt?' · '+t('سُلِّم في','delivered')+' '+(d.deliveredAt||'').slice(0,10):''}</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:4px">${(d.items||[]).map(i=>{const pr=PRODUCTS.find(v=>v.id===i.id);return((pr?(LANG==='ar'?pr.tAr:pr.tEn):i.id)+' ×'+i.qty)}).join(' · ')}</div>
+  </div>`;
+}
 let tT;function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('on');clearTimeout(tT);tT=setTimeout(()=>e.classList.remove('on'),2400)}
 document.querySelectorAll('#nav a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav').classList.remove('open')));
 
@@ -1930,6 +1964,8 @@ async function ptStudent(){
     if(d){if(!d.valid||d.kind!=='teacher'){toast(t('كود المدرّس غير صحيح','Invalid teacher code'));return}verified=true;tname=d.name||''}
   }
   setBuyer({type:'student',name:n,mobile:p,gov:g,city,school,trackIdx:document.getElementById('pts-t').selectedIndex,code:c||null,teacher:tname,verified});
+  /* registration lands server-side immediately (fire-and-forget) — student is visible to the team before any order */
+  try{apiFetch('/api/student/register',{method:'POST',body:JSON.stringify({name:n,mobile:p,governorate:g,city,school,track:document.getElementById('pts-t').selectedOptions[0].textContent,refCode:(verified&&c)||null})})}catch(e){}
   closePortal();toast(t('تم تفعيل حساب الطالب','Student account activated'));
 }
 async function ptTeacherExist(){

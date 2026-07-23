@@ -60,11 +60,11 @@ textarea{width:100%;border:1.5px solid #D8E3E0;border-radius:12px;padding:12px;f
 </style>
 </head>
 <body>
-<div class="top"><img src="senior-logo.png?v=2" alt="Senior"><div><h1>لوحة المدرّس الشريك</h1><p class="sub">تابع طلبات كودك ومكافآتك في أي وقت</p></div></div>
+<div class="top"><img src="senior-logo.png?v=2" alt="Senior"><div><h1 id="hdTitle">لوحة شركاء Senior</h1><p class="sub" id="hdSub">مدرّس · مندوب · مكتبة — تابع طلباتك ومستحقاتك في أي وقت</p></div></div>
 
 <div class="card" id="loginCard">
   <h3>🔑 الدخول بكودك</h3>
-  <label>كود المدرّس</label><input id="aCode" dir="ltr" placeholder="SNR-T-0000">
+  <label>كودك (مدرّس SNR-T · مندوب SNR-R · مكتبة SNR-L)</label><input id="aCode" dir="ltr" placeholder="SNR-T-0000">
   <label>رقم الموبايل المسجَّل به</label><input id="aMob" dir="ltr" placeholder="01xxxxxxxxx">
   <button class="b-t" onclick="login()">عرض لوحتي</button>
   <button class="b-g" style="margin-inline-start:8px" onclick="demoLogin()">👀 شاهد لوحة تجريبية</button>
@@ -80,14 +80,14 @@ textarea{width:100%;border:1.5px solid #D8E3E0;border-radius:12px;padding:12px;f
     <button class="out" onclick="logout()">تسجيل خروج</button></span></div>
   <div class="note">⚠️ الأرقام المعروضة حالياً أرقام تجريبية للعرض — النسب النهائية تُعتمد قريباً.</div>
 
-  <div class="card share">
+  <div class="card share" id="shareCard">
     <h3>🔗 رابطك الخاص</h3>
     <p style="font-size:13px;color:#33474E">شاركه مع طلابك — يفتح الموقع وخصمهم مفعَّل تلقائياً بكودك، وتُحتسب طلباتهم لك.</p>
     <div class="linkbox"><span id="aLink"></span><button class="b-g" style="padding:6px 14px" onclick="copyLink()">نسخ</button></div>
     <button class="b-wa" onclick="waShare()">💬 مشاركة عبر واتساب</button>
   </div>
 
-  <div class="card">
+  <div class="card" id="tierCard">
     <h3>🏅 درجتك في برنامج الشركاء</h3>
     <div class="tier">
       <span class="tbadge" id="tBadge"></span>
@@ -95,7 +95,28 @@ textarea{width:100%;border:1.5px solid #D8E3E0;border-radius:12px;padding:12px;f
     </div>
   </div>
 
-  <div class="kpis">
+  <div class="card" id="batchCard" style="display:none">
+    <h3>🎟️ أكوادك المطبوعة</h3>
+    <p style="font-size:13px;color:#33474E">أكواد شراء صادرة باسمك — أي طالب يستخدم واحداً منها يُحتسب طلبه لك تلقائياً.</p>
+    <div class="kpis">
+      <div class="kpi"><div class="n" id="bTotal">0</div><div class="l">إجمالي أكوادك</div></div>
+      <div class="kpi hot"><div class="n" id="bUsed">0</div><div class="l">استُخدمت</div></div>
+      <div class="kpi"><div class="n" id="bLeft">0</div><div class="l">متبقية</div></div>
+    </div>
+  </div>
+
+  <div class="kpis" id="libKpis" style="display:none">
+    <div class="kpi"><div class="n" id="lkOrders">0</div><div class="l">طلباتك</div></div>
+    <div class="kpi"><div class="n" id="lkDel">0</div><div class="l">مُسلَّمة</div></div>
+    <div class="kpi hot"><div class="n" id="lkRev">0</div><div class="l">إجمالي مشترياتك (ج)</div></div>
+  </div>
+
+  <div class="card" id="libsCard" style="display:none">
+    <h3>🏪 المكتبات التي ضممتها</h3>
+    <div id="rLibs">—</div>
+  </div>
+
+  <div class="kpis" id="mainKpis">
     <div class="kpi"><div class="n" id="kDel">0</div><div class="l">طلبات مُسلَّمة</div></div>
     <div class="kpi"><div class="n" id="kOpen">0</div><div class="l">قيد التنفيذ</div></div>
     <div class="kpi"><div class="n" id="kPct">0%</div><div class="l">نسبتك</div></div>
@@ -104,15 +125,15 @@ textarea{width:100%;border:1.5px solid #D8E3E0;border-radius:12px;padding:12px;f
     <div class="kpi"><div class="n" id="kPaid">0</div><div class="l">مدفوع (ج)</div></div>
     <div class="kpi hot"><div class="n" id="kPend">0</div><div class="l">مستحق للسحب (ج)</div></div>
   </div>
-  <p class="msg" style="margin:-4px 0 12px">تُحتسب العمولة على الطلبات <b>المُسلَّمة</b> فقط — طلباتك قيد التنفيذ تتحول إلى عمولة فور تسليمها.</p>
+  <p class="msg" style="margin:-4px 0 12px" id="commNote">تُحتسب العمولة على الطلبات <b>المُسلَّمة</b> فقط — طلباتك قيد التنفيذ تتحول إلى عمولة فور تسليمها.</p>
 
-  <div class="card wd">
+  <div class="card wd" id="wdCard">
     <h3>💸 سحب مكافآتك</h3>
     <div id="wdBox">—</div>
   </div>
 
   <div class="card">
-    <h3>🧾 الطلبات التي جاءت عبرك</h3>
+    <h3 id="ordersTitle">🧾 الطلبات التي جاءت عبرك</h3>
     <div class="chips">
       <button class="chip on" id="p7" onclick="setPeriod(7)">آخر أسبوع</button>
       <button class="chip" id="p30" onclick="setPeriod(30)">آخر شهر</button>
@@ -121,10 +142,10 @@ textarea{width:100%;border:1.5px solid #D8E3E0;border-radius:12px;padding:12px;f
     <div id="aOrders">—</div>
   </div>
 
-  <div class="card"><h3>📅 الأداء الشهري</h3><div id="aMonthly">—</div></div>
-  <div class="card"><h3>💸 دفعات العمولة</h3><div id="aPays">—</div></div>
+  <div class="card" id="monthlyCard"><h3>📅 الأداء الشهري</h3><div id="aMonthly">—</div></div>
+  <div class="card" id="paysCard"><h3>💸 دفعات العمولة</h3><div id="aPays">—</div></div>
 
-  <div class="card">
+  <div class="card" id="promoCard">
     <h3>📣 منشور جاهز لمجموعة طلابك</h3>
     <textarea id="aPromo" rows="6" readonly></textarea>
     <button class="b-t" onclick="copyPromo()">نسخ المنشور</button>
@@ -157,7 +178,7 @@ function demoLogin(){
   login();
 }
 let PERIOD=7;
-const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم'};
+const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي',returned:'مرتجع'};
 const BOOKS={sharh:'الشرح',exercises:'التمارين',skills:'المهارات',comprehension:'قطع الفهم',grammar:'القواعد',bundle:'المجموعة كاملة'};
 function setPeriod(p){PERIOD=p;['p7','p30','p0'].forEach(id=>document.getElementById(id).classList.remove('on'));document.getElementById('p'+p).classList.add('on');renderOrders()}
 function renderOrders(){
@@ -165,10 +186,19 @@ function renderOrders(){
   const cut=PERIOD?Date.now()-PERIOD*86400000:0;
   const list=(A.orderList||[]).filter(o=>!cut||new Date(o.created_at.replace(' ','T')+'Z').getTime()>=cut);
   if(!list.length){el.innerHTML='<p class="msg">لا توجد طلبات في هذه الفترة.</p>';return}
+  if(A.kind==='library'){
+    el.innerHTML=`<table><tr><th>رقم الطلب</th><th>الكتب</th><th>الإجمالي</th><th>الحالة</th><th>التاريخ</th><th>التسليم</th></tr>`+
+    list.map(o=>`<tr><td><span class="code">${o.order_no||('#'+o.id)}</span></td>
+      <td>${o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join('، ')}</td><td>${o.total} ج</td>
+      <td><span class="st s-${o.status}">${ST[o.status]||o.status}</span></td>
+      <td style="color:#8A9499;font-size:11.5px">${(o.created_at||'').slice(0,10)}</td>
+      <td style="color:#8A9499;font-size:11.5px">${o.delivered_at?(o.delivered_at||'').slice(0,10):'—'}</td></tr>`).join('')+'</table>';
+    return;
+  }
   const totD=list.filter(o=>o.status==='delivered').reduce((s,o)=>s+o.total,0);
   const totO=list.filter(o=>o.status!=='delivered').reduce((s,o)=>s+o.total,0);
   el.innerHTML=`<p class="msg" style="margin:0 0 8px"><b>${list.length}</b> طلب — عمولة محقَّقة <b>${Math.round(totD*A.pct/100)} ج</b>${totO?` — متوقَّع بعد التسليم <b>${Math.round(totO*A.pct/100)} ج</b>`:''}</p>
-  <table><tr><th>#</th><th>الطالب</th><th>الكتب</th><th>الإجمالي</th><th>الحالة</th><th>التاريخ</th></tr>`+
+  <table><tr><th>#</th><th>${A.kind==='rep'?'المشتري':'الطالب'}</th><th>الكتب</th><th>الإجمالي</th><th>الحالة</th><th>التاريخ</th></tr>`+
   list.map(o=>`<tr><td>${o.id}</td><td>${o.name}<br><span style="color:#8A9499;font-size:11.5px">${o.governorate||''}</span></td>
     <td>${o.items.map(i=>`${BOOKS[i.id]||i.id}×${i.qty}`).join('، ')}</td><td>${o.total} ج</td>
     <td><span class="st s-${o.status}">${ST[o.status]||o.status}</span></td>
@@ -200,10 +230,36 @@ async function requestWithdraw(){
   else alert(r.error==='already_requested'?'لديك طلب سحب قيد التنفيذ بالفعل.':'لا يوجد مستحق للسحب.');
 }
 function render(){
+  const kind=A.kind||'teacher';
+  const show=(id,on)=>{const e=document.getElementById(id);if(e)e.style.display=on?'':'none'};
   document.getElementById('loginCard').style.display='none';
   document.getElementById('panel').style.display='block';
   document.getElementById('aName').textContent=A.name;
   document.getElementById('aCodeChip').textContent=A.code;
+  /* role-specific layout */
+  show('shareCard',kind==='teacher');show('tierCard',kind==='teacher');show('promoCard',kind==='teacher');
+  show('monthlyCard',kind==='teacher');show('batchCard',kind==='teacher'&&A.batch&&A.batch.total>0);
+  show('libsCard',kind==='rep');show('mainKpis',kind!=='library');show('libKpis',kind==='library');
+  show('wdCard',kind!=='library');show('paysCard',kind!=='library');show('commNote',kind!=='library');
+  document.getElementById('hdTitle').textContent=kind==='rep'?'لوحة المندوب':kind==='library'?'لوحة المكتبة':'لوحة المدرّس الشريك';
+  document.getElementById('ordersTitle').textContent=kind==='library'?'🧾 طلبات مكتبتك':'🧾 الطلبات التي جاءت عبرك';
+  if(kind==='library'){
+    document.getElementById('lkOrders').textContent=A.orders;
+    document.getElementById('lkDel').textContent=A.delivered;
+    document.getElementById('lkRev').textContent=A.revenue;
+    renderOrders();
+    return;
+  }
+  if(kind==='rep'){
+    document.getElementById('rLibs').innerHTML=(A.libraries||[]).length
+      ?'<table><tr><th>المكتبة</th><th>الكود</th><th>موبايل</th><th>المنطقة</th><th>انضمت</th></tr>'+A.libraries.map(l=>`<tr><td><b>${l.name}</b></td><td>${l.code?'<span class="code">'+l.code+'</span>':'—'}</td><td dir="ltr">${l.mobile||'—'}</td><td>${l.area||'—'}</td><td style="color:#8A9499;font-size:11.5px">${(l.created_at||'').slice(0,10)}</td></tr>`).join('')+'</table>'
+      :'<p class="msg">لا مكتبات مسجَّلة بكودك بعد — كل مكتبة تسجّل بكودك تُحسب لك.</p>';
+  }
+  if(A.batch){
+    document.getElementById('bTotal').textContent=A.batch.total;
+    document.getElementById('bUsed').textContent=A.batch.used;
+    document.getElementById('bLeft').textContent=A.batch.remaining;
+  }
   document.getElementById('aLink').textContent=`${SITE}/?ref=${A.code}`;
   document.getElementById('kDel').textContent=A.delivered;
   document.getElementById('kOpen').textContent=A.openOrders;
@@ -212,6 +268,12 @@ function render(){
   document.getElementById('kExp').textContent=A.expected;
   document.getElementById('kPaid').textContent=A.paid;
   document.getElementById('kPend').textContent=A.pending;
+  if(kind==='rep'){renderWd();renderOrders();
+    document.getElementById('aPays').innerHTML=(A.payouts||[]).length
+      ?'<table><tr><th>الشهر</th><th>المبلغ</th><th>الحالة</th><th>المرجع</th><th>التاريخ</th></tr>'+A.payouts.map(p=>`<tr><td>${p.month||'—'}</td><td><b>${p.amount} ج</b></td><td>${p.status==='paid'?'<span class="st s-delivered">تم التحويل</span>':'<span class="st s-confirmed">قيد التنفيذ</span>'}</td><td>${p.ref||'—'}</td><td style="color:#8A9499;font-size:12px">${(p.paid_at||p.created_at||'').slice(0,10)}</td></tr>`).join('')+'</table>'
+      :'<p class="msg">لم تُصرف دفعات بعد.</p>';
+    return;
+  }
   /* tier badge + progress */
   const tb=document.getElementById('tBadge');
   tb.textContent=(A.tier.k==='silver'?'🥈 الشريك الفضّي':A.tier.k==='gold'?'🥇 الشريك الذهبي':'💎 الشريك البلاتيني')+' — '+A.tier.pct+'%';

@@ -247,7 +247,6 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
           <div class="filterpanel" id="sfPanel" style="display:none">
             <div class="fgroup"><label>بحث</label><input id="sfq" placeholder="اسم الطالب أو الموبايل أو كود الطالب أو المدرسة…" oninput="SF.q=this.value;renderSFChips();renderRegStudents()"></div>
             <div class="fgroup"><label>الصف</label><div class="fopts" id="sfTrackOpts"></div></div>
-            <div class="fgroup"><label>المحافظة</label><div class="fopts" id="sfGovOpts"></div></div>
             <div class="fgroup"><label>المدرّس المُحيل</label><div class="fopts" id="sfRefOpts"></div></div>
             <div class="factions"><button class="b-g" onclick="clearSF()">مسح الكل</button><button class="b-t" onclick="toggleSFilters()">تم</button></div>
           </div>
@@ -258,12 +257,12 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
           <div class="note" style="margin:2px 0 12px">📋 اضغط «تاريخ الطلبات» لعرض ملف الطالب وتفاصيل طلباته السابقة.</div>
           <div class="otblwrap" id="regList">…</div>
         </div>
-        <div class="card"><h3>🏫 أعلى المدارس</h3><div id="sSchools">…</div></div>
       </div>
       <div class="subpanel" id="sub-codes">
         <div class="tiles" id="kStats"></div>
         <div class="card">
-          <h3>🎟️ إنشاء أكواد الطلبة</h3>
+          <h3>🎟️ إنشاء أكواد الشراء</h3>
+          <div class="note">أكواد شراء للطلبة — تُنشأ هنا وتُنزَّل CSV.</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
             <div style="width:auto"><label>عدد الأكواد الجديدة</label><input id="kCount" type="number" value="100" min="1" max="5000" style="width:130px;margin:0"></div>
             <button class="b-t" id="kGenBtn" onclick="genCodes()">إنشاء وتنزيل CSV</button>
@@ -275,37 +274,127 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
       </div>
     </section>
 
-    <!-- CUSTOMERS -->
-    <section class="sec" id="sec-customers">
-      <div class="card">
-        <h3>🏪 المكتبات</h3>
-        <div class="row3"><div><label>اسم المكتبة</label><input id="lbName"></div><div><label>موبايل</label><input id="lbMob" dir="ltr"></div><div><label>المنطقة</label><input id="lbArea"></div></div>
-        <button class="b-t" onclick="addLibrary()">إضافة مكتبة</button><div class="msg" id="lbMsg"></div>
-        <div id="lList" style="margin-top:14px">…</div>
+    <!-- TEACHERS -->
+    <section class="sec" id="sec-teachers">
+      <div class="subtabs" id="tchTabs">
+        <button class="on" onclick="subShow('tch','treg')">🧑‍🏫 المدرسون المسجلون</button>
+        <button onclick="subShow('tch','tpart')">🤝 المدرسون الشركاء</button>
+        <button onclick="subShow('tch','treq')">📥 طلبات التفعيل <span class="fb" id="treqBadge"></span></button>
+        <button onclick="subShow('tch','tcodes')">🎟️ إنشاء أكواد المدرسين</button>
+      </div>
+      <div class="subpanel on" id="sub-treg">
+        <div class="card">
+          <div class="filterbar">
+            <button class="filterbtn" id="tFilterBtn" onclick="toggleTFilters()">🔎 الفلاتر <span class="fb" id="tfCount"></span></button>
+            <button class="filterbtn" id="tColBtn" onclick="toggleTCols()">⚙️ الأعمدة</button>
+            <button class="filterbtn" id="tDlBtn" onclick="downloadTeachersXlsx()">⬇️ تحميل</button>
+            <div class="ofchips" id="tfChips" style="margin:0"></div>
+            <span style="flex:1"></span>
+            <span class="ofcount" id="tregCount"></span>
+          </div>
+          <div class="filterpanel" id="tfPanel" style="display:none">
+            <div class="fgroup"><label>بحث</label><input id="tfq" placeholder="اسم المدرّس أو الموبايل أو الكود أو المنطقة…" oninput="TF.q=this.value;renderTFChips();renderTeachers()"></div>
+            <div class="fgroup"><label>الطلبات عبر كوده</label><div class="fopts" id="tfOrdOpts"></div></div>
+            <div class="factions"><button class="b-g" onclick="clearTF()">مسح الكل</button><button class="b-t" onclick="toggleTFilters()">تم</button></div>
+          </div>
+          <div class="filterpanel" id="tColPanel" style="display:none">
+            <div class="fgroup"><label>اختر الأعمدة الظاهرة في الجدول</label><div class="colopts" id="tColOpts"></div></div>
+            <div class="factions"><button class="b-g" onclick="resetTCols()">الأعمدة الافتراضية</button><button class="b-t" onclick="toggleTCols()">تم</button></div>
+          </div>
+          <div class="note" style="margin:2px 0 12px">👤 اضغط أيقونة التفاصيل لعرض ملف المدرّس والطلبات التي جاءت عبر كوده.</div>
+          <div class="otblwrap" id="tregList">…</div>
+        </div>
+      </div>
+      <div class="subpanel" id="sub-tpart">
+        <div class="card">
+          <h3>🤝 المدرسون الشركاء — العمولات</h3>
+          <div class="note">⚠️ العمولة على الطلبات <b>المُسلَّمة فقط</b>. درجات تجريبية: 🥈 فضّي 10% · 🥇 ذهبي 12% · 💎 بلاتيني 15%.</div>
+          <div id="wReqs"></div>
+          <button class="b-g" onclick="exportCommCSV()">⬇️ تصدير CSV</button>
+          <div id="cList" style="margin-top:12px">…</div><div id="pDetail" style="margin-top:14px"></div>
+        </div>
+      </div>
+      <div class="subpanel" id="sub-treq">
+        <div class="card"><h3>📥 طلبات التفعيل — مدرّسون بانتظار المراجعة</h3><div class="note">اعتمد الطلب ليتولّد كود المدرّس ويظهر في المسجلين، أو ارفضه.</div><div id="jList">…</div></div>
+      </div>
+      <div class="subpanel" id="sub-tcodes">
+        <div class="card">
+          <h3>🎟️ إنشاء أكواد شراء باسم مدرّس</h3>
+          <div class="note">كل كود من الباتش يربط طلب الطالب بالمدرّس تلقائيًا (خصم الطالب + عمولة المدرّس) دون كتابة كود المدرّس.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+            <div style="width:auto;min-width:220px"><label>المدرّس</label><select id="tcTeacher" style="margin:0"></select></div>
+            <div style="width:auto"><label>عدد الأكواد</label><input id="tcCount" type="number" value="50" min="1" max="5000" style="width:110px;margin:0"></div>
+            <button class="b-t" onclick="genChannelCodes('teacher',document.getElementById('tcTeacher').value,'tcCount','tcMsg')">إنشاء وتنزيل CSV</button>
+          </div>
+          <div class="msg" id="tcMsg"></div>
+        </div>
       </div>
     </section>
 
-    <!-- PARTNERS -->
-    <section class="sec" id="sec-partners">
-      <div class="subtabs" id="partTabs">
-        <button class="on" onclick="subShow('part','join')">📥 طلبات الانضمام</button>
-        <button onclick="subShow('part','teachers')">🧑‍🏫 المدرّسون</button>
-        <button onclick="subShow('part','reps')">🚗 المناديب</button>
-        <button onclick="subShow('part','comm')">💵 العمولات</button>
+    <!-- LIBRARIES -->
+    <section class="sec" id="sec-libraries">
+      <div class="subtabs" id="libTabs">
+        <button class="on" onclick="subShow('lib','lreg')">🏪 المكتبات المسجلة</button>
+        <button onclick="subShow('lib','lreps')">🚗 المناديب</button>
+        <button onclick="subShow('lib','lcodes')">🎟️ إنشاء أكواد المكتبات</button>
       </div>
-      <div class="subpanel on" id="sub-join"><div class="card"><h3>📥 مدرّسون بانتظار المراجعة</h3><div class="note">اعتمد الطلب ليتولّد كود المدرّس، أو ارفضه.</div><div id="jList">…</div></div></div>
-      <div class="subpanel" id="sub-teachers"><div class="card"><h3>🧑‍🏫 المدرّسون المعتمدون</h3><div id="tList">…</div></div></div>
-      <div class="subpanel" id="sub-reps"><div class="card">
-        <h3>🚗 مناديب المبيعات (أكواد المكتبات)</h3>
-        <div class="row2"><div><label>اسم المندوب</label><input id="repName"></div><div><label>موبايل</label><input id="repMob" dir="ltr"></div></div>
-        <button class="b-t" onclick="addRep()">إنشاء كود مندوب</button><div class="msg" id="repMsg"></div>
-        <div id="rList" style="margin-top:14px">…</div></div></div>
-      <div class="subpanel" id="sub-comm"><div class="card">
-        <h3>💵 عمولات الشركاء</h3>
-        <div class="note">⚠️ العمولة على الطلبات <b>المُسلَّمة فقط</b>. درجات تجريبية: 🥈 فضّي 10% · 🥇 ذهبي 12% · 💎 بلاتيني 15% · مندوب 5%.</div>
-        <div id="wReqs"></div>
-        <button class="b-g" onclick="exportCommCSV()">⬇️ تصدير CSV</button>
-        <div id="cList" style="margin-top:12px">…</div><div id="pDetail" style="margin-top:14px"></div></div></div>
+      <div class="subpanel on" id="sub-lreg">
+        <div class="card">
+          <h3>🏪 المكتبات المسجلة</h3>
+          <div class="row3"><div><label>اسم المكتبة</label><input id="lbName"></div><div><label>موبايل</label><input id="lbMob" dir="ltr"></div><div><label>المنطقة</label><input id="lbArea"></div></div>
+          <button class="b-t" onclick="addLibrary()">إضافة مكتبة</button><div class="msg" id="lbMsg"></div>
+          <div id="lList" style="margin-top:14px">…</div>
+        </div>
+      </div>
+      <div class="subpanel" id="sub-lreps">
+        <div class="card">
+          <h3>🚗 مناديب المبيعات (أكواد المكتبات)</h3>
+          <div class="row2"><div><label>اسم المندوب</label><input id="repName"></div><div><label>موبايل</label><input id="repMob" dir="ltr"></div></div>
+          <button class="b-t" onclick="addRep()">إنشاء كود مندوب</button><div class="msg" id="repMsg"></div>
+          <div id="rList" style="margin-top:14px">…</div>
+        </div>
+        <div class="card">
+          <h3>💵 عمولات المناديب</h3>
+          <div class="note">عمولة المندوب على الطلبات <b>المُسلَّمة فقط</b> (نسبة تجريبية 5%).</div>
+          <div id="rcList">…</div><div id="pDetailR" style="margin-top:14px"></div>
+        </div>
+      </div>
+      <div class="subpanel" id="sub-lcodes">
+        <div class="card">
+          <h3>🎟️ إنشاء أكواد شراء باسم مكتبة</h3>
+          <div class="note">كل كود من الباتش يربط الطلب بالمكتبة تلقائيًا — لتوزيعها على عملائها.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+            <div style="width:auto;min-width:220px"><label>المكتبة</label><select id="lcLib" style="margin:0"></select></div>
+            <div style="width:auto"><label>عدد الأكواد</label><input id="lcCount" type="number" value="50" min="1" max="5000" style="width:110px;margin:0"></div>
+            <button class="b-t" onclick="genChannelCodes('library',document.getElementById('lcLib').value,'lcCount','lcMsg')">إنشاء وتنزيل CSV</button>
+          </div>
+          <div class="msg" id="lcMsg"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN: team + audit (GM only) -->
+    <section class="sec" id="sec-admin">
+      <div class="subtabs" id="admTabs">
+        <button class="on" onclick="subShow('adm','team')">👥 الفريق</button>
+        <button onclick="subShow('adm','audit')">📜 سجل العمليات</button>
+      </div>
+      <div class="subpanel on" id="sub-team">
+        <div class="card">
+          <h3>👥 أعضاء الفريق</h3>
+          <div class="note">كل عضو له مفتاح شخصي يدخل به اللوحة — انسخ المفتاح وأرسله له. تعطيل العضو يوقف مفتاحه فورًا.</div>
+          <div class="row3">
+            <div><label>الاسم</label><input id="tmName"></div>
+            <div><label>موبايل</label><input id="tmMob" dir="ltr"></div>
+            <div><label>الدور</label><select id="tmRole"><option value="sales">مبيعات</option><option value="kam">مدير كبار العملاء</option><option value="gm">مدير عام</option></select></div>
+          </div>
+          <button class="b-t" onclick="addMember()">إضافة عضو</button><div class="msg" id="tmMsg"></div>
+          <div id="mList" style="margin-top:14px">…</div>
+        </div>
+      </div>
+      <div class="subpanel" id="sub-audit">
+        <div class="card"><h3>📜 سجل العمليات — من فعل ماذا ومتى</h3><div id="gList">…</div></div>
+      </div>
     </section>
 
     <!-- INVENTORY -->
@@ -350,17 +439,17 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
 
 <script>
 const API='https://senior-api.seniorbooksegy.workers.dev';
-const SECTIONS=[['overview','🏠','نظرة عامة'],['orders','🛍️','الطلبات'],['students','🎓','الطلاب'],['customers','👥','العملاء'],['partners','🤝','الشركاء'],['inventory','📦','المخزون'],['analytics','📈','التحليلات'],['finance','💰','المالية']];
-const ROLE_SEC={gm:['overview','orders','students','customers','partners','inventory','analytics','finance'],kam:['overview','orders','students','customers','partners','inventory','analytics'],sales:['orders']};
+const SECTIONS=[['overview','🏠','نظرة عامة'],['orders','🛍️','الطلبات'],['students','🎓','الطلاب'],['teachers','🧑‍🏫','المدرسون'],['libraries','🏪','المكتبات'],['inventory','📦','المخزون'],['analytics','📈','التحليلات'],['finance','💰','المالية'],['admin','🛡️','الإدارة']];
+const ROLE_SEC={gm:['overview','orders','students','teachers','libraries','inventory','analytics','finance','admin'],kam:['overview','orders','students','teachers','libraries','inventory','analytics'],sales:['orders']};
 const SECTITLE=Object.fromEntries(SECTIONS.map(s=>[s[0],s[2]]));
 const BOOKS={sharh:'الشرح',exercises:'التمارين',skills:'المهارات',comprehension:'قطع الفهم',grammar:'القواعد',bundle:'المجموعة كاملة'};
-const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي'};
-const STC={new:'#E4572E',confirmed:'#C98A22',shipped:'#2E6DB4',delivered:'#1C7A46',cancelled:'#8A9499'};
-const STBG={new:'#FBEAE7',confirmed:'#FBF1DF',shipped:'#E7F0FB',delivered:'#E8F5EC',cancelled:'#F1EDE6'};
+const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي',returned:'مرتجع'};
+const STC={new:'#E4572E',confirmed:'#C98A22',shipped:'#2E6DB4',delivered:'#1C7A46',cancelled:'#8A9499',returned:'#7C5CBF'};
+const STBG={new:'#FBEAE7',confirmed:'#FBF1DF',shipped:'#E7F0FB',delivered:'#E8F5EC',cancelled:'#F1EDE6',returned:'#EFEAF8'};
 const BT={student:'طالب',teacher:'مدرّس',library:'مكتبة',guest:'زائر'};
 const ROLE_AR={gm:'المدير العام',kam:'مدير كبار العملاء',sales:'مبيعات'};
 let BASE=localStorage.getItem('snr_api')||API, KEY=localStorage.getItem('snr_key')||'';
-let ME=null, TEAM=[], ORDERS=[], COMMS=[], STATS=null;
+let ME=null, TEAM=[], ORDERS=[], COMMS=[], LIBS=[], STATS=null;
 document.getElementById('apiUrl').value=BASE; if(KEY)document.getElementById('adminKey').value=KEY;
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const isGM=()=>ME&&ME.role==='gm';
@@ -396,15 +485,15 @@ function logout(){localStorage.removeItem('snr_key');location.reload()}
 function refreshAll(){
   loadOrders();
   if(ME.role!=='sales'){loadStats();loadInv();loadTeachersApproved();loadJoin();loadStudents();loadLibraries();loadReps();loadAnalytics(7)}
-  if(ME.role==='gm'){loadFinance();loadComms()}
+  if(ME.role==='gm'){loadFinance();loadComms();loadTeamList();loadAudit()}
 }
 function show(sec){
   SECTIONS.forEach(s=>{const el=document.getElementById('sec-'+s[0]),nv=document.getElementById('nv-'+s[0]);if(el)el.classList.toggle('on',s[0]===sec);if(nv)nv.classList.toggle('on',s[0]===sec)});
   document.getElementById('pageTitle').textContent=SECTITLE[sec]||'';
 }
 function subShow(group,key){
-  const map={stu:['reg','codes'],part:['join','teachers','reps','comm'],adm:['team','audit']};
-  const tabsId={stu:'stuTabs',part:'partTabs',adm:'admTabs'}[group];
+  const map={stu:['reg','codes'],tch:['treg','tpart','treq','tcodes'],lib:['lreg','lreps','lcodes'],adm:['team','audit']};
+  const tabsId={stu:'stuTabs',tch:'tchTabs',lib:'libTabs',adm:'admTabs'}[group];
   map[group].forEach(k=>{const p=document.getElementById('sub-'+k);if(p)p.classList.toggle('on',k===key)});
   [...document.querySelectorAll('#'+tabsId+' button')].forEach((b,i)=>b.classList.toggle('on',map[group][i]===key));
 }
@@ -431,8 +520,9 @@ async function loadStats(){
        <div class="tile"><div class="l">طلبات مفتوحة</div><div class="n">${open}</div><div class="s">${newC} بانتظار التأكيد</div></div>`;
     const al=[];
     if(newC)al.push(['u','🔔',`${newC} طلب جديد بانتظار التأكيد`,`show('orders');setF('status','new')`,'عرض']);
-    if(s.pendingTeachers)al.push(['i','🧑‍🏫',`${s.pendingTeachers} مدرّس بانتظار المراجعة`,`show('partners');subShow('part','join')`,'مراجعة']);
-    if(isGM()&&s.openWithdrawals&&s.openWithdrawals.c)al.push(['i','💸',`${s.openWithdrawals.c} طلب سحب عمولة بإجمالي ${s.openWithdrawals.s} ج`,`show('partners');subShow('part','comm')`,'تحويل']);
+    if(s.pendingTeachers)al.push(['i','🧑‍🏫',`${s.pendingTeachers} مدرّس بانتظار المراجعة`,`show('teachers');subShow('tch','treq')`,'مراجعة']);
+    if(isGM()&&s.openWithdrawals&&s.openWithdrawals.c)al.push(['i','💸',`${s.openWithdrawals.c} طلب سحب عمولة بإجمالي ${s.openWithdrawals.s} ج`,`show('teachers');subShow('tch','tpart')`,'تحويل']);
+    const badge=document.getElementById('treqBadge');if(badge)badge.textContent=s.pendingTeachers||'';
     (s.lowStock||[]).forEach(b=>al.push(['w','📉',`مخزون ${BOOKS[b.book_id]||b.book_id} منخفض: ${b.stock} نسخة`,`show('inventory')`,'المخزون']));
     document.getElementById('ovAtt').innerHTML=al.length?al.map(a=>`<div class="att ${a[0]}"><span class="ico">${a[1]}</span><span class="tx">${a[2]}</span><button class="b-g" onclick="${a[3]}">${a[4]}</button></div>`).join(''):'<div class="okline">✅ لا شيء يحتاج تدخلك الآن — كل شيء تحت السيطرة.</div>';
     /* charts (analytics section) */
@@ -515,7 +605,7 @@ const WAMSGS={
   cancelled:o=>`أهلاً ${o.name}، تم إلغاء طلبك رقم ${o.order_no||o.id}. إن كان بالخطأ فتواصل معنا.`,
 };
 async function loadOrders(){
-  try{const d=await api('/api/admin/orders');ORDERS=d.orders;renderFilterChips();renderFCount();renderOrders();renderRecent();renderRegStudents();}
+  try{const d=await api('/api/admin/orders');ORDERS=d.orders;renderFilterChips();renderFCount();renderOrders();renderRecent();renderRegStudents();renderTeachers();}
   catch(e){document.getElementById('oList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 function govOpts(){return [...new Set(ORDERS.map(o=>o.governorate).filter(Boolean))]}
@@ -798,11 +888,126 @@ async function saveInv(id){const v=+document.getElementById('inv-'+id).value;try
 
 /* ============ PARTNERS: teachers / join / reps / commissions ============ */
 async function loadTeachersApproved(){
-  const el=document.getElementById('tList');
   try{const d=await api('/api/admin/teachers?status=approved');
-    TMAP=Object.fromEntries(d.teachers.filter(t=>t.code).map(t=>[t.code,(t.first_name+' '+t.last_name).trim()]));renderRegStudents();
-    el.innerHTML=d.teachers.length?'<table><tr><th>الاسم</th><th>الكود</th><th>موبايل</th><th>المنطقة</th><th>طلاب متوقَّعون</th><th>اعتُمد</th></tr>'+d.teachers.map(t=>`<tr><td>${esc(t.first_name)} ${esc(t.last_name)}<br><span style="color:var(--muted2);font-size:11.5px">${esc(t.email||'')}</span></td><td><span class="code">${esc(t.code||'—')}</span></td><td dir="ltr">${esc(t.mobile)}</td><td>${esc(t.area||'—')}</td><td>${esc(t.expected_students||t.seniority||'—')}</td><td style="color:var(--muted2);font-size:11.5px">${esc((t.created_at||'').slice(0,10))}</td></tr>`).join('')+'</table>':'<p class="msg">لا مدرّسين معتمدين بعد.</p>';
-  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+    TCHRS=d.teachers||[];
+    TMAP=Object.fromEntries(TCHRS.filter(t=>t.code).map(t=>[t.code,(t.first_name+' '+t.last_name).trim()]));
+    const sel=document.getElementById('tcTeacher');
+    if(sel)sel.innerHTML='<option value="">— اختر المدرّس —</option>'+TCHRS.filter(t=>t.code).map(t=>`<option value="${esc(t.code)}">${esc(t.first_name)} ${esc(t.last_name)} (${esc(t.code)})</option>`).join('');
+    renderRegStudents();renderTeachers();
+  }catch(e){const el=document.getElementById('tregList');if(el)el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+}
+/* ---- registered teachers table (same pattern as the students view) ---- */
+let TCHRS=[];
+let TF={q:'',ord:''};
+function tchStats(code){
+  if(!code)return{c:0,d:0};
+  let c=0,d=0;ORDERS.forEach(o=>{if(o.ref_code===code&&o.status!=='cancelled'){c++;if(o.status==='delivered')d++}});
+  return{c,d};
+}
+const TCOLS=[
+  {k:'name',l:'اسم المدرّس',fixed:1,def:1,td:'nm',w:20,cell:t=>`<b>${esc(t.first_name)} ${esc(t.last_name)}</b>`,x:t=>(t.first_name+' '+t.last_name).trim()},
+  {k:'state',l:'الحالة',def:1,c:1,w:11,cell:t=>t.active===0?'<span class="tag" style="background:#FBEAE7;color:#C0421C">⛔ معطَّل</span>':(t.partner!==0?'<span class="tag" style="background:#E8F5EC;color:#1C7A46">🤝 شريك</span>':'<span class="tag">مسجّل</span>'),x:t=>t.active===0?'معطَّل':(t.partner!==0?'شريك':'مسجّل')},
+  {k:'code',l:'الكود',def:1,c:1,w:13,cell:t=>t.code?`<span class="code" style="font-size:11px">${esc(t.code)}</span>`:'—',x:t=>t.code||''},
+  {k:'mobile',l:'رقم التواصل',def:1,c:1,w:15,cell:t=>`<span dir="ltr" style="font-size:12px;color:var(--muted)">${esc(t.mobile||'—')}</span>`,x:t=>t.mobile||''},
+  {k:'email',l:'البريد الإلكتروني',def:0,w:22,cell:t=>`<span dir="ltr" style="font-size:11.5px">${esc(t.email||'—')}</span>`,x:t=>t.email||''},
+  {k:'area',l:'المنطقة',def:1,c:1,w:14,cell:t=>esc(t.area||'—'),x:t=>t.area||''},
+  {k:'expected',l:'طلاب متوقَّعون',def:1,c:1,w:12,cell:t=>esc(t.expected_students||t.seniority||'—'),x:t=>t.expected_students||t.seniority||''},
+  {k:'orders',l:'طلبات عبر كوده',def:1,c:1,w:12,cell:t=>`<b>${tchStats(t.code).c}</b>`,x:t=>''+tchStats(t.code).c},
+  {k:'delivered',l:'مُسلَّمة',def:1,c:1,w:10,cell:t=>`<b style="color:var(--green)">${tchStats(t.code).d}</b>`,x:t=>''+tchStats(t.code).d},
+  {k:'reg',l:'تاريخ التسجيل',def:1,c:1,w:12,cell:t=>`<span style="color:var(--muted);font-size:12px">${esc((t.created_at||'').slice(0,10))||'—'}</span>`,x:t=>(t.created_at||'').slice(0,10)},
+  {k:'approved',l:'تاريخ الاعتماد',def:0,c:1,w:12,cell:t=>`<span style="color:var(--muted);font-size:12px">${esc((t.approved_at||'').slice(0,10))||'—'}</span>`,x:t=>(t.approved_at||'').slice(0,10)},
+];
+let VTCOLS=(()=>{try{const s=JSON.parse(localStorage.getItem('snr_tcols1'));if(Array.isArray(s)&&s.length)return new Set(s)}catch(e){}return new Set(TCOLS.filter(c=>c.def).map(c=>c.k))})();
+TCOLS.forEach(c=>{if(c.fixed)VTCOLS.add(c.k)});
+function saveTCols(){try{localStorage.setItem('snr_tcols1',JSON.stringify([...VTCOLS]))}catch(e){}}
+function toggleTCols(){const p=document.getElementById('tColPanel'),open=p.style.display==='none';document.getElementById('tfPanel').style.display='none';document.getElementById('tFilterBtn').classList.remove('on');p.style.display=open?'block':'none';document.getElementById('tColBtn').classList.toggle('on',open);if(open)renderTColOpts()}
+function renderTColOpts(){document.getElementById('tColOpts').innerHTML=TCOLS.filter(c=>!c.fixed).map(c=>`<label class="colopt"><input type="checkbox" ${VTCOLS.has(c.k)?'checked':''} onchange="toggleTCol('${c.k}',this.checked)"> ${c.l}</label>`).join('')}
+function toggleTCol(k,on){if(on)VTCOLS.add(k);else VTCOLS.delete(k);saveTCols();renderTeachers()}
+function resetTCols(){VTCOLS=new Set(TCOLS.filter(c=>c.def).map(c=>c.k));TCOLS.forEach(c=>{if(c.fixed)VTCOLS.add(c.k)});saveTCols();renderTColOpts();renderTeachers()}
+function toggleTFilters(){
+  const p=document.getElementById('tfPanel'),open=p.style.display==='none';
+  document.getElementById('tColPanel').style.display='none';document.getElementById('tColBtn').classList.remove('on');
+  p.style.display=open?'block':'none';document.getElementById('tFilterBtn').classList.toggle('on',open);
+  if(open){renderTFPanel();const q=document.getElementById('tfq');if(q)q.value=TF.q}
+}
+function renderTFPanel(){
+  const opt=(v,l)=>`<button class="fopt ${TF.ord===v?'on':''}" onclick="setTF('ord','${v}')">${esc(l)}</button>`;
+  document.getElementById('tfOrdOpts').innerHTML=[['','الكل'],['has','لديه طلبات'],['none','بدون طلبات']].map(([v,l])=>opt(v,l)).join('');
+}
+function setTF(dim,val){TF[dim]=val;renderTFPanel();renderTFChips();renderTeachers()}
+function renderTFChips(){
+  const chips=[];
+  if(TF.ord)chips.push(['ord',TF.ord==='has'?'لديه طلبات':'بدون طلبات']);
+  if(TF.q)chips.push(['q','🔎 '+TF.q]);
+  const el=document.getElementById('tfChips');
+  if(el)el.innerHTML=chips.map(([d,l])=>`<button class="ofchip" onclick="setTF('${d}','')">${esc(l)} ✕</button>`).join('')+(chips.length>1?`<button class="ofchip clr" onclick="clearTF()">مسح الكل ✕</button>`:'');
+  const fc=document.getElementById('tfCount');if(fc)fc.textContent=['ord','q'].filter(k=>TF[k]).length||'';
+}
+function clearTF(){TF={q:'',ord:''};const q=document.getElementById('tfq');if(q)q.value='';renderTFPanel();renderTFChips();renderTeachers()}
+function tchFiltered(){
+  const q=TF.q.trim(),qU=q.toUpperCase();
+  return TCHRS.filter(t=>{
+    const st=tchStats(t.code);
+    if(TF.ord==='has'&&!st.c)return false;
+    if(TF.ord==='none'&&st.c)return false;
+    if(!q)return true;
+    const nm=(t.first_name+' '+t.last_name);
+    return nm.includes(q)||(t.mobile||'').includes(q)||(t.code||'').toUpperCase().includes(qU)||(t.area||'').includes(q);
+  });
+}
+function renderTeachers(){
+  const el=document.getElementById('tregList');if(!el)return;
+  const rows=tchFiltered();
+  const cnt=document.getElementById('tregCount');if(cnt)cnt.textContent=TCHRS.length?(rows.length===TCHRS.length?TCHRS.length+' مدرّس':rows.length+' من '+TCHRS.length+' مدرّس'):'';
+  if(!TCHRS.length){el.innerHTML='<p class="msg">لا مدرّسين معتمدين بعد — تظهر الأسماء هنا بعد اعتماد طلبات التفعيل.</p>';return}
+  if(!rows.length){el.innerHTML='<p class="msg">لا نتائج مطابقة للفلاتر.</p>';return}
+  const cols=TCOLS.filter(c=>VTCOLS.has(c.k));
+  el.innerHTML='<table class="otbl"><thead><tr>'+cols.map(c=>'<th>'+c.l+'</th>').join('')+'<th>إجراءات</th></tr></thead><tbody>'+rows.map(t=>
+    '<tr>'+cols.map(c=>`<td${c.td?' class="'+c.td+'"':''}${c.c?' style="text-align:center"':''}>${c.cell(t)}</td>`).join('')+
+    `<td style="text-align:center;white-space:nowrap"><button class="b-g iconb" title="ملف المدرّس والطلبات عبر كوده" onclick="showBuyerCode('${esc(t.code||'')}')" ${t.code?'':'disabled'}>👤</button> `+
+    `<button class="b-g iconb" title="${t.active===0?'إعادة تفعيل الكود':'تعطيل الكود'}" onclick="tchToggle(${t.id},'active',${t.active===0})">${t.active===0?'▶️':'⏸️'}</button> `+
+    `<button class="b-g iconb" title="${t.partner!==0?'إلغاء صفة الشريك':'تفعيل كشريك'}" onclick="tchToggle(${t.id},'partner',${t.partner===0})">🤝</button></td></tr>`
+  ).join('')+'</tbody></table>';
+}
+async function tchToggle(id,field,val){
+  if(field==='active'&&!val&&!confirm('تعطيل المدرّس يوقف كوده فورًا (خصم طلابه وعمولته ولوحته). متابعة؟'))return;
+  if(field==='partner'&&!val&&!confirm('إلغاء صفة الشريك يخفي لوحة العمولات عنه. متابعة؟'))return;
+  try{await api('/api/admin/teacher/update',{method:'POST',body:JSON.stringify(field==='active'?{id,active:val}:{id,partner:val})});loadTeachersApproved()}catch(e){alert(e.message)}
+}
+async function downloadTeachersXlsx(){
+  const btn=document.getElementById('tDlBtn');const old=btn.textContent;btn.textContent='⏳ جارٍ التحضير…';
+  try{await loadExcelJS()}catch(e){btn.textContent=old;alert('تعذّر تحميل أداة التصدير — تحقق من الاتصال بالإنترنت.');return}
+  try{
+    const list=TCHRS; /* download ALL teachers, not just the filtered view */
+    const today=new Date().toISOString().slice(0,10);
+    const wb=new ExcelJS.Workbook();
+    const ws=wb.addWorksheet('مدرّسو Senior',{views:[{rightToLeft:true,state:'frozen',ySplit:2}]});
+    const thin={style:'thin',color:{argb:'FFE3DECF'}};const border={top:thin,left:thin,bottom:thin,right:thin};
+    ws.mergeCells(1,1,1,TCOLS.length);
+    const tc=ws.getCell(1,1);tc.value='🧑‍🏫 المدرسون المسجلون — تصدير '+today+'  ('+list.length+' مدرّس)';
+    tc.font={bold:true,size:14,color:{argb:'FF0E6E60'}};tc.alignment={horizontal:'right',vertical:'middle'};ws.getRow(1).height=28;
+    const hr=ws.getRow(2);
+    TCOLS.forEach((c,i)=>{const cell=hr.getCell(i+1);cell.value=c.l;cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF0E6E60'}};cell.font={bold:true,color:{argb:'FFFFFFFF'},size:11};cell.alignment={horizontal:'center',vertical:'middle',wrapText:true};cell.border=border});
+    hr.height=24;
+    list.forEach((t,idx)=>{
+      const r=ws.getRow(idx+3);
+      TCOLS.forEach((c,i)=>{
+        const cell=r.getCell(i+1);
+        let v=c.x(t);if(v==null||v==='')v='—';
+        cell.value=v;cell.border=border;
+        cell.alignment={horizontal:c.c?'center':'right',vertical:'middle'};
+        cell.font={size:10.5};
+        if(idx%2)cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFBF9F4'}};
+        if(c.k==='orders'||c.k==='delivered')cell.font={bold:true,size:10.5};
+      });
+    });
+    TCOLS.forEach((c,i)=>ws.getColumn(i+1).width=c.w||14);
+    ws.autoFilter={from:{row:2,column:1},to:{row:2,column:TCOLS.length}};
+    const buf=await wb.xlsx.writeBuffer();
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+    a.download='مدرّسو-Senior-'+today+'.xlsx';a.click();URL.revokeObjectURL(a.href);
+  }catch(e){alert('خطأ في التصدير: '+e.message)}
+  btn.textContent=old;
 }
 async function loadJoin(){
   const el=document.getElementById('jList');
@@ -821,20 +1026,24 @@ async function reject(id){if(confirm('رفض هذا الطلب؟')){await api('/
 async function addRep(){const name=document.getElementById('repName').value.trim(),mobile=document.getElementById('repMob').value.trim(),m=document.getElementById('repMsg');if(!name){m.textContent='أدخل الاسم.';return}const d=await api('/api/admin/rep',{method:'POST',body:JSON.stringify({name,mobile})});m.textContent=d.code?('تم إنشاء الكود: '+d.code):'خطأ.';document.getElementById('repName').value='';document.getElementById('repMob').value='';loadReps()}
 async function loadReps(){const el=document.getElementById('rList');try{const d=await api('/api/admin/reps');el.innerHTML=d.reps.length?'<table><tr><th>الاسم</th><th>موبايل</th><th>الكود</th></tr>'+d.reps.map(r=>`<tr><td>${esc(r.name)}</td><td dir="ltr">${esc(r.mobile||'—')}</td><td><span class="code">${esc(r.code)}</span></td></tr>`).join('')+'</table>':'<p class="msg">لا مناديب بعد.</p>'}catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}}
 async function loadComms(){
-  const el=document.getElementById('cList');
+  const el=document.getElementById('cList'),elR=document.getElementById('rcList');
   try{const d=await api('/api/admin/commissions');COMMS=d.commissions;
-    el.innerHTML=COMMS.length?'<table><tr><th>الكود</th><th>الاسم</th><th>الدرجة</th><th>مُسلَّم</th><th>مبيعات</th><th>النسبة</th><th>العمولة</th><th>مدفوع</th><th>مستحق</th><th></th></tr>'+COMMS.map(c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(c.name)}</td><td>${c.kind==='rep'?'مندوب':c.tier==='فضّي'?'🥈':c.tier==='ذهبي'?'🥇':c.tier==='بلاتيني'?'💎':'—'} ${c.kind==='rep'?'':esc(c.tier||'')}</td><td>${c.delivered}</td><td>${c.revenue} ج</td><td>${c.pct}%</td><td><b>${c.commission} ج</b></td><td style="color:var(--green)">${c.paid} ج</td><td style="color:#C0421C"><b>${c.pending} ج</b>${c.requested?`<br><span class="tag">قيد السحب: ${c.requested}</span>`:''}</td><td style="white-space:nowrap"><button class="b-g iconb" onclick="showPartner('${esc(c.code)}')">👤</button>${c.pending>0&&!c.requested?` <button class="b-t iconb" onclick="payOut('${esc(c.code)}',${c.pending})">💸</button>`:''}</td></tr>`).join('')+'</table>':'<p class="msg">لا طلبات بأكواد بعد.</p>';
+    const row=c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(c.name)}</td><td>${c.kind==='rep'?'مندوب':c.tier==='فضّي'?'🥈':c.tier==='ذهبي'?'🥇':c.tier==='بلاتيني'?'💎':'—'} ${c.kind==='rep'?'':esc(c.tier||'')}</td><td>${c.delivered}</td><td>${c.revenue} ج</td><td>${c.pct}%</td><td><b>${c.commission} ج</b></td><td style="color:var(--green)">${c.paid} ج</td><td style="color:#C0421C"><b>${c.pending} ج</b>${c.requested?`<br><span class="tag">قيد السحب: ${c.requested}</span>`:''}</td><td style="white-space:nowrap"><button class="b-g iconb" onclick="showPartner('${esc(c.code)}')">👤</button>${c.pending>0&&!c.requested?` <button class="b-t iconb" onclick="payOut('${esc(c.code)}',${c.pending})">💸</button>`:''}</td></tr>`;
+    const head='<table><tr><th>الكود</th><th>الاسم</th><th>الدرجة</th><th>مُسلَّم</th><th>مبيعات</th><th>النسبة</th><th>العمولة</th><th>مدفوع</th><th>مستحق</th><th></th></tr>';
+    const tch=COMMS.filter(c=>c.kind!=='rep'),reps=COMMS.filter(c=>c.kind==='rep');
+    if(el)el.innerHTML=tch.length?head+tch.map(row).join('')+'</table>':'<p class="msg">لا طلبات بأكواد مدرّسين بعد.</p>';
+    if(elR)elR.innerHTML=reps.length?head+reps.map(row).join('')+'</table>':'<p class="msg">لا طلبات بأكواد مناديب بعد.</p>';
     loadWithdrawals();
-  }catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
+  }catch(e){if(el)el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 function exportCommCSV(){const rows=[['الكود','الاسم','الصفة','مُسلَّم','مبيعات','النسبة','العمولة','مدفوع','مستحق']];COMMS.forEach(c=>rows.push([c.code,c.name,c.kind==='teacher'?'مدرّس':'مندوب',c.delivered,c.revenue,c.pct,c.commission,c.paid,c.pending]));dlCSV(rows,'senior-commissions')}
 async function loadWithdrawals(){const el=document.getElementById('wReqs');try{const d=await api('/api/admin/withdrawals');el.innerHTML=(d.withdrawals||[]).length?'<h3>💸 طلبات سحب بانتظار التحويل</h3>'+d.withdrawals.map(w=>`<div class="alertline">💰 <span style="flex:1"><b>${esc(w.name)}</b> (<span class="code">${esc(w.code)}</span>) يطلب <b>${w.amount} ج</b> — <span dir="ltr">${esc(w.mobile)}</span> ${w.status==='processing'?'<span class="tag">قيد التحويل</span>':''}</span>${w.status==='requested'?`<button class="b-g" onclick="advWithdrawal(${w.id})">بدء التحويل</button>`:''} <button class="b-t" onclick="payWithdrawal(${w.id})">تم ✓</button></div>`).join('')+'<div style="height:8px"></div>':''}catch(e){el.innerHTML=''}}
 async function advWithdrawal(id){await api('/api/admin/withdrawal/advance',{method:'POST',body:JSON.stringify({id})});loadComms()}
 async function payWithdrawal(id){const ref=prompt('مرجع التحويل (فودافون كاش / إنستاباي):')||'';await api('/api/admin/withdrawal/pay',{method:'POST',body:JSON.stringify({id,ref})});loadComms();loadStats()}
 async function showPartner(code){
-  const el=document.getElementById('pDetail');el.innerHTML='<p class="msg">جارٍ التحميل…</p>';
+  const el=document.getElementById(code.indexOf('SNR-R')===0?'pDetailR':'pDetail');el.innerHTML='<p class="msg">جارٍ التحميل…</p>';
   try{const d=await api('/api/admin/affiliate?code='+encodeURIComponent(code));const i=d.info,n=d.numbers;
-    el.innerHTML=`<div class="card" style="border-color:var(--teal);margin-bottom:0"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><h3 style="margin:0">👤 ${esc(i.name)} <span class="code">${esc(code)}</span> ${d.kind==='teacher'?(n.tier.k==='silver'?'🥈':n.tier.k==='gold'?'🥇':'💎')+' '+esc(n.tier.ar):'(مندوب)'}</h3><button class="b-g iconb" onclick="document.getElementById('pDetail').innerHTML=''">إغلاق ×</button></div>
+    el.innerHTML=`<div class="card" style="border-color:var(--teal);margin-bottom:0"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><h3 style="margin:0">👤 ${esc(i.name)} <span class="code">${esc(code)}</span> ${d.kind==='teacher'?(n.tier.k==='silver'?'🥈':n.tier.k==='gold'?'🥇':'💎')+' '+esc(n.tier.ar):'(مندوب)'}</h3><button class="b-g iconb" onclick="this.closest('#pDetail,#pDetailR').innerHTML=''">إغلاق ×</button></div>
       <p class="msg" style="margin:6px 0 10px">📱 <span dir="ltr">${esc(i.mobile||'')}</span>${i.email?' · ✉️ '+esc(i.email):''}${i.area?' · 📍 '+esc(i.area):''}${i.approved_at?' · اعتُمد: '+esc(i.approved_at.slice(0,10)):''}</p>
       <div class="kpis"><div class="kpi"><div class="n">${n.delivered}/${n.orders}</div><div class="l">مُسلَّم / إجمالي</div></div><div class="kpi" style="--c:#F2A03D"><div class="n">${n.revenue}</div><div class="l">مبيعات مُسلَّمة</div></div><div class="kpi" style="--c:#E4572E"><div class="n">${n.commission}</div><div class="l">عمولة ${n.tier?n.tier.pct+'%':''}</div></div><div class="kpi" style="--c:#2E6DB4"><div class="n">${n.expected}</div><div class="l">متوقَّع</div></div><div class="kpi" style="--c:#1C7A46"><div class="n">${n.paid}</div><div class="l">مدفوع</div></div><div class="kpi" style="--c:#C0421C"><div class="n">${n.pending}</div><div class="l">مستحق</div></div></div>
       <h3>الطلبات عبر الكود</h3>${ordersMini(d.orderList,true)}
@@ -846,8 +1055,10 @@ async function payOut(code,pending){const amt=prompt(`دفعة للكود ${code
 
 /* ============ STUDENTS: registered students (all registration data + filters + Excel) ============ */
 let TMAP={}; /* teacher code → teacher name (built in loadTeachersApproved) */
-let SF={q:'',track:'',gov:'',ref:''};
-/* one row per student = latest order (ORDERS newest-first) + aggregates over all his orders */
+let REGST=[]; /* server-side student registry (registration lands before any order) */
+let SF={q:'',track:'',ref:''};
+/* one row per student = latest order (ORDERS newest-first) + aggregates over all his orders,
+   merged with the server registry so a student who registered but never ordered still shows */
 function sregRows(){
   const m=new Map();
   ORDERS.filter(o=>o.buyer_type==='student').forEach(o=>{
@@ -859,11 +1070,15 @@ function sregRows(){
     /* latest order may lack school/track the older ones had — backfill */
     ['school','track','city','address'].forEach(k=>{if(!s[k]&&o[k])s[k]=o[k]});
   });
+  REGST.forEach(r=>{
+    if(m.has(r.mobile)){const s=m.get(r.mobile);['school','track','city'].forEach(k=>{if(!s[k]&&r[k])s[k]=r[k]});if(!s.refCode&&r.ref_code&&r.ref_code.indexOf('SNR-T')===0)s.refCode=r.ref_code;return}
+    m.set(r.mobile,{name:r.name,mobile:r.mobile,governorate:r.governorate,city:r.city,school:r.school,track:r.track,address:'',ordersCount:0,spend:0,firstAt:r.created_at,refCode:(r.ref_code&&r.ref_code.indexOf('SNR-T')===0)?r.ref_code:null});
+  });
   return [...m.values()];
 }
 /* columns model like orders: cell = HTML, x = plain text for Excel */
 const SCOLS=[
-  {k:'name',l:'اسم الطالب',fixed:1,def:1,td:'nm',w:20,cell:s=>`<b>${esc(s.name)}</b>`,x:s=>s.name||''},
+  {k:'name',l:'اسم الطالب',fixed:1,def:1,td:'nm',w:20,cell:s=>`<b>${esc(s.name)}</b>${s.ordersCount?'':' <span class="tag" style="font-size:10px">🕓 لم يطلب بعد</span>'}`,x:s=>s.name||''},
   {k:'mobile',l:'رقم التواصل',def:1,c:1,w:15,cell:s=>`<span dir="ltr" style="font-size:12px;color:var(--muted)">${esc(s.mobile||'—')}</span>`,x:s=>s.mobile||''},
   {k:'gov',l:'المحافظة',def:1,c:1,w:12,cell:s=>esc(s.governorate||'—'),x:s=>s.governorate||''},
   {k:'city',l:'المركز',def:1,c:1,w:12,cell:s=>esc(s.city||'—'),x:s=>s.city||''},
@@ -889,7 +1104,6 @@ function sregFiltered(){
   const q=SF.q.trim(),qU=q.toUpperCase();
   return sregRows().filter(s=>
     (!SF.track||(s.track||'')===SF.track)&&
-    (!SF.gov||(s.governorate||'')===SF.gov)&&
     (!SF.ref||(SF.ref==='none'?!s.refCode:s.refCode===SF.ref))&&
     (!q||(s.name||'').includes(q)||(s.mobile||'').includes(q)||(s.school||'').includes(q)||studentCode(s.mobile).includes(qU)||(s.refCode||'').toUpperCase().includes(qU)));
 }
@@ -917,25 +1131,22 @@ function renderSFPanel(){
   const all=sregRows();
   const opt=(v,l,cur,dim)=>`<button class="fopt ${cur===v?'on':''}" onclick="setSF('${dim}','${String(v).replace(/'/g,"\\'")}')">${esc(l)}</button>`;
   const tracks=[...new Set(all.map(s=>s.track).filter(Boolean))];
-  const govs=[...new Set(all.map(s=>s.governorate).filter(Boolean))];
   const refs=[...new Set(all.map(s=>s.refCode).filter(Boolean))];
   document.getElementById('sfTrackOpts').innerHTML=[['','الكل'],...tracks.map(t=>[t,t])].map(([v,l])=>opt(v,l,SF.track,'track')).join('');
-  document.getElementById('sfGovOpts').innerHTML=[['','الكل'],...govs.map(g=>[g,g])].map(([v,l])=>opt(v,l,SF.gov,'gov')).join('');
   document.getElementById('sfRefOpts').innerHTML=[['','الكل'],['none','بدون مدرّس'],...refs.map(r=>[r,TMAP[r]||r])].map(([v,l])=>opt(v,l,SF.ref,'ref')).join('');
 }
 function setSF(dim,val){SF[dim]=val;renderSFPanel();renderSFChips();renderRegStudents()}
-function activeSFCount(){return ['track','gov','ref','q'].filter(k=>SF[k]).length}
+function activeSFCount(){return ['track','ref','q'].filter(k=>SF[k]).length}
 function renderSFCount(){const el=document.getElementById('sfCount');if(el)el.textContent=activeSFCount()||''}
 function renderSFChips(){
   const chips=[];
   if(SF.track)chips.push(['track',SF.track]);
-  if(SF.gov)chips.push(['gov',SF.gov]);
   if(SF.ref)chips.push(['ref','🧑‍🏫 '+(SF.ref==='none'?'بدون مدرّس':(TMAP[SF.ref]||SF.ref))]);
   if(SF.q)chips.push(['q','🔎 '+SF.q]);
   const el=document.getElementById('sfChips');
   if(el)el.innerHTML=chips.map(([d,l])=>`<button class="ofchip" onclick="setSF('${d}','')">${esc(l)} ✕</button>`).join('')+(chips.length>1?`<button class="ofchip clr" onclick="clearSF()">مسح الكل ✕</button>`:'');
 }
-function clearSF(){SF={q:'',track:'',gov:'',ref:''};const q=document.getElementById('sfq');if(q)q.value='';renderSFPanel();renderSFChips();renderRegStudents()}
+function clearSF(){SF={q:'',track:'',ref:''};const q=document.getElementById('sfq');if(q)q.value='';renderSFPanel();renderSFChips();renderRegStudents()}
 /* --- students Excel export: ALL students, styled like the orders export --- */
 async function downloadStudentsXlsx(){
   const btn=document.getElementById('sDlBtn');const old=btn.textContent;btn.textContent='⏳ جارٍ التحضير…';
@@ -976,16 +1187,33 @@ async function downloadStudentsXlsx(){
 /* ============ CUSTOMERS: students / libraries ============ */
 async function loadStudents(){
   try{const d=await api('/api/admin/students');
-    document.getElementById('kStats').innerHTML=`<div class="tile"><div class="l">أكواد Plus</div><div class="n">${d.codes.total||0}</div></div><div class="tile"><div class="l">مفعَّلة</div><div class="n">${d.codes.activated||0}</div></div><div class="tile"><div class="l">متبقية</div><div class="n">${(d.codes.total||0)-(d.codes.activated||0)}</div></div><div class="tile"><div class="l">تقارير أسبوعية</div><div class="n">${d.reports||0}</div></div><div class="tile"><div class="l">مشترون</div><div class="n">${(d.buyers||[]).length}</div></div>`;
+    REGST=d.registered||[];renderRegStudents();
+    document.getElementById('kStats').innerHTML=`<div class="tile"><div class="l">أكواد الشراء</div><div class="n">${d.codes.total||0}</div></div><div class="tile"><div class="l">مفعَّلة</div><div class="n">${d.codes.activated||0}</div></div><div class="tile"><div class="l">متبقية</div><div class="n">${(d.codes.total||0)-(d.codes.activated||0)}</div></div>`;
     document.getElementById('kGenBtn').style.display=isGM()?'':'none';
-    document.getElementById('kList').innerHTML=(d.recent||[]).length?'<table><tr><th>الكود</th><th>الطالب</th><th>موبايل</th><th>التفعيل</th></tr>'+d.recent.map(c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(c.student_name||'—')}</td><td dir="ltr">${esc(c.mobile||'—')}</td><td>${esc((c.activated_at||'').slice(0,16))}</td></tr>`).join('')+'</table>':'<p class="msg">لا أكواد مفعَّلة بعد — بانتظار قرار المطبعة.</p>';
-    const smx=Math.max(1,...(d.bySchool||[]).map(s=>+s.c));
-    document.getElementById('sSchools').innerHTML=(d.bySchool||[]).map(s=>`<div class="hbar"><span class="nm" title="${esc(s.school)}">${esc(s.school)}</span><div class="tr"><i style="width:${s.c/smx*100}%"></i></div><b>${s.c}</b></div>`).join('')||'<p class="msg">لا بيانات مدارس بعد.</p>';
+    document.getElementById('kList').innerHTML=(d.recent||[]).length?'<table><tr><th>الكود</th><th>القناة</th><th>الطالب</th><th>موبايل</th><th>التفعيل</th></tr>'+d.recent.map(c=>`<tr><td><span class="code">${esc(c.code)}</span></td><td>${esc(chLabel(c))}</td><td>${esc(c.student_name||'—')}</td><td dir="ltr">${esc(c.mobile||'—')}</td><td>${esc((c.activated_at||'').slice(0,16))}</td></tr>`).join('')+'</table>':'<p class="msg">لا أكواد مفعَّلة بعد — بانتظار قرار المطبعة.</p>';
   }catch(e){document.getElementById('kList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
-async function genCodes(){const n=+document.getElementById('kCount').value||0,m=document.getElementById('kMsg');if(n<1){m.textContent='أدخل عدداً.';return}m.textContent='جارٍ الإنشاء…';const d=await api('/api/admin/codes/generate',{method:'POST',body:JSON.stringify({count:n})});if(d.ok){dlCSV([['code'],...d.codes.map(c=>[c])],'senior-codes-'+d.count);m.textContent=`تم إنشاء ${d.count} كوداً.`;loadStudents()}else m.textContent='خطأ.'}
-async function dlUnactivated(){const d=await api('/api/admin/codes?activated=0');dlCSV([['code'],...d.list.map(c=>[c.code])],'senior-codes-unactivated')}
-async function loadLibraries(){const el=document.getElementById('lList');try{const d=await api('/api/admin/libraries');el.innerHTML=(d.libraries||[]).length?'<table><tr><th>المكتبة</th><th>موبايل</th><th>المنطقة</th><th>كود المندوب</th><th>طلبات</th><th>مشتريات</th><th>آخر طلب</th></tr>'+d.libraries.map(l=>`<tr><td><b>${esc(l.name)}</b>${l.contact?'<br><span style="color:var(--muted2);font-size:11px">'+esc(l.contact)+'</span>':''}</td><td dir="ltr">${esc(l.mobile)}</td><td>${esc(l.area||'—')}</td><td>${l.rep_code?'<span class="code">'+esc(l.rep_code)+'</span>':'—'}</td><td>${l.orders}</td><td>${l.revenue} ج</td><td style="color:var(--muted2);font-size:11.5px">${esc((l.last||'').slice(0,10))||'—'}</td></tr>`).join('')+'</table>':'<p class="msg">لا مكتبات بعد — تُسجَّل تلقائياً مع أول طلب مكتبة.</p>'}catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}}
+async function genCodes(){const n=+document.getElementById('kCount').value||0,m=document.getElementById('kMsg');if(n<1){m.textContent='أدخل عدداً.';return}m.textContent='جارٍ الإنشاء…';const d=await api('/api/admin/codes/generate',{method:'POST',body:JSON.stringify({count:n,channelType:'general'})});if(d.ok){dlCSV([['code'],...d.codes.map(c=>[c])],'senior-codes-'+d.count);m.textContent=`تم إنشاء ${d.count} كوداً (عام).`;loadStudents()}else m.textContent='خطأ.'}
+/* channelled batch: teacher/library codes — each code auto-links its channel to the order */
+async function genChannelCodes(type,chCode,countId,msgId){
+  const n=+document.getElementById(countId).value||0,m=document.getElementById(msgId);
+  if(!chCode){m.textContent=type==='teacher'?'اختر المدرّس أولاً.':'اختر المكتبة أولاً.';return}
+  if(n<1){m.textContent='أدخل عدداً.';return}
+  m.textContent='جارٍ الإنشاء…';
+  try{
+    const d=await api('/api/admin/codes/generate',{method:'POST',body:JSON.stringify({count:n,channelType:type,channelCode:chCode})});
+    if(d.ok){dlCSV([['code','channel'],...d.codes.map(c=>[c,chCode])],'senior-codes-'+chCode+'-'+d.count);m.textContent=`تم إنشاء ${d.count} كوداً باسم ${chCode}.`;loadStudents()}
+    else m.textContent='خطأ: '+(d.error==='bad_channel'?'القناة غير صحيحة.':'تعذّر الإنشاء.');
+  }catch(e){m.textContent='خطأ: '+e.message}
+}
+const CH_AR={general:'عام',teacher:'مدرّس',library:'مكتبة',rep:'مندوب'};
+function chLabel(c){if(!c.channel_type||c.channel_type==='general')return 'عام';const nm=c.channel_type==='teacher'?(TMAP[c.channel_code]||''):'';return (CH_AR[c.channel_type]||c.channel_type)+(nm?' — '+nm:(c.channel_code?' — '+c.channel_code:''))}
+async function dlUnactivated(){const d=await api('/api/admin/codes?activated=0');dlCSV([['code','channel_type','channel_code'],...d.list.map(c=>[c.code,c.channel_type||'general',c.channel_code||''])],'senior-codes-unactivated')}
+async function loadLibraries(){const el=document.getElementById('lList');try{const d=await api('/api/admin/libraries');
+  LIBS=d.libraries||[];
+  const sel=document.getElementById('lcLib');
+  if(sel)sel.innerHTML='<option value="">— اختر المكتبة —</option>'+LIBS.filter(l=>l.code).map(l=>`<option value="${esc(l.code)}">${esc(l.name)} (${esc(l.code)})</option>`).join('');
+  el.innerHTML=LIBS.length?'<table><tr><th>المكتبة</th><th>الكود</th><th>موبايل</th><th>المنطقة</th><th>كود المندوب</th><th>طلبات</th><th>مشتريات</th><th>آخر طلب</th></tr>'+LIBS.map(l=>`<tr><td><b>${esc(l.name)}</b>${l.contact?'<br><span style="color:var(--muted2);font-size:11px">'+esc(l.contact)+'</span>':''}</td><td>${l.code?'<span class="code">'+esc(l.code)+'</span>':'—'}</td><td dir="ltr">${esc(l.mobile)}</td><td>${esc(l.area||'—')}</td><td>${l.rep_code?'<span class="code">'+esc(l.rep_code)+'</span>':'—'}</td><td>${l.orders}</td><td>${l.revenue} ج</td><td style="color:var(--muted2);font-size:11.5px">${esc((l.last||'').slice(0,10))||'—'}</td></tr>`).join('')+'</table>':'<p class="msg">لا مكتبات بعد — تُسجَّل تلقائياً مع أول طلب مكتبة.</p>'}catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}}
 async function addLibrary(){const n=document.getElementById('lbName').value.trim(),p=document.getElementById('lbMob').value.trim(),a=document.getElementById('lbArea').value.trim(),m=document.getElementById('lbMsg');if(!n||!p){m.textContent='أدخل الاسم والموبايل.';return}try{await api('/api/admin/library/add',{method:'POST',body:JSON.stringify({name:n,mobile:p,area:a})});m.textContent='تمت الإضافة.';document.getElementById('lbName').value='';document.getElementById('lbMob').value='';document.getElementById('lbArea').value='';loadLibraries()}catch(e){m.textContent='خطأ: '+e.message}}
 
 /* ============ ADMIN: team / audit ============ */
