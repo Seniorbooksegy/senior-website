@@ -238,6 +238,7 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
         <div class="card">
           <div class="filterbar">
             <button class="filterbtn" id="sFilterBtn" onclick="toggleSFilters()">🔎 الفلاتر <span class="fb" id="sfCount"></span></button>
+            <button class="filterbtn" id="sColBtn" onclick="toggleSCols()">⚙️ الأعمدة</button>
             <button class="filterbtn" id="sDlBtn" onclick="downloadStudentsXlsx()">⬇️ تحميل</button>
             <div class="ofchips" id="sfChips" style="margin:0"></div>
             <span style="flex:1"></span>
@@ -249,6 +250,10 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
             <div class="fgroup"><label>المحافظة</label><div class="fopts" id="sfGovOpts"></div></div>
             <div class="fgroup"><label>المدرّس المُحيل</label><div class="fopts" id="sfRefOpts"></div></div>
             <div class="factions"><button class="b-g" onclick="clearSF()">مسح الكل</button><button class="b-t" onclick="toggleSFilters()">تم</button></div>
+          </div>
+          <div class="filterpanel" id="sColPanel" style="display:none">
+            <div class="fgroup"><label>اختر الأعمدة الظاهرة في الجدول</label><div class="colopts" id="sColOpts"></div></div>
+            <div class="factions"><button class="b-g" onclick="resetSCols()">الأعمدة الافتراضية</button><button class="b-t" onclick="toggleSCols()">تم</button></div>
           </div>
           <div class="note" style="margin:2px 0 12px">📋 اضغط «تاريخ الطلبات» لعرض ملف الطالب وتفاصيل طلباته السابقة.</div>
           <div class="otblwrap" id="regList">…</div>
@@ -858,20 +863,28 @@ function sregRows(){
 }
 /* columns model like orders: cell = HTML, x = plain text for Excel */
 const SCOLS=[
-  {k:'name',l:'اسم الطالب',td:'nm',w:20,cell:s=>`<b>${esc(s.name)}</b>`,x:s=>s.name||''},
-  {k:'mobile',l:'رقم التواصل',c:1,w:15,cell:s=>`<span dir="ltr" style="font-size:12px;color:var(--muted)">${esc(s.mobile||'—')}</span>`,x:s=>s.mobile||''},
-  {k:'gov',l:'المحافظة',c:1,w:12,cell:s=>esc(s.governorate||'—'),x:s=>s.governorate||''},
-  {k:'city',l:'المركز',c:1,w:12,cell:s=>esc(s.city||'—'),x:s=>s.city||''},
-  {k:'school',l:'المدرسة',w:20,cell:s=>esc(s.school||'—'),x:s=>s.school||''},
-  {k:'track',l:'الصف',c:1,w:16,cell:s=>esc(s.track||'—'),x:s=>s.track||''},
-  {k:'address',l:'العنوان',td:'nm',w:30,cell:s=>esc(s.address||'—'),x:s=>s.address||''},
-  {k:'scode',l:'كود الطالب',c:1,w:14,cell:s=>`<span class="code" style="font-size:11px">${studentCode(s.mobile)}</span>`,x:s=>studentCode(s.mobile)},
-  {k:'refname',l:'المدرّس المُحيل',c:1,w:16,cell:s=>s.refCode&&TMAP[s.refCode]?esc(TMAP[s.refCode]):'—',x:s=>s.refCode?(TMAP[s.refCode]||''):''},
-  {k:'refcode',l:'كود المدرّس',c:1,w:13,cell:s=>s.refCode?`<span class="code" style="font-size:11px">${esc(s.refCode)}</span>`:'—',x:s=>s.refCode||''},
-  {k:'cnt',l:'عدد الطلبات',c:1,w:10,cell:s=>`<b>${s.ordersCount}</b>`,x:s=>''+s.ordersCount},
-  {k:'spend',l:'إجمالي مشترياته',c:1,w:13,cell:s=>`<b>${s.spend} ج</b>`,x:s=>s.spend+' ج'},
-  {k:'reg',l:'تاريخ التسجيل',c:1,w:12,cell:s=>`<span style="color:var(--muted);font-size:12px">${esc((s.firstAt||'').slice(0,10))||'—'}</span>`,x:s=>(s.firstAt||'').slice(0,10)},
+  {k:'name',l:'اسم الطالب',fixed:1,def:1,td:'nm',w:20,cell:s=>`<b>${esc(s.name)}</b>`,x:s=>s.name||''},
+  {k:'mobile',l:'رقم التواصل',def:1,c:1,w:15,cell:s=>`<span dir="ltr" style="font-size:12px;color:var(--muted)">${esc(s.mobile||'—')}</span>`,x:s=>s.mobile||''},
+  {k:'gov',l:'المحافظة',def:1,c:1,w:12,cell:s=>esc(s.governorate||'—'),x:s=>s.governorate||''},
+  {k:'city',l:'المركز',def:1,c:1,w:12,cell:s=>esc(s.city||'—'),x:s=>s.city||''},
+  {k:'school',l:'المدرسة',def:1,w:20,cell:s=>esc(s.school||'—'),x:s=>s.school||''},
+  {k:'track',l:'الصف',def:1,c:1,w:16,cell:s=>esc(s.track||'—'),x:s=>s.track||''},
+  {k:'address',l:'العنوان',def:0,td:'nm',w:30,cell:s=>esc(s.address||'—'),x:s=>s.address||''},
+  {k:'scode',l:'كود الطالب',def:1,c:1,w:14,cell:s=>`<span class="code" style="font-size:11px">${studentCode(s.mobile)}</span>`,x:s=>studentCode(s.mobile)},
+  {k:'refname',l:'المدرّس المُحيل',def:1,c:1,w:16,cell:s=>s.refCode&&TMAP[s.refCode]?esc(TMAP[s.refCode]):'—',x:s=>s.refCode?(TMAP[s.refCode]||''):''},
+  {k:'refcode',l:'كود المدرّس',def:1,c:1,w:13,cell:s=>s.refCode?`<span class="code" style="font-size:11px">${esc(s.refCode)}</span>`:'—',x:s=>s.refCode||''},
+  {k:'cnt',l:'عدد الطلبات',def:1,c:1,w:10,cell:s=>`<b>${s.ordersCount}</b>`,x:s=>''+s.ordersCount},
+  {k:'spend',l:'إجمالي مشترياته',def:1,c:1,w:13,cell:s=>`<b>${s.spend} ج</b>`,x:s=>s.spend+' ج'},
+  {k:'reg',l:'تاريخ التسجيل',def:1,c:1,w:12,cell:s=>`<span style="color:var(--muted);font-size:12px">${esc((s.firstAt||'').slice(0,10))||'—'}</span>`,x:s=>(s.firstAt||'').slice(0,10)},
 ];
+/* visible set persisted like the orders view */
+let VSCOLS=(()=>{try{const s=JSON.parse(localStorage.getItem('snr_scols1'));if(Array.isArray(s)&&s.length)return new Set(s)}catch(e){}return new Set(SCOLS.filter(c=>c.def).map(c=>c.k))})();
+SCOLS.forEach(c=>{if(c.fixed)VSCOLS.add(c.k)});
+function saveSCols(){try{localStorage.setItem('snr_scols1',JSON.stringify([...VSCOLS]))}catch(e){}}
+function toggleSCols(){const p=document.getElementById('sColPanel'),open=p.style.display==='none';document.getElementById('sfPanel').style.display='none';document.getElementById('sFilterBtn').classList.remove('on');p.style.display=open?'block':'none';document.getElementById('sColBtn').classList.toggle('on',open);if(open)renderSColOpts()}
+function renderSColOpts(){document.getElementById('sColOpts').innerHTML=SCOLS.filter(c=>!c.fixed).map(c=>`<label class="colopt"><input type="checkbox" ${VSCOLS.has(c.k)?'checked':''} onchange="toggleSCol('${c.k}',this.checked)"> ${c.l}</label>`).join('')}
+function toggleSCol(k,on){if(on)VSCOLS.add(k);else VSCOLS.delete(k);saveSCols();renderRegStudents()}
+function resetSCols(){VSCOLS=new Set(SCOLS.filter(c=>c.def).map(c=>c.k));SCOLS.forEach(c=>{if(c.fixed)VSCOLS.add(c.k)});saveSCols();renderSColOpts();renderRegStudents()}
 function sregFiltered(){
   const q=SF.q.trim(),qU=q.toUpperCase();
   return sregRows().filter(s=>
@@ -887,14 +900,16 @@ function renderRegStudents(){
   renderSFCount();
   if(!all.length){el.innerHTML='<p class="msg">لا طلبة مسجلين بعد — يظهر الطالب هنا مع أول طلب له.</p>';return}
   if(!rows.length){el.innerHTML='<p class="msg">لا نتائج مطابقة للفلاتر.</p>';return}
-  el.innerHTML='<table class="otbl"><thead><tr>'+SCOLS.map(c=>'<th>'+c.l+'</th>').join('')+'<th>تاريخ الطلبات</th></tr></thead><tbody>'+rows.map(s=>
-    '<tr>'+SCOLS.map(c=>`<td${c.td?' class="'+c.td+'"':''}${c.c?' style="text-align:center"':''}>${c.cell(s)}</td>`).join('')+
-    `<td style="text-align:center"><button class="b-g iconb" title="عرض تفاصيل طلباته السابقة" onclick="showBuyerMobile('${esc(s.mobile)}')">🧾 تاريخ الطلبات</button></td></tr>`
+  const cols=SCOLS.filter(c=>VSCOLS.has(c.k));
+  el.innerHTML='<table class="otbl"><thead><tr>'+cols.map(c=>'<th>'+c.l+'</th>').join('')+'<th>تاريخ الطلبات</th></tr></thead><tbody>'+rows.map(s=>
+    '<tr>'+cols.map(c=>`<td${c.td?' class="'+c.td+'"':''}${c.c?' style="text-align:center"':''}>${c.cell(s)}</td>`).join('')+
+    `<td style="text-align:center"><button class="b-g iconb" title="تاريخ الطلبات — عرض تفاصيل طلباته السابقة" onclick="showBuyerMobile('${esc(s.mobile)}')">🧾</button></td></tr>`
   ).join('')+'</tbody></table>';
 }
 /* --- students filter panel (same pattern as orders) --- */
 function toggleSFilters(){
   const p=document.getElementById('sfPanel'),open=p.style.display==='none';
+  document.getElementById('sColPanel').style.display='none';document.getElementById('sColBtn').classList.remove('on');
   p.style.display=open?'block':'none';document.getElementById('sFilterBtn').classList.toggle('on',open);
   if(open){renderSFPanel();const q=document.getElementById('sfq');if(q)q.value=SF.q}
 }
