@@ -116,6 +116,10 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
 .icol .ir{padding:2px 0;font-size:12px;border-top:1px dotted #F0EBE2;line-height:1.45;white-space:nowrap}
 .icol .ir:first-child{border-top:none}
 .icol.q .ir,.icol.p .ir{direction:ltr;color:var(--muted)}
+.srcb{font-size:11.5px;font-weight:600;white-space:nowrap}
+.colopts{display:flex;flex-wrap:wrap;gap:10px 20px}
+.colopt{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;cursor:pointer;color:var(--ink)}
+.colopt input{width:auto;margin:0;cursor:pointer}
 /* charts */
 .note{background:#FDF4E6;border:1px solid #F0E0C0;border-radius:10px;padding:9px 13px;font-size:12.5px;color:#7A5511;margin-bottom:12px}
 .chart{display:flex;align-items:flex-end;gap:6px;height:150px;padding:10px 4px 4px;direction:ltr}
@@ -189,6 +193,7 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
       <div class="card">
         <div class="filterbar">
           <button class="filterbtn" id="filterBtn" onclick="toggleFilters()">🔎 الفلاتر <span class="fb" id="fCount"></span></button>
+          <button class="filterbtn" id="colBtn" onclick="toggleCols()">⚙️ الأعمدة</button>
           <div class="ofchips" id="ofChips" style="margin:0"></div>
           <span style="flex:1"></span>
           <span class="ofcount" id="ofCount"></span>
@@ -200,6 +205,10 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
           <div class="fgroup"><label>حالة الطلب</label><div class="fopts" id="fStatusOpts"></div></div>
           <div class="fgroup"><label>المحافظة</label><div class="fopts" id="fGovOpts"></div></div>
           <div class="factions"><button class="b-g" onclick="clearAllF()">مسح الكل</button><button class="b-t" onclick="toggleFilters()">تم</button></div>
+        </div>
+        <div class="filterpanel" id="colPanel" style="display:none">
+          <div class="fgroup"><label>اختر الأعمدة الظاهرة في الجدول</label><div class="colopts" id="colOpts"></div></div>
+          <div class="factions"><button class="b-g" onclick="resetCols()">الأعمدة الافتراضية</button><button class="b-t" onclick="toggleCols()">تم</button></div>
         </div>
         <div class="note" style="margin:2px 0 12px">👤 اضغط اسم المشتري لعرض ملفه الكامل · 🧾 فاتورة · 💬 واتساب</div>
         <div class="otblwrap" id="oList">…</div>
@@ -459,6 +468,7 @@ function govOpts(){return [...new Set(ORDERS.map(o=>o.governorate).filter(Boolea
 /* single unified filter panel (Trendyol-style) */
 function toggleFilters(){
   const p=document.getElementById('ofPanel'),open=p.style.display==='none';
+  document.getElementById('colPanel').style.display='none';document.getElementById('colBtn').classList.remove('on');
   p.style.display=open?'block':'none';document.getElementById('filterBtn').classList.toggle('on',open);
   if(open){renderFilterPanel();const q=document.getElementById('ofq');if(q)q.value=F.q}
 }
@@ -484,25 +494,78 @@ function filteredOrders(){
   const q=F.q.trim(),qU=q.toUpperCase();
   return ORDERS.filter(o=>(!F.type||o.buyer_type===F.type)&&(!F.status||o.status===F.status)&&(!F.gov||o.governorate===F.gov)&&(!q||o.name.includes(q)||(o.mobile||'').includes(q)||(o.order_no||'').toUpperCase().includes(qU)||(o.ref_code||'').toUpperCase().includes(qU)));
 }
+/* ---- order source (from utm) ---- */
+const PAYN={cod:'عند الاستلام',instapay:'InstaPay',wallet:'محفظة',fawry:'فوري'};
+function orderSource(o){
+  const s=(o.utm||'').split('/')[0].toLowerCase();
+  if(/(facebook|fb|meta)/.test(s))return{ic:'📘',l:'فيسبوك',c:'#1877F2'};
+  if(/(instagram|insta|ig)/.test(s))return{ic:'📸',l:'إنستجرام',c:'#C13584'};
+  if(/(tiktok|tt)/.test(s))return{ic:'🎵',l:'تيك توك',c:'#111'};
+  if(/(google|search|goog|adwords)/.test(s))return{ic:'🔍',l:'بحث جوجل',c:'#4285F4'};
+  if(/(youtube|yt)/.test(s))return{ic:'▶️',l:'يوتيوب',c:'#FF0000'};
+  if(/(whatsapp|wa)/.test(s))return{ic:'💬',l:'واتساب',c:'#25D366'};
+  if(s)return{ic:'🔗',l:o.utm.split('/')[0],c:'#5E7078'};
+  return{ic:'❔',l:'غير معروف',c:'#8A9499'};
+}
+function icol(o,cls,fn){return '<div class="icol '+cls+'">'+o.items.map(fn).join('')+'</div>'}
+function statusCell(o){return `<div class="acts"><select class="stsel" style="border-color:${STC[o.status]};color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select>${o.status==='delivered'?`<button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>`:`<button class="b-g iconb" style="opacity:.35" title="الفاتورة تُصدر بعد دفع/تسليم الطلب" onclick="invoiceBlocked()">🧾</button>`}<button class="b-wa iconb" title="واتساب" onclick="waCustomer(${o.id})">💬</button></div>${o.delivered_at?`<div class="dt">✅ سُلّم ${esc(o.delivered_at.slice(0,10))}</div>`:''}`}
+
+/* ---- columns model: lean default + toggleable extras (persisted) ---- */
+const COLS=[
+  {k:'order_no',l:'رقم الطلب',fixed:1,def:1,cell:o=>`<button class="bname" onclick="showOrder(${o.id})" title="تفاصيل الطلب"><span class="code" style="font-size:12px">${esc(o.order_no||('#'+o.id))}</span></button>`},
+  {k:'date',l:'تاريخ الطلب',def:1,cell:o=>`<span style="color:var(--muted);font-size:12px">${esc((o.created_at||'').slice(0,10))}</span>`},
+  {k:'source',l:'المصدر',def:1,cell:o=>{const s=orderSource(o);return `<span class="srcb" style="color:${s.c}" title="${esc(s.l)}${o.utm?' — '+esc(o.utm):''}">${s.ic} ${esc(s.l)}</span>`}},
+  {k:'type',l:'نوع المشتري',def:1,cell:o=>`<span class="tag bt-${o.buyer_type}">${BT[o.buyer_type]||o.buyer_type}</span>`},
+  {k:'name',l:'اسم المشتري',fixed:1,def:1,td:'nm',cell:o=>`<button class="bname" onclick="buyerClick(${o.id})">${esc(o.name)}</button>`},
+  {k:'refcode',l:'كود المدرّس',def:0,cell:o=>o.ref_code&&/^SNR-T/i.test(o.ref_code)?`<span class="code" style="font-size:11px">${esc(o.ref_code)}</span>`:'—'},
+  {k:'repcode',l:'كود المندوب',def:0,cell:o=>o.ref_code&&/^SNR-R/i.test(o.ref_code)?`<span class="code" style="font-size:11px">${esc(o.ref_code)}</span>`:'—'},
+  {k:'mobile',l:'رقم التواصل',def:1,cell:o=>`<span dir="ltr" style="font-size:12px;color:var(--muted)">${esc(o.mobile)}</span>`},
+  {k:'gov',l:'المحافظة',def:1,cell:o=>esc(o.governorate||'—')},
+  {k:'city',l:'المركز',def:1,cell:o=>esc(o.city||'—')},
+  {k:'school',l:'المدرسة',def:0,cell:o=>esc(o.school||'—')},
+  {k:'book',l:'الكتاب',fixed:1,def:1,cell:o=>icol(o,'b',i=>`<div class="ir" style="font-weight:600">${BOOKS[i.id]||i.id}</div>`)},
+  {k:'qty',l:'العدد',fixed:1,def:1,cell:o=>icol(o,'q',i=>`<div class="ir">×${i.qty}</div>`)},
+  {k:'price',l:'السعر',fixed:1,def:1,cell:o=>icol(o,'p',i=>`<div class="ir">${i.price} ج</div>`)},
+  {k:'total',l:'الإجمالي',fixed:1,def:1,cell:o=>`<b>${o.total} ج</b>`},
+  {k:'pay',l:'طريقة الدفع',def:0,cell:o=>PAYN[o.pay_method]||esc(o.pay_method||'—')},
+  {k:'delivery',l:'تاريخ التسليم',def:0,cell:o=>o.delivered_at?`<span style="color:var(--green);font-size:12px">${esc(o.delivered_at.slice(0,10))}</span>`:'—'},
+  {k:'status',l:'حالة الطلب',fixed:1,def:1,cell:statusCell},
+];
+let VCOLS=(()=>{try{const s=JSON.parse(localStorage.getItem('snr_cols'));if(Array.isArray(s)&&s.length)return new Set(s)}catch(e){}return new Set(COLS.filter(c=>c.def).map(c=>c.k))})();
+COLS.forEach(c=>{if(c.fixed)VCOLS.add(c.k)});
+function saveCols(){try{localStorage.setItem('snr_cols',JSON.stringify([...VCOLS]))}catch(e){}}
+function toggleCols(){const p=document.getElementById('colPanel'),open=p.style.display==='none';document.getElementById('ofPanel').style.display='none';document.getElementById('filterBtn').classList.remove('on');p.style.display=open?'block':'none';document.getElementById('colBtn').classList.toggle('on',open);if(open)renderColOpts()}
+function renderColOpts(){document.getElementById('colOpts').innerHTML=COLS.filter(c=>!c.fixed).map(c=>`<label class="colopt"><input type="checkbox" ${VCOLS.has(c.k)?'checked':''} onchange="toggleCol('${c.k}',this.checked)"> ${c.l}</label>`).join('')}
+function toggleCol(k,on){if(on)VCOLS.add(k);else VCOLS.delete(k);saveCols();renderOrders()}
+function resetCols(){VCOLS=new Set(COLS.filter(c=>c.def).map(c=>c.k));COLS.forEach(c=>{if(c.fixed)VCOLS.add(c.k)});saveCols();renderColOpts();renderOrders()}
 function renderOrders(){
   const el=document.getElementById('oList'),list=filteredOrders();
   const cnt=document.getElementById('ofCount');if(cnt)cnt.textContent=list.length+(list.length===ORDERS.length?'':' / '+ORDERS.length)+' طلب';
   if(!list.length){el.innerHTML='<p class="msg">لا توجد طلبات مطابقة.</p>';return}
-  const col=(o,f)=>'<div class="icol '+f.cls+'">'+o.items.map(f.fn).join('')+'</div>';
-  el.innerHTML=`<table class="otbl"><tr><th>رقم الطلب</th><th>تاريخ الطلب</th><th>نوع المشتري</th><th>اسم المشتري</th><th>رقم التواصل</th><th>المحافظة</th><th>المركز</th><th>الكتاب</th><th>العدد</th><th>السعر</th><th>الإجمالي</th><th>حالة الطلب</th></tr>`+
-    list.map(o=>`<tr>
-      <td><span class="code" style="font-size:12px">${esc(o.order_no||('#'+o.id))}</span></td>
-      <td style="color:var(--muted);font-size:12px">${esc((o.created_at||'').slice(0,10))}</td>
-      <td><span class="tag bt-${o.buyer_type}">${BT[o.buyer_type]||o.buyer_type}</span></td>
-      <td class="nm"><button class="bname" onclick="buyerClick(${o.id})">${esc(o.name)}</button>${o.ref_code?`<div><span class="code" style="font-size:10.5px">${esc(o.ref_code)}</span></div>`:''}</td>
-      <td dir="ltr" style="font-size:12px;color:var(--muted)">${esc(o.mobile)}</td>
-      <td>${esc(o.governorate||'—')}</td>
-      <td>${esc(o.city||'—')}</td>
-      <td>${col(o,{cls:'b',fn:i=>`<div class="ir" style="font-weight:600">${BOOKS[i.id]||i.id}</div>`})}</td>
-      <td>${col(o,{cls:'q',fn:i=>`<div class="ir">×${i.qty}</div>`})}</td>
-      <td>${col(o,{cls:'p',fn:i=>`<div class="ir">${i.price} ج</div>`})}</td>
-      <td><b>${o.total} ج</b></td>
-      <td><div class="acts"><select class="stsel" style="border-color:${STC[o.status]};color:${STC[o.status]}" onchange="setStatus(${o.id},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select>${o.status==='delivered'?`<button class="b-g iconb" title="فاتورة" onclick="invoice(${o.id})">🧾</button>`:`<button class="b-g iconb" style="opacity:.35" title="الفاتورة تُصدر بعد دفع/تسليم الطلب" onclick="invoiceBlocked()">🧾</button>`}<button class="b-wa iconb" title="واتساب" onclick="waCustomer(${o.id})">💬</button></div>${o.delivered_at?`<div class="dt">✅ سُلّم ${esc(o.delivered_at.slice(0,10))}</div>`:''}</td></tr>`).join('')+'</table>';
+  const cols=COLS.filter(c=>VCOLS.has(c.k));
+  el.innerHTML=`<table class="otbl"><tr>${cols.map(c=>`<th>${c.l}</th>`).join('')}</tr>`+
+    list.map(o=>`<tr>${cols.map(c=>`<td${c.td?` class="${c.td}"`:''}>${c.cell(o)}</td>`).join('')}</tr>`).join('')+'</table>';
+}
+/* full order-details panel (opened from the order number) */
+function showOrder(id){
+  const o=ORDERS.find(x=>x.id===id);if(!o)return;
+  const s=orderSource(o),isT=o.ref_code&&/^SNR-T/i.test(o.ref_code),isR=o.ref_code&&/^SNR-R/i.test(o.ref_code);
+  openBuyerModal(`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h3 style="margin:0">🧾 تفاصيل الطلب <span class="code">${esc(o.order_no||('#'+o.id))}</span></h3><button class="b-g iconb" onclick="closeBuyer()">إغلاق ×</button></div>
+    <div class="kpis" style="margin-top:10px">
+      <div class="kpi" style="--c:${STC[o.status]}"><div class="n" style="font-size:15px">${ST[o.status]||o.status}</div><div class="l">الحالة</div></div>
+      <div class="kpi" style="--c:#1C7A46"><div class="n" style="font-size:15px">${o.total} ج</div><div class="l">الإجمالي</div></div>
+      <div class="kpi" style="--c:${s.c}"><div class="n" style="font-size:14px">${s.ic} ${esc(s.l)}</div><div class="l">المصدر${o.utm?' · '+esc(o.utm):''}</div></div></div>
+    <h3>📋 بيانات الطلب</h3>
+    <table>
+      <tr><th>تاريخ الطلب</th><td>${esc((o.created_at||'').slice(0,16))}</td><th>تاريخ التسليم</th><td>${o.delivered_at?esc(o.delivered_at.slice(0,16)):'—'}</td></tr>
+      <tr><th>المشتري</th><td><button class="bname" onclick="closeBuyer();buyerClick(${o.id})">${esc(o.name)}</button> <span class="tag bt-${o.buyer_type}">${BT[o.buyer_type]||o.buyer_type}</span></td><th>التواصل</th><td dir="ltr">${esc(o.mobile)}</td></tr>
+      <tr><th>المحافظة</th><td>${esc(o.governorate||'—')}</td><th>المركز</th><td>${esc(o.city||'—')}</td></tr>
+      <tr><th>المدرسة</th><td>${esc(o.school||'—')}</td><th>طريقة الدفع</th><td>${PAYN[o.pay_method]||esc(o.pay_method||'—')}</td></tr>
+      <tr><th>كود المدرّس</th><td>${isT?'<span class="code">'+esc(o.ref_code)+'</span>':'—'}</td><th>كود المندوب</th><td>${isR?'<span class="code">'+esc(o.ref_code)+'</span>':'—'}</td></tr>
+      <tr><th>العنوان</th><td colspan="3">${esc(o.address||'—')}</td></tr></table>
+    <h3 style="margin-top:12px">📚 الكتب</h3>
+    <table><tr><th>الكتاب</th><th>العدد</th><th>سعر الوحدة</th><th>القيمة</th></tr>${o.items.map(i=>`<tr><td>${BOOKS[i.id]||i.id}</td><td dir="ltr">×${i.qty}</td><td>${i.price} ج</td><td>${i.qty*i.price} ج</td></tr>`).join('')}<tr><td colspan="3" style="text-align:left"><b>الإجمالي</b></td><td><b>${o.total} ج</b></td></tr></table>
+    <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${o.status==='delivered'?`<button class="b-g" onclick="closeBuyer();invoice(${o.id})">🧾 فاتورة</button>`:''}<button class="b-wa" onclick="waCustomer(${o.id})">💬 واتساب</button><button class="b-g" onclick="closeBuyer();buyerClick(${o.id})">👤 ملف المشتري</button></div>`);
 }
 async function setStatus(id,status){
   try{await api('/api/admin/order/status',{method:'POST',body:JSON.stringify({id,status})});
