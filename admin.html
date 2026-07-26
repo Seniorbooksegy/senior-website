@@ -458,6 +458,65 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
       </div>
     </section>
 
+    <!-- CUSTOMER DATABASE (GM) -->
+    <section class="sec" id="sec-db">
+      <div class="tiles" id="dbKpis"></div>
+      <div class="subtabs" id="dbTabs">
+        <button class="on" onclick="subShow('db','dbcur')">👥 العملاء الحاليون</button>
+        <button onclick="subShow('db','dbnew')">🆕 العملاء الجدد</button>
+      </div>
+
+      <div class="subpanel on" id="sub-dbcur">
+        <div class="card">
+          <h3>➕ إضافة عميل حالي</h3>
+          <div class="note">للعملاء الذين تتعامل معهم بالفعل خارج الموقع — يُصدَر لكل عميل كود فورًا، ثم أرسل له رسالة الترحيب بضغطة واحدة.</div>
+          <div class="row3">
+            <div><label>اسم المدرّس</label><input id="dbName"></div>
+            <div><label>رقم الموبايل</label><input id="dbMob" dir="ltr" placeholder="01xxxxxxxxx"></div>
+            <div><label>المنطقة</label><input id="dbArea"></div>
+          </div>
+          <div class="row2">
+            <div><label>عدد الطلاب المتوقَّع (اختياري)</label><input id="dbExp"></div>
+            <div><label>ملاحظات (اختياري)</label><input id="dbNotes" placeholder="تاريخ التعامل، الكميات المعتادة…"></div>
+          </div>
+          <button class="b-t" onclick="dbAddOne()">إصدار كود وإضافته</button>
+          <div class="msg" id="dbMsg"></div>
+        </div>
+
+        <div class="card">
+          <h3>📋 نقل دفعة كاملة</h3>
+          <div class="note">الصق قائمة عملائك — سطر لكل عميل بالترتيب: <b>الاسم، الموبايل، المنطقة</b> (مفصولة بفاصلة أو Tab). يُصدَر كود لكل واحد تلقائيًا ويُتجاهَل المكرَّر.</div>
+          <textarea id="dbBulk" rows="6" placeholder="أحمد محمد علي، 01012345678، طنطا&#10;محمود سعيد، 01198765432، المنصورة" style="width:100%;font-family:inherit"></textarea>
+          <button class="b-t" onclick="dbAddBulk()">استيراد الدفعة</button>
+          <div class="msg" id="dbBulkMsg"></div>
+        </div>
+
+        <div class="card">
+          <div class="filterbar">
+            <input id="dbqCur" placeholder="🔎 بحث بالاسم أو الموبايل أو الكود…" oninput="renderDB()" style="max-width:320px;margin:0">
+            <button class="filterbtn" onclick="dbDownload('legacy')">⬇️ تحميل</button>
+            <span style="flex:1"></span>
+            <span class="ofcount" id="dbCurCount"></span>
+          </div>
+          <div class="note" style="margin:2px 0 12px">💬 = إرسال رسالة الترحيب بالكود عبر واتساب · ✅ = تم الإرسال (يُسجَّل تلقائيًا عند الضغط).</div>
+          <div class="otblwrap" id="dbCurList">…</div>
+        </div>
+      </div>
+
+      <div class="subpanel" id="sub-dbnew">
+        <div class="card">
+          <div class="filterbar">
+            <input id="dbqNew" placeholder="🔎 بحث بالاسم أو الموبايل أو الكود…" oninput="renderDB()" style="max-width:320px;margin:0">
+            <button class="filterbtn" onclick="dbDownload('site')">⬇️ تحميل</button>
+            <span style="flex:1"></span>
+            <span class="ofcount" id="dbNewCount"></span>
+          </div>
+          <div class="note" style="margin:2px 0 12px">المدرّسون الذين سجّلوا بأنفسهم عبر الموقع واعتُمدوا — أرسل لهم نفس رسالة الترحيب بالكود ومتابعة اللوحة.</div>
+          <div class="otblwrap" id="dbNewList">…</div>
+        </div>
+      </div>
+    </section>
+
     <!-- AI REPORT -->
     <section class="sec" id="sec-ai">
       <div class="card" style="padding:14px 18px">
@@ -488,8 +547,8 @@ th{color:var(--muted);font-weight:600;white-space:nowrap;font-size:11.5px}
 
 <script>
 const API='https://senior-api.seniorbooksegy.workers.dev';
-const SECTIONS=[['overview','🏠','نظرة عامة'],['orders','🛍️','الطلبات'],['students','🎓','الطلاب'],['plus','⭐','Senior Plus'],['teachers','🧑‍🏫','المدرسون'],['libraries','🏪','المكتبات'],['inventory','📦','المخزون'],['analytics','📈','التحليلات'],['ai','🤖','تقرير الذكاء'],['finance','💰','المالية'],['admin','🛡️','الإدارة']];
-const ROLE_SEC={gm:['overview','orders','students','plus','teachers','libraries','inventory','analytics','ai','finance','admin'],kam:['overview','orders','students','plus','teachers','libraries','inventory','analytics','ai'],sales:['orders']};
+const SECTIONS=[['overview','🏠','نظرة عامة'],['orders','🛍️','الطلبات'],['students','🎓','الطلاب'],['plus','⭐','Senior Plus'],['teachers','🧑‍🏫','المدرسون'],['libraries','🏪','المكتبات'],['db','🗄️','قاعدة البيانات'],['inventory','📦','المخزون'],['analytics','📈','التحليلات'],['ai','🤖','تقرير الذكاء'],['finance','💰','المالية'],['admin','🛡️','الإدارة']];
+const ROLE_SEC={gm:['overview','orders','students','plus','teachers','libraries','db','inventory','analytics','ai','finance','admin'],kam:['overview','orders','students','plus','teachers','libraries','inventory','analytics','ai'],sales:['orders']};
 const SECTITLE=Object.fromEntries(SECTIONS.map(s=>[s[0],s[2]]));
 const BOOKS={sharh:'الشرح',exercises:'التمارين',skills:'المهارات',comprehension:'قطع الفهم',grammar:'القواعد',bundle:'المجموعة كاملة'};
 const ST={new:'جديد',confirmed:'مؤكَّد',shipped:'شُحن',delivered:'سُلِّم',cancelled:'أُلغي',returned:'مرتجع'};
@@ -541,8 +600,8 @@ function show(sec){
   document.getElementById('pageTitle').textContent=SECTITLE[sec]||'';
 }
 function subShow(group,key){
-  const map={stu:['reg','codes'],tch:['treg','tpart','treq','tcodes'],lib:['lreg','lreps','lcodes'],adm:['team','audit']};
-  const tabsId={stu:'stuTabs',tch:'tchTabs',lib:'libTabs',adm:'admTabs'}[group];
+  const map={stu:['reg','codes'],tch:['treg','tpart','treq','tcodes'],lib:['lreg','lreps','lcodes'],adm:['team','audit'],db:['dbcur','dbnew']};
+  const tabsId={stu:'stuTabs',tch:'tchTabs',lib:'libTabs',adm:'admTabs',db:'dbTabs'}[group];
   map[group].forEach(k=>{const p=document.getElementById('sub-'+k);if(p)p.classList.toggle('on',k===key)});
   [...document.querySelectorAll('#'+tabsId+' button')].forEach((b,i)=>b.classList.toggle('on',map[group][i]===key));
 }
@@ -725,7 +784,7 @@ const WAMSGS={
   cancelled:o=>`أهلاً ${o.name}، تم إلغاء طلبك رقم ${o.order_no||o.id}. إن كان بالخطأ فتواصل معنا.`,
 };
 async function loadOrders(){
-  try{const d=await api('/api/admin/orders');ORDERS=d.orders;renderFilterChips();renderFCount();renderOrders();renderRecent();renderRegStudents();renderTeachers();renderOrdersAnalytics();renderPlusKpis();}
+  try{const d=await api('/api/admin/orders');ORDERS=d.orders;renderFilterChips();renderFCount();renderOrders();renderRecent();renderRegStudents();renderTeachers();renderOrdersAnalytics();renderPlusKpis();renderDB();}
   catch(e){document.getElementById('oList').innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 function govOpts(){return [...new Set(ORDERS.map(o=>o.governorate).filter(Boolean))]}
@@ -1025,7 +1084,7 @@ async function loadTeachersApproved(){
     TMAP=Object.fromEntries(TCHRS.filter(t=>t.code).map(t=>[t.code,(t.first_name+' '+t.last_name).trim()]));
     const sel=document.getElementById('tcTeacher');
     if(sel)sel.innerHTML='<option value="">— اختر المدرّس —</option>'+TCHRS.filter(t=>t.code).map(t=>`<option value="${esc(t.code)}">${esc(t.first_name)} ${esc(t.last_name)} (${esc(t.code)})</option>`).join('');
-    renderRegStudents();renderTeachers();
+    renderRegStudents();renderTeachers();renderDB();
   }catch(e){const el=document.getElementById('tregList');if(el)el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}
 }
 /* ---- registered teachers table (same pattern as the students view) ---- */
@@ -1361,6 +1420,102 @@ async function loadLibraries(){const el=document.getElementById('lList');try{con
   el.innerHTML=LIBS.length?'<table><tr><th>المكتبة / السنتر</th><th>الكود</th><th>المسؤول</th><th>رقم التواصل</th><th>المنطقة / المركز</th><th>العنوان</th><th>كود المندوب</th><th>طلبات</th><th>مشتريات</th><th>آخر طلب</th><th>تاريخ التسجيل</th></tr>'+LIBS.map(l=>`<tr><td><b>${esc(l.name)}</b></td><td>${l.code?'<span class="code">'+esc(l.code)+'</span>':'—'}</td><td>${esc(l.contact||'—')}</td><td dir="ltr">${esc(l.mobile||'—')}</td><td>${esc(l.area||'—')}</td><td style="max-width:200px">${esc(l.address||'—')}</td><td>${l.rep_code?'<span class="code">'+esc(l.rep_code)+'</span>':'<span style="color:var(--muted2)">— مباشر</span>'}</td><td>${l.orders}</td><td>${l.revenue} ج</td><td style="color:var(--muted2);font-size:11.5px">${esc((l.last||'').slice(0,10))||'—'}</td><td style="color:var(--muted2);font-size:11.5px">${esc((l.created_at||'').slice(0,10))||'—'}</td></tr>`).join('')+'</table>':'<p class="msg">لا مكتبات بعد — تُسجَّل تلقائياً مع أول طلب مكتبة.</p>'}catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}}
 async function addLibrary(){const n=document.getElementById('lbName').value.trim(),p=document.getElementById('lbMob').value.trim(),a=document.getElementById('lbArea').value.trim(),ad=document.getElementById('lbAddr').value.trim(),m=document.getElementById('lbMsg');if(!n||!p){m.textContent='أدخل الاسم ورقم التواصل.';return}try{await api('/api/admin/library/add',{method:'POST',body:JSON.stringify({name:n,mobile:p,area:a,address:ad})});m.textContent='تمت الإضافة.';document.getElementById('lbName').value='';document.getElementById('lbMob').value='';document.getElementById('lbArea').value='';document.getElementById('lbAddr').value='';loadLibraries()}catch(e){m.textContent='خطأ: '+e.message}}
 
+/* ============ CUSTOMER DATABASE (GM): legacy + newly registered teachers ============ */
+const SITE_URL='seniorbookegy.com';
+function dbWelcomeMsg(t,legacy){
+  const name=((t.first_name||'')+' '+(t.last_name||'')).trim();
+  const head=legacy
+    ? `أستاذنا الفاضل ${name}،\nلكونك من عملاء Senior المميزين، سعدنا بتسجيلك في برنامج شركاء Senior وأصدرنا لك كودك الخاص:`
+    : `أهلاً بك أستاذ ${name} في برنامج شركاء Senior 👋\nتم اعتماد تسجيلك، وهذا كودك الخاص:`;
+  return `${head}\n\n🔑 ${t.code}\n\nماذا يمنحك هذا الكود؟\n• خصم خاص لكل طالب يطلب مستخدماً كودك.\n• مكافأة لك تُحتسب على الطلبات المُسلَّمة عبر الكود.\n• متابعة كاملة لنشاطك وطلبات طلابك ومستحقاتك أولاً بأول.\n\n🖥️ لوحتك الخاصة:\n${SITE_URL}/affiliate.html\nللدخول أدخل الكود ${t.code} ورقم موبايلك ${t.mobile||''}\n\n🔗 رابطك لمشاركته مع طلابك — يفتح الموقع وخصمهم مفعَّل تلقائياً:\n${SITE_URL}/?ref=${t.code}\n\nنتشرف بشراكتك — سلسلة Senior 🌟`;
+}
+function dbRows(src){
+  const q=(document.getElementById(src==='legacy'?'dbqCur':'dbqNew')||{}).value||'';
+  const s=q.trim(),sU=s.toUpperCase();
+  return TCHRS.filter(t=>((t.source||'site')===src)&&(!s||((t.first_name+' '+t.last_name).includes(s))||(t.mobile||'').includes(s)||(t.code||'').toUpperCase().includes(sU)||(t.area||'').includes(s)));
+}
+function dbTable(src){
+  const rows=dbRows(src),legacy=src==='legacy';
+  const cnt=document.getElementById(legacy?'dbCurCount':'dbNewCount');
+  const all=TCHRS.filter(t=>(t.source||'site')===src).length;
+  if(cnt)cnt.textContent=all?(rows.length===all?all+' عميل':rows.length+' من '+all):'';
+  if(!all)return `<p class="msg">${legacy?'لا عملاء حاليين بعد — أضفهم من النموذج أعلاه أو انقل دفعة كاملة.':'لا مدرّسين سجّلوا عبر الموقع بعد.'}</p>`;
+  if(!rows.length)return '<p class="msg">لا نتائج مطابقة للبحث.</p>';
+  return '<table class="otbl"><thead><tr><th>الاسم</th><th>الكود</th><th>رقم الموبايل</th><th>المنطقة</th><th>طلبات عبر كوده</th><th>رسالة الترحيب</th><th>أُضيف في</th><th>إجراءات</th></tr></thead><tbody>'+rows.map(t=>{
+    const st=tchStats(t.code);
+    return `<tr><td class="nm"><b>${esc(t.first_name)} ${esc(t.last_name)}</b>${t.notes?'<br><span style="color:var(--muted2);font-size:10.5px">📝 '+esc(t.notes)+'</span>':''}</td>`+
+    `<td style="text-align:center"><span class="code" style="font-size:11px">${esc(t.code||'—')}</span></td>`+
+    `<td style="text-align:center"><span dir="ltr" style="font-size:12px;color:var(--muted)">${esc(t.mobile||'—')}</span></td>`+
+    `<td style="text-align:center">${esc(t.area||'—')}</td>`+
+    `<td style="text-align:center"><b>${st.c}</b>${st.d?` <span style="color:var(--green);font-size:11px">(${st.d} مُسلَّم)</span>`:''}</td>`+
+    `<td style="text-align:center">${t.welcomed_at?'<span class="tag" style="background:#E8F5EC;color:#1C7A46">✅ أُرسلت '+esc(t.welcomed_at.slice(0,10))+'</span>':'<span class="tag" style="background:#FBF1DF;color:#C98A22">⏳ لم تُرسل</span>'}</td>`+
+    `<td style="text-align:center;color:var(--muted2);font-size:11.5px">${esc((t.approved_at||t.created_at||'').slice(0,10))}</td>`+
+    `<td style="text-align:center;white-space:nowrap"><button class="b-t iconb" title="إرسال رسالة الترحيب بالكود" onclick="dbWA(${t.id},${legacy?1:0})">💬</button> `+
+    `<button class="b-g iconb" title="ملف المدرّس" onclick="showBuyerCode('${esc(t.code||'')}')">👤</button></td></tr>`;
+  }).join('')+'</tbody></table>';
+}
+function renderDB(){
+  const c=document.getElementById('dbCurList'),n=document.getElementById('dbNewList');
+  if(!c||!n)return;
+  c.innerHTML=dbTable('legacy');n.innerHTML=dbTable('site');
+  const kp=document.getElementById('dbKpis');
+  if(kp){
+    const leg=TCHRS.filter(t=>(t.source||'site')==='legacy'),site=TCHRS.filter(t=>(t.source||'site')==='site');
+    const pending=TCHRS.filter(t=>!t.welcomed_at).length;
+    const active=TCHRS.filter(t=>tchStats(t.code).c>0).length;
+    kp.innerHTML=
+      `<div class="tile"><div class="l">إجمالي قاعدة البيانات</div><div class="n">${TCHRS.length}</div><div class="s">مدرّس بكود فعّال</div></div>
+       <div class="tile"><div class="l">عملاء حاليون (منقولون)</div><div class="n">${leg.length}</div><div class="s">أُضيفوا يدويًا بالفريق</div></div>
+       <div class="tile"><div class="l">عملاء جدد (من الموقع)</div><div class="n">${site.length}</div><div class="s">سجّلوا بأنفسهم</div></div>
+       <div class="tile"><div class="l">بانتظار رسالة الترحيب</div><div class="n" style="color:${pending?'#C98A22':'inherit'}">${pending}</div><div class="s">لم تُرسل لهم أكوادهم بعد</div></div>
+       <div class="tile"><div class="l">جاءت عبرهم طلبات</div><div class="n">${active}</div><div class="s">من ${TCHRS.length} في القاعدة</div></div>`;
+  }
+}
+async function dbWA(id,legacy){
+  const t=TCHRS.find(x=>x.id===id);if(!t||!t.code)return;
+  window.open(`https://wa.me/2${t.mobile}?text=${encodeURIComponent(dbWelcomeMsg(t,!!legacy))}`,'_blank');
+  try{await api('/api/admin/teacher/welcomed',{method:'POST',body:JSON.stringify({id})});t.welcomed_at=new Date().toISOString();renderDB()}catch(e){}
+}
+async function dbAddOne(){
+  const m=document.getElementById('dbMsg');
+  const name=document.getElementById('dbName').value.trim(),mobile=document.getElementById('dbMob').value.trim();
+  if(!name||!/^01[0-9]{9}$/.test(mobile.replace(/\D/g,''))){m.textContent='أدخل الاسم ورقم موبايل صحيحاً (٠١…).';return}
+  m.textContent='جارٍ الإضافة…';
+  try{
+    const d=await api('/api/admin/teacher/add',{method:'POST',body:JSON.stringify({name,mobile,
+      area:document.getElementById('dbArea').value.trim(),expected:document.getElementById('dbExp').value.trim(),notes:document.getElementById('dbNotes').value.trim()})});
+    if(d.added&&d.added.length){
+      const a=d.added[0];
+      m.innerHTML=`✅ تمت الإضافة — الكود: <span class="code">${esc(a.code)}</span> · اضغط 💬 في الجدول لإرسال رسالة الترحيب.`;
+      ['dbName','dbMob','dbArea','dbExp','dbNotes'].forEach(i=>document.getElementById(i).value='');
+      await loadTeachersApproved();
+    }else m.textContent='⚠️ '+((d.skipped&&d.skipped[0]&&d.skipped[0].why)||'تعذّرت الإضافة.');
+  }catch(e){m.textContent='خطأ: '+e.message}
+}
+async function dbAddBulk(){
+  const m=document.getElementById('dbBulkMsg'),txt=document.getElementById('dbBulk').value.trim();
+  if(!txt){m.textContent='الصق قائمة العملاء أولاً.';return}
+  const list=txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{
+    const p=l.split(/[،,\t]+/).map(x=>x.trim());
+    return{name:p[0]||'',mobile:p[1]||'',area:p[2]||''};
+  });
+  if(!list.length){m.textContent='لم أتعرّف على أي سطر صالح.';return}
+  m.textContent=`جارٍ استيراد ${list.length} عميلاً…`;
+  try{
+    const d=await api('/api/admin/teacher/add',{method:'POST',body:JSON.stringify({list})});
+    const add=d.added||[],skip=d.skipped||[];
+    m.innerHTML=`✅ أُضيف <b>${add.length}</b> عميلاً بأكوادهم${skip.length?` · تُجوهل <b>${skip.length}</b>: `+skip.slice(0,5).map(s=>esc(s.name)+' ('+esc(s.why)+')').join('، ')+(skip.length>5?'…':''):''}`;
+    if(add.length){document.getElementById('dbBulk').value='';await loadTeachersApproved();
+      dlCSV([['الاسم','الموبايل','الكود'],...add.map(a=>[a.name,a.mobile,a.code])],'senior-عملاء-حاليون-'+add.length);}
+  }catch(e){m.textContent='خطأ: '+e.message}
+}
+function dbDownload(src){
+  const rows=TCHRS.filter(t=>(t.source||'site')===src);
+  dlCSV([['الاسم','الكود','الموبايل','المنطقة','طلبات','مُسلَّم','رسالة الترحيب','أُضيف في'],
+    ...rows.map(t=>{const s=tchStats(t.code);return[(t.first_name+' '+t.last_name).trim(),t.code||'',t.mobile||'',t.area||'',s.c,s.d,t.welcomed_at?'أُرسلت':'لم تُرسل',(t.approved_at||t.created_at||'').slice(0,10)]})],
+    src==='legacy'?'senior-عملاء-حاليون':'senior-عملاء-جدد');
+}
+
 /* ============ SENIOR PLUS: activated students + weekly reports (PDF) ============ */
 const PTYPES={grammar:['📐','القواعد'],comp:['📖','قطع الفهم'],trans:['🔤','الترجمة'],novel:['🗝️','الرواية']};
 let PLUSR={};/* code → last fetched reports (for PDF) */
@@ -1494,7 +1649,7 @@ async function addMember(){const n=document.getElementById('tmName').value.trim(
 async function renameMember(id,cur){const n=prompt('الاسم الجديد:',cur);if(!n)return;try{await api('/api/admin/team/update',{method:'POST',body:JSON.stringify({id,name:n})});loadTeamList()}catch(e){alert(e.message)}}
 async function rekeyMember(id){if(!confirm('توليد مفتاح جديد؟ القديم سيتوقف.'))return;try{const d=await api('/api/admin/team/update',{method:'POST',body:JSON.stringify({id,rekey:true})});alert('المفتاح الجديد: '+d.akey);loadTeamList()}catch(e){alert(e.message)}}
 async function toggleMember(id,active){try{await api('/api/admin/team/update',{method:'POST',body:JSON.stringify({id,active:!!active})});loadTeamList()}catch(e){alert(e.message)}}
-const ACT_AR={order_status:'حالة طلب',teacher_approve:'اعتماد مدرّس',teacher_reject:'رفض مدرّس',teacher_update:'تعديل مدرّس',rep_add:'كود مندوب',restock:'توريد مخزون',inventory_set:'تصحيح مخزون',team_add:'إضافة عضو',team_update:'تعديل عضو',payout:'دفعة عمولة',withdrawal_advance:'بدء تحويل',withdrawal_pay:'إتمام تحويل',library_add:'إضافة مكتبة',codes_generate:'توليد أكواد',ai_report:'تقرير ذكاء اصطناعي'};
+const ACT_AR={order_status:'حالة طلب',teacher_approve:'اعتماد مدرّس',teacher_reject:'رفض مدرّس',teacher_update:'تعديل مدرّس',rep_add:'كود مندوب',restock:'توريد مخزون',inventory_set:'تصحيح مخزون',team_add:'إضافة عضو',team_update:'تعديل عضو',payout:'دفعة عمولة',withdrawal_advance:'بدء تحويل',withdrawal_pay:'إتمام تحويل',library_add:'إضافة مكتبة',codes_generate:'توليد أكواد',ai_report:'تقرير ذكاء اصطناعي',customer_add:'إضافة عملاء لقاعدة البيانات'};
 async function loadAudit(){const el=document.getElementById('gList');try{const d=await api('/api/admin/audit');el.innerHTML=(d.audit||[]).length?'<table><tr><th>الوقت</th><th>العضو</th><th>الإجراء</th><th>التفاصيل</th></tr>'+d.audit.map(a=>`<tr><td style="color:var(--muted2);font-size:11.5px;white-space:nowrap">${esc((a.created_at||'').slice(0,16))}</td><td>${esc(a.actor)} <span class="tag role-${a.role}">${ROLE_AR[a.role]||a.role||''}</span></td><td><b>${ACT_AR[a.action]||esc(a.action)}</b></td><td>${esc(a.detail||'')}</td></tr>`).join('')+'</table>':'<p class="msg">لا نشاط بعد.</p>'}catch(e){el.innerHTML='<p class="msg">خطأ: '+esc(e.message)+'</p>'}}
 
 /* ============ FINANCE ============ */
