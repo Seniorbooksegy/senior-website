@@ -1518,7 +1518,7 @@ function setCodeSt(state,msg){const s=document.getElementById('coCodeSt');if(!s)
 let coCodeT;
 function coCodeInput(){
   clearTimeout(coCodeT);
-  const v=document.getElementById('co-code').value.trim().toUpperCase();
+  const v=codeUp(document.getElementById('co-code').value);
   if(!v){setCodeSt('','');renderCoSum();return}
   if(BUYER&&BUYER.code===v&&BUYER.verified){setCodeSt('ok',t('✓ الكود مفعَّل','✓ Code active')+(BUYER.teacher?' — '+BUYER.teacher:''));renderCoSum();return}
   setCodeSt('wait',t('جارٍ التحقق من الكود…','Checking the code…'));
@@ -1536,11 +1536,11 @@ function coCodeInput(){
   },500);
 }
 async function submitOrder(){
-  const n=document.getElementById('co-n').value.trim(),p=document.getElementById('co-p').value.trim(),
+  const n=document.getElementById('co-n').value.trim(),p=digitsOnly(document.getElementById('co-p').value),
         a=document.getElementById('co-a').value.trim(),city=document.getElementById('co-city').value.trim();
   if(!n||!p||!a||!city){toast(t('من فضلك أكمل البيانات (ومنها المدينة / المركز)','Please complete the fields (including city)'));return}
   /* teacher code typed at checkout counts exactly like the portal one */
-  const codeIn=document.getElementById('co-code').value.trim().toUpperCase();
+  const codeIn=codeUp(document.getElementById('co-code').value);
   if(codeIn&&(!BUYER||BUYER.code!==codeIn)){
     const d=await apiFetch('/api/code/check?code='+encodeURIComponent(codeIn));
     if(d&&!d.valid){toast(d.used?t('هذا الكود استُخدم من قبل — امسح الخانة أو استخدم كوداً آخر','This code was already used — clear the field or use another'):t('الكود غير صحيح — صحّحه أو امسح الخانة','Invalid code — fix it or clear the field'));return}
@@ -1584,7 +1584,7 @@ const openModal=id=>document.getElementById(id).classList.add('on');
 const closeModal=id=>document.getElementById(id).classList.remove('on');
 /* ---- public order tracking (order no + mobile) ---- */
 async function trackOrder(){
-  const no=document.getElementById('tk-no').value.trim(),p=document.getElementById('tk-p').value.trim(),el=document.getElementById('tkRes');
+  const no=codeUp(document.getElementById('tk-no').value),p=digitsOnly(document.getElementById('tk-p').value),el=document.getElementById('tkRes');
   if(!no||!mobOK(p)){el.innerHTML='<p style="color:#C0421C;font-size:13.5px">'+t('أدخل رقم الطلب ورقم الموبايل المسجَّل عليه.','Enter the order number and the mobile used on it.')+'</p>';return}
   el.innerHTML='<p style="color:var(--muted);font-size:13.5px">'+t('جارٍ البحث…','Looking up…')+'</p>';
   const d=await apiFetch('/api/order/track?no='+encodeURIComponent(no)+'&mobile='+encodeURIComponent(p));
@@ -1956,12 +1956,16 @@ function codePct(){
 function discountPct(){return Math.min(90,ONLINE_PCT+codePct())}
 function discAmt(){return Math.round(total()*discountPct()/100)}
 function payTotal(){return total()-discAmt()}
-const mobOK=v=>/^01[0-9]{9}$/.test((v||'').replace(/\D/g,''));
+/* Arabic-Indic (٠١٢…) / Persian (۰۱۲…) numerals → ASCII: أرقام الموبايل والأكواد تُقبل بالعربي أو الإنجليزي */
+const enD=s=>String(s==null?'':s).replace(/[٠-٩]/g,d=>String(d.charCodeAt(0)-0x0660)).replace(/[۰-۹]/g,d=>String(d.charCodeAt(0)-0x06F0));
+const digitsOnly=s=>enD(s).replace(/\D/g,'');
+const codeUp=s=>enD(String(s||'').trim()).toUpperCase();
+const mobOK=v=>/^01[0-9]{9}$/.test(digitsOnly(v));
 async function ptStudent(){
-  const n=document.getElementById('pts-n').value.trim(),p=document.getElementById('pts-p').value.trim(),
+  const n=document.getElementById('pts-n').value.trim(),p=digitsOnly(document.getElementById('pts-p').value),
         g=document.getElementById('pts-g').value,city=document.getElementById('pts-city').value.trim(),
         school=document.getElementById('pts-school').value.trim(),
-        c=document.getElementById('pts-c').value.trim().toUpperCase();
+        c=codeUp(document.getElementById('pts-c').value);
   if(!n||!mobOK(p)){toast(t('أكمل الاسم ورقم موبايل صحيحاً','Enter your name and a valid mobile number'));return}
   let verified=false,tname='';
   if(c){
@@ -1974,8 +1978,8 @@ async function ptStudent(){
   closePortal();toast(t('تم تفعيل حساب الطالب','Student account activated'));
 }
 async function ptTeacherExist(){
-  const n=document.getElementById('ptt-n').value.trim(),p=document.getElementById('ptt-p').value.trim(),
-        c=document.getElementById('ptt-c').value.trim().toUpperCase();
+  const n=document.getElementById('ptt-n').value.trim(),p=digitsOnly(document.getElementById('ptt-p').value),
+        c=codeUp(document.getElementById('ptt-c').value);
   if(!n||!mobOK(p)||!c){toast(t('أكمل الاسم والموبايل والكود','Complete the name, mobile and code'));return}
   const d=await apiFetch('/api/code/check?code='+encodeURIComponent(c));
   if(d&&(!d.valid||d.kind!=='teacher')){toast(t('الكود غير صحيح أو لم يُعتمد بعد','The code is invalid or not approved yet'));return}
@@ -1985,7 +1989,7 @@ async function ptTeacherExist(){
 async function ptTeacherNew(){
   const f=document.getElementById('ptn-f').value.trim(),l=document.getElementById('ptn-l').value.trim(),
         a=document.getElementById('ptn-a').value,s=document.getElementById('ptn-s').selectedOptions[0].textContent,
-        p=document.getElementById('ptn-p').value.trim(),e=document.getElementById('ptn-e').value.trim();
+        p=digitsOnly(document.getElementById('ptn-p').value),e=document.getElementById('ptn-e').value.trim();
   if(!f||!l||!mobOK(p)){toast(t('أكمل الاسم بشقّيه ورقم موبايل صحيحاً','Complete both names and a valid mobile number'));return}
   const d=await apiFetch('/api/teacher/register',{method:'POST',body:JSON.stringify({first:f,last:l,area:a,expected:s,mobile:p,email:e})});
   const done=document.getElementById('ptDoneMsg');
@@ -2002,10 +2006,10 @@ async function ptTeacherNew(){
 }
 async function ptLib(){
   const n=document.getElementById('ptl-n').value.trim(),o=document.getElementById('ptl-o').value.trim(),
-        p=document.getElementById('ptl-p').value.trim(),g=document.getElementById('ptl-g').value,
+        p=digitsOnly(document.getElementById('ptl-p').value),g=document.getElementById('ptl-g').value,
         city=document.getElementById('ptl-city').value.trim(),
         addr=document.getElementById('ptl-addr').value.trim(),
-        c=document.getElementById('ptl-c').value.trim().toUpperCase();
+        c=codeUp(document.getElementById('ptl-c').value);
   if(!n||!o||!mobOK(p)||!city||!addr){toast(t('أكمل البيانات كاملة: الاسم والمسؤول والعنوان ورقم التواصل والمنطقة / المركز','Complete all fields: name, contact person, address, contact number and area'));return}
   /* rep code optional — a library/centre may register directly with us */
   let verified=false;

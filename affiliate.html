@@ -159,7 +159,9 @@ let A=null;
 const saved=localStorage.getItem('snr_aff');
 if(saved){try{const s=JSON.parse(saved);document.getElementById('aCode').value=s.code;document.getElementById('aMob').value=s.mobile;login()}catch(e){}}
 async function login(){
-  const code=document.getElementById('aCode').value.trim().toUpperCase(),mobile=document.getElementById('aMob').value.trim();
+  /* الأرقام العربية (٠١٢…) تُقبل كالإنجليزية في الكود ورقم الموبايل */
+  const enD=s=>String(s||'').replace(/[٠-٩]/g,d=>String(d.charCodeAt(0)-0x0660)).replace(/[۰-۹]/g,d=>String(d.charCodeAt(0)-0x06F0));
+  const code=enD(document.getElementById('aCode').value.trim()).toUpperCase(),mobile=enD(document.getElementById('aMob').value).replace(/\D/g,'');
   const m=document.getElementById('loginMsg');
   if(!code||!mobile){m.textContent='أدخل الكود ورقم الموبايل.';return}
   m.textContent='جارٍ التحميل…';
