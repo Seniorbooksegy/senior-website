@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Senior — المتخصص الأول في إنجليزي الثانوية العامة والأزهر</title>
-<meta name="description" content="سلسلة Senior المتخصصة في اللغة الإنجليزية للثانوية العامة والأزهر: القواعد، التمارين، المهارات، وقطع الفهم — مجاب عنها بالكامل. تأليف الأستاذ صلاح علي. اطلب أونلاين والدفع عند الاستلام.">
+<meta name="description" content="سلسلة Senior المتخصصة في اللغة الإنجليزية للثانوية العامة والأزهر: القواعد، التمارين، المهارات، وقطع الفهم — مجاب عنها بالكامل. تأليف الأستاذ صلاح علي. اطلب عبر واتساب والدفع عند الاستلام.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -951,8 +951,7 @@ header.scr .brand img{height:26px}
     </div>
   </div>
   <div class="wrap fbot"><span data-ar="© 2026 Senior — جميع الحقوق محفوظة · تأليف الأستاذ صلاح علي · توزيع مؤسسة الكتب الذهبية" data-en="© 2026 Senior — All rights reserved · By Mr. Salah Ali · Distributed by Golden Books"></span>
-    <span style="display:block;margin-top:6px"><a href="policies.html#privacy" style="color:#8CA3A9;text-decoration:underline;text-underline-offset:3px" data-ar="سياسة الخصوصية" data-en="Privacy policy"></a>
-    <a href="#" onclick="openModal('mTrack');return false" style="color:#8CA3A9;text-decoration:underline;text-underline-offset:3px;margin-inline-start:14px" data-ar="🔎 تتبع طلبك" data-en="🔎 Track your order"></a></span></div>
+    <span style="display:block;margin-top:6px"><a href="policies.html#privacy" style="color:#8CA3A9;text-decoration:underline;text-underline-offset:3px" data-ar="سياسة الخصوصية" data-en="Privacy policy"></a></span></div>
 </footer>
 
 <!-- ORDER TRACKING -->
@@ -974,7 +973,6 @@ header.scr .brand img{height:26px}
   <div class="citems" id="citems"></div>
   <div class="dfoot" id="dfoot" style="display:none">
     <div class="tot"><span data-ar="الإجمالي" data-en="Total"></span><span><span class="v" id="ctot">0</span> <span data-ar="ج" data-en="EGP">ج</span></span></div>
-    <button class="btn b-o" onclick="openCheckout()" data-ar="إتمام الطلب" data-en="Checkout"></button>
     <button class="btn b-wa" onclick="orderWA()" data-ar="اطلب عبر واتساب" data-en="Order on WhatsApp"></button>
   </div>
 </aside>
@@ -1249,7 +1247,7 @@ header.scr .brand img{height:26px}
 
 <div class="mbar" id="mbar">
   <div class="s"><b><span id="mbarTot">0</span> <span data-ar="ج" data-en="EGP">ج</span></b><span id="mbarCount"></span></div>
-  <button class="btn b-o" onclick="openCheckout()" data-ar="إتمام الطلب" data-en="Checkout"></button>
+  <button class="btn b-wa" onclick="orderWA()" data-ar="اطلب عبر واتساب" data-en="Order on WhatsApp"></button>
 </div>
 
 <a class="wa" id="waF" target="_blank" rel="noopener" aria-label="WhatsApp">
@@ -1478,10 +1476,12 @@ function orderText(info){
   if(BUYER){L.push('');L.push(`${t('نوع المشتري','Buyer type')}: ${LANG==='ar'?BTYPE[BUYER.type][0]:BTYPE[BUYER.type][1]}`);
     if(BUYER.school)L.push(`${t('المدرسة','School')}: ${BUYER.school}`);
     if(BUYER.code)L.push(`${t('كود الخصم','Discount code')}: ${BUYER.code}${BUYER.verified?'':t(' (بانتظار التحقق)',' (pending verification)')}`)}
-  return encodeURIComponent(L.join('\n'));
+  return encodeURIComponent(L.join('\n').replace(/&amp;/g,'&'));
 }
-function orderWA(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}window.open(`https://wa.me/${WA}?text=${orderText(null)}`,'_blank')}
-function openCheckout(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}
+/* WhatsApp is the ONLY purchase channel (2026-10-15) — no on-site checkout, no API orders */
+function orderWA(){if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}
+  if(typeof track==='function')track('ev','order',''+payTotal());window.open(`https://wa.me/${WA}?text=${orderText(null)}`,'_blank')}
+function openCheckout(){return orderWA();if(!count()){toast(t('السلّة فارغة','Cart is empty'));return}
   if(typeof track==='function')track('ev','checkout');
   if(BUYER){
     if(BUYER.name&&!document.getElementById('co-n').value)document.getElementById('co-n').value=BUYER.name;
@@ -1535,7 +1535,7 @@ function coCodeInput(){
     renderCoSum();
   },500);
 }
-async function submitOrder(){
+async function submitOrder(){return orderWA();
   const n=document.getElementById('co-n').value.trim(),p=digitsOnly(document.getElementById('co-p').value),
         a=document.getElementById('co-a').value.trim(),city=document.getElementById('co-city').value.trim();
   if(!n||!p||!a||!city){toast(t('من فضلك أكمل البيانات (ومنها المدينة / المركز)','Please complete the fields (including city)'));return}
