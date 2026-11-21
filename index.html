@@ -2140,7 +2140,7 @@ initReveal();
   setTimeout(function(){
     var m=document.getElementById('promo'),v=document.getElementById('promoVid'),tall=innerWidth<700;
     v.poster='promo/skills2-'+(tall?'9x16':'4x5')+'.jpg?v=1';
-    v.src='promo/skills2-short-'+(tall?'9x16':'4x5')+'.mp4?v=1';
+    v.src='promo/skills2-short-'+(tall?'9x16':'4x5')+'.mp4?v=2';
     m.classList.add('on');document.body.style.overflow='hidden';
     var pr=v.play();if(pr&&pr.catch)pr.catch(function(){});
     if(typeof track==='function')track('ev','promo','shown');
