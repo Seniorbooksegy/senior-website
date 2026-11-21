@@ -676,6 +676,22 @@ header.scr .brand img{height:26px}
 .plan li{margin-bottom:8px;line-height:1.7}
 .sendrow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
 @media(max-width:520px){.sendrow{grid-template-columns:1fr}.plat-body{padding:18px 14px 36px}}
+
+/* ---- Skills 2 promo popup ---- */
+.promo{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;padding:16px}
+.promo.on{display:flex}
+.promo .pbg{position:absolute;inset:0;background:rgba(10,22,30,.78);backdrop-filter:blur(3px)}
+.promo .pbox{position:relative;width:min(400px,100%,calc((100vh - 170px)*9/16));background:#0b1638;border-radius:22px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);animation:mPop .34s cubic-bezier(.3,1.2,.4,1)}
+.promo video{display:block;width:100%;height:auto;background:#0b1638}
+.promo .ptop{display:flex;justify-content:space-between;align-items:center;padding:8px 10px}
+.promo .px{width:36px;height:36px;border-radius:50%;border:none;background:rgba(0,0,0,.55);color:#fff;font-size:22px;line-height:36px;cursor:pointer;z-index:2}
+.promo .psnd{height:36px;padding:0 14px;border-radius:999px;border:none;background:rgba(0,0,0,.55);color:#fff;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;z-index:2}
+.promo .pcta{display:flex;gap:10px;padding:12px}
+.promo .pcta a,.promo .pcta button{flex:1;text-align:center;text-decoration:none;font-family:inherit;font-weight:700;font-size:15px;padding:13px 10px;border-radius:999px;border:none;cursor:pointer}
+.promo .pwa{background:#25D366;color:#fff}
+.promo .pno{background:rgba(255,255,255,.1);color:#fff}
+@media (min-width:700px){.promo .pbox{width:min(460px,92vw,calc((100vh - 170px)*4/5))}}
+@media (prefers-reduced-motion:reduce){.promo .pbox{animation:none}}
 </style>
 </head>
 <body>
@@ -2097,6 +2113,39 @@ if('IntersectionObserver' in window){
 
 applyLang();
 initReveal();
+</script>
+
+<div class="promo" id="promo" role="dialog" aria-modal="true" aria-label="Senior Skills 2">
+  <div class="pbg" onclick="closePromo()"></div>
+  <div class="pbox">
+    <div class="ptop"><button class="psnd" id="promoSnd" onclick="promoSound()">🔇 شغّل الصوت</button><button class="px" onclick="closePromo()" aria-label="إغلاق">×</button></div>
+    <video id="promoVid" muted playsinline loop preload="none"></video>
+    <div class="pcta">
+      <a class="pwa" id="promoWa" target="_blank" rel="noopener" onclick="if(typeof track==='function')track('ev','promo','whatsapp')">اطلبه واتساب</a>
+      <button class="pno" onclick="closePromo()">تصفّح الموقع</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var KEY='snr_promo_s2', force=/[?&]promo=1/.test(location.search);
+  function seenToday(){try{return localStorage.getItem(KEY)===new Date().toDateString()}catch(e){return false}}
+  function mark(){try{localStorage.setItem(KEY,new Date().toDateString())}catch(e){}}
+  var wa='https://wa.me/201010101445?text='+encodeURIComponent('أهلاً، عايز أطلب كتاب Senior Skills 2 للصف الثاني الثانوي');
+  document.getElementById('promoWa').href=wa;
+  window.closePromo=function(){var m=document.getElementById('promo'),v=document.getElementById('promoVid');v.pause();m.classList.remove('on');document.body.style.overflow='';mark()};
+  window.promoSound=function(){var v=document.getElementById('promoVid'),b=document.getElementById('promoSnd');v.muted=!v.muted;if(!v.muted){v.currentTime=0;v.play()}b.textContent=v.muted?'🔇 شغّل الصوت':'🔊 الصوت شغّال';if(typeof track==='function')track('ev','promo',v.muted?'mute':'sound')};
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('promo').classList.contains('on'))closePromo()});
+  if(!force&&seenToday())return;
+  setTimeout(function(){
+    var m=document.getElementById('promo'),v=document.getElementById('promoVid'),tall=innerWidth<700;
+    v.poster='promo/skills2-'+(tall?'9x16':'4x5')+'.jpg?v=1';
+    v.src='promo/skills2-short-'+(tall?'9x16':'4x5')+'.mp4?v=1';
+    m.classList.add('on');document.body.style.overflow='hidden';
+    var pr=v.play();if(pr&&pr.catch)pr.catch(function(){});
+    if(typeof track==='function')track('ev','promo','shown');
+  },1200);
+})();
 </script>
 </body>
 </html>
