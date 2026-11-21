@@ -1008,7 +1008,7 @@ header.scr .brand img{height:26px}
         <div class="fld"><label data-ar="المدينة / المركز" data-en="City / Markaz"></label><input id="co-city" required data-ar-ph="مثال: المنصورة" data-en-ph="e.g. Mansoura"></div>
       </div>
       <div class="two">
-        <div class="fld"><label data-ar="المسار" data-en="Track"></label><select id="co-t"><option data-ar="ثالثة ثانوي — عام" data-en="Grade 3 — General"></option><option data-ar="ثالثة ثانوي — أزهر" data-en="Grade 3 — Azhar"></option><option data-ar="أخرى" data-en="Other"></option></select></div>
+        <div class="fld"><label data-ar="المسار" data-en="Track"></label><select id="co-t"><option data-ar="ثالثة ثانوي — عام" data-en="Grade 3 — General"></option><option data-ar="ثالثة ثانوي — أزهر" data-en="Grade 3 — Azhar"></option><option data-ar="ثانية ثانوي — عام (البكالوريا)" data-en="Grade 2 — General (Baccalaureate)"></option><option data-ar="ثانية ثانوي — أزهر" data-en="Grade 2 — Azhar"></option><option data-ar="أخرى" data-en="Other"></option></select></div>
         <div class="fld"><label data-ar="كود المدرّس أو كود الشراء (اختياري)" data-en="Teacher or purchase code (optional)"></label><input id="co-code" dir="ltr" data-ar-ph="SNR-T-0000 / SNR-S-XXXXXX" data-en-ph="SNR-T-0000 / SNR-S-XXXXXX" oninput="coCodeInput()"><div id="coCodeSt" class="codeSt"></div></div>
       </div>
       <div class="fld"><label data-ar="العنوان بالتفصيل" data-en="Full address"></label><textarea id="co-a" rows="2" required data-ar-ph="الشارع، رقم العمارة، علامة مميّزة" data-en-ph="Street, building no., landmark"></textarea></div>
@@ -1065,7 +1065,7 @@ header.scr .brand img{height:26px}
           <div class="fld"><label data-ar="اسم المدرسة" data-en="School name"></label><input id="pts-school" data-ar-ph="مثال: مدرسة المنصورة الثانوية" data-en-ph="e.g. Mansoura Secondary School"></div>
         </div>
         <div class="two">
-          <div class="fld"><label data-ar="المسار" data-en="Track"></label><select id="pts-t"><option data-ar="ثالثة ثانوي — عام" data-en="Grade 3 — General"></option><option data-ar="ثالثة ثانوي — أزهر" data-en="Grade 3 — Azhar"></option><option data-ar="أخرى" data-en="Other"></option></select></div>
+          <div class="fld"><label data-ar="المسار" data-en="Track"></label><select id="pts-t"><option data-ar="ثالثة ثانوي — عام" data-en="Grade 3 — General"></option><option data-ar="ثالثة ثانوي — أزهر" data-en="Grade 3 — Azhar"></option><option data-ar="ثانية ثانوي — عام (البكالوريا)" data-en="Grade 2 — General (Baccalaureate)"></option><option data-ar="ثانية ثانوي — أزهر" data-en="Grade 2 — Azhar"></option><option data-ar="أخرى" data-en="Other"></option></select></div>
           <div class="fld"><label data-ar="كود المدرّس (اختياري)" data-en="Teacher code (optional)"></label><input id="pts-c" dir="ltr" data-ar-ph="SNR-T-0000" data-en-ph="SNR-T-0000"></div>
         </div>
         <button class="btn b-o" style="width:100%" onclick="ptStudent()" data-ar="تفعيل وبدء الشراء" data-en="Activate &amp; start shopping"></button>
@@ -1505,7 +1505,7 @@ function openCheckout(){return orderWA();if(!count()){toast(t('السلّة فا
     if(BUYER.gov)document.getElementById('co-g').value=BUYER.gov;
     if(BUYER.city&&!document.getElementById('co-city').value)document.getElementById('co-city').value=BUYER.city;
     if(BUYER.address&&!document.getElementById('co-a').value)document.getElementById('co-a').value=BUYER.address;
-    if(typeof BUYER.trackIdx==='number'&&BUYER.trackIdx>=0)document.getElementById('co-t').selectedIndex=BUYER.trackIdx;
+    if(typeof BUYER.trackIdx==='number'&&BUYER.trackIdx>=0)document.getElementById('co-t').selectedIndex=(!BUYER.tv&&BUYER.trackIdx===2)?4:BUYER.trackIdx;
     if(BUYER.code)document.getElementById('co-code').value=BUYER.code;
   }
   renderPays();renderCoSum();
@@ -1988,7 +1988,7 @@ async function ptStudent(){
     const d=await apiFetch('/api/code/check?code='+encodeURIComponent(c));
     if(d){if(!d.valid||d.kind!=='teacher'){toast(t('كود المدرّس غير صحيح','Invalid teacher code'));return}verified=true;tname=d.name||''}
   }
-  setBuyer({type:'student',name:n,mobile:p,gov:g,city,school,trackIdx:document.getElementById('pts-t').selectedIndex,code:c||null,teacher:tname,verified});
+  setBuyer({type:'student',name:n,mobile:p,gov:g,city,school,trackIdx:document.getElementById('pts-t').selectedIndex,tv:2,code:c||null,teacher:tname,verified});
   /* registration lands server-side immediately (fire-and-forget) — student is visible to the team before any order */
   try{apiFetch('/api/student/register',{method:'POST',body:JSON.stringify({name:n,mobile:p,governorate:g,city,school,track:document.getElementById('pts-t').selectedOptions[0].textContent,refCode:(verified&&c)||null})})}catch(e){}
   closePortal();toast(t('تم تفعيل حساب الطالب','Student account activated'));
